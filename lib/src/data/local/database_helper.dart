@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:bulk_buyers/src/data/remote/store_api_provider.dart';
+import 'package:bulk_buyers/src/data/remote/model/store_api_provider.dart';
 import 'package:bulk_buyers/src/models/cart_model.dart';
 import 'package:bulk_buyers/src/models/order_details_model.dart';
 import 'package:bulk_buyers/src/models/order_products_model.dart';

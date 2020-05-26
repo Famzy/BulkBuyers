@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 /// A modal overlay that will show over your child widget (fullscreen) when the show value is true
 /// 
@@ -30,7 +31,9 @@ class BusyOverlay extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  CircularProgressIndicator(),
+                  Container(
+                      height: 100,
+                      child: Lottie.asset('assets/lottie/cart_empty.json')),
                   Text(title,
                       style: TextStyle(
                           fontSize: 16.0,

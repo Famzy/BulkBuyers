@@ -107,6 +107,7 @@ class UIHelper {
       String placeholder,
       TextInputType keyboard,
       Function action,
+      IconButton icon,
       @required TextEditingController controller,
       String validationMessage,
       bool isPassword = false,
@@ -116,12 +117,12 @@ class UIHelper {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         validationMessage != null
-              ? Padding(
+            ? Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(validationMessage,
                     style: TextStyle(color: Colors.red[400], fontSize: 12.0)),
               )
-              : Container(),
+            : Container(),
         Padding(
           padding: EdgeInsets.only(top: 1, bottom: 1),
           child: TextField(
@@ -134,19 +135,20 @@ class UIHelper {
             obscureText: isPassword,
             keyboardType: keyboard,
             decoration: InputDecoration(
+              suffixIcon: icon,
               labelText: placeholder,
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(color: whiteSwatch)),
             ),
-          
           ),
         ),
       ],
     );
   }
 
-  static Widget fullScreenButton({@required String title, @required Function onTap}) {
+  static Widget fullScreenButton(
+      {@required String title, @required Function onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -163,7 +165,9 @@ class UIHelper {
       ),
     );
   }
-  static Widget ScreenButton({@required String title, @required Function onTap}) {
+
+  static Widget ScreenButton(
+      {@required String title, @required Function onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -192,7 +196,8 @@ class UIHelper {
       ),
     );
   }
-static Widget confirm({BoxFit fit}) {
+
+  static Widget confirm({BoxFit fit}) {
     return Container(
       width: 183,
       height: 87,
@@ -203,6 +208,7 @@ static Widget confirm({BoxFit fit}) {
       ),
     );
   }
+
   static Widget pageTitle({@required String title}) {
     return Align(
       alignment: Alignment.topCenter,
@@ -243,6 +249,7 @@ static Widget confirm({BoxFit fit}) {
       ),
     );
   }
+
   static Widget descriptionText(
       {@required String title, @required Function onTap}) {
     return Center(
@@ -260,6 +267,4 @@ static Widget confirm({BoxFit fit}) {
       ),
     );
   }
-
- 
 }

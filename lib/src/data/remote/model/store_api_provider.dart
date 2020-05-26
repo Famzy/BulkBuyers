@@ -1,16 +1,13 @@
 import 'dart:convert';
+
 import 'package:bulk_buyers/src/models/discount_models.dart';
 import 'package:bulk_buyers/src/models/login_model.dart';
-import 'package:bulk_buyers/src/models/orders_post_model.dart';
 import 'package:bulk_buyers/src/models/place_order_model.dart';
-import 'package:bulk_buyers/src/models/registration_model.dart';
 import 'package:bulk_buyers/src/models/user_model.dart';
 import 'package:http/http.dart' show Client;
 import 'dart:async';
-import 'package:bulk_buyers/src/models/shop_model.dart';
 import 'package:bulk_buyers/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../models/orders_model.dart';
 
 class ApiProvider {
   /*
@@ -32,55 +29,56 @@ class ApiProvider {
   final _root = Constants.BASE_URL;
   Client client = Client();
 
-  // Auth Section
-  Future<int> registration(Register register) async {
-    print("Resgister call made");
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var registerFileds = register.toJson();
-    try {
-      var response = await client.post('$_root/register',
-          headers: {
-            "key": "Content-Type",
-            "value": "application/json",
-          },
-          body: registerFileds);
-      if (response.statusCode == 200) {
-        var token = json.decode(response.body);
-        sharedPreferences.setString("token", token['token']);
-      }
-      print(response.body);
-      return response.statusCode;
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
 
-  Future<int> login(Login login) async {
-    print("loggining triggred");
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+//  // Auth Section
+//  Future<int> registration(Register register) async {
+//    print("Resgister call made");
+//    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+//    var registerFileds = register.toJson();
+//    try {
+//      var response = await client.post('$_root/s',
+//          headers: {
+//            "key": "Content-Type",
+//            "value": "application/json",
+//          },
+//          body: registerFileds);
+//      if (response.statusCode == 200) {
+//        var token = json.decode(response.body);
+//        sharedPreferences.setString("token", token['token']);
+//      }
+//      print(response.body);
+//      return response.statusCode;
+//    } on Exception catch (e) {
+//      print(e);
+//    }
+//  }
 
-    var loginFields = login.toJson();
-    try {
-      print(loginFields);
-      var response = await client.post('$_root/access',
-          headers: {
-            "key": "Content-Type",
-            "value": "application/json",
-          },
-          body: loginFields);
-      print(response.statusCode);
-      print(response.body);
-      if (response.statusCode == 200) {
-        var token = json.decode(response.body);
-        sharedPreferences.setString("token", token['token']);
-        sharedPreferences.setString("state", "false");
-      }
-      print(response.body);
-      return response.statusCode;
-    } catch (exception) {
-      print(exception);
-    }
-  }
+//  Future<int> login(Login login) async {
+//    print("loggining triggred");
+//    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+//
+//    var loginFields = login.toJson();
+//    try {
+//      print(loginFields);
+//      var response = await client.post('$_root/access',
+//          headers: {
+//            "key": "Content-Type",
+//            "value": "application/json",
+//          },
+//          body: loginFields);
+//      print(response.statusCode);
+//      print(response.body);
+//      if (response.statusCode == 200) {
+//        var token = json.decode(response.body);
+//        sharedPreferences.setString("token", token['token']);
+//        sharedPreferences.setString("state", "false");
+//      }
+//      print(response.body);
+//      return response.statusCode;
+//    } catch (exception) {
+//      print(exception);
+//    }
+//  }
 
   Future<List<List>> fetchUserDetails() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -230,21 +228,21 @@ class ApiProvider {
     }
   }
 
-  Future<dynamic> getDiscount(Discount discount) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString("token");
-
-    var body = discount.toJson();
-    print('discount code: $body');
-    final response = await client.post("$_root/discount/code",
-        headers: {
-          "Accept": "application/json",
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json"
-        },
-        body: body);
-    print("This is the status Code: ${response.statusCode}");
-    print("This is the msg Code: ${response.body}");
-    return response;
-  }
+//  Future<dynamic> getDiscount(Discount discount) async {
+//    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+//    String token = sharedPreferences.getString("token");
+//
+//    var body = discount.toJson();
+//    print('discount code: $body');
+//    final response = await client.post("$_root/discount/code",
+//        headers: {
+//          "Accept": "application/json",
+//          "Authorization": "Bearer $token",
+//          "Content-Type": "application/json"
+//        },
+//        body: body);
+//    print("This is the status Code: ${response.statusCode}");
+//    print("This is the msg Code: ${response.body}");
+//    return response;
+//  }
 }

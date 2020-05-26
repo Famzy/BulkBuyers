@@ -7,6 +7,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/ic_logo" />
+            android:src="@mipmap/ic_bb_logo_adjusted" />
     </item>
 </layer-list>

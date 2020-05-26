@@ -403,8 +403,8 @@ class OrderDetailsView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(result.productname, textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.w700)),
-                  Text(result.description, textAlign: TextAlign.left,),
+                  Text(result.productname, textAlign: TextAlign.left,),
+                  Text(result.description, textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.w700)),
                 ],
               ),
             ),
@@ -467,7 +467,7 @@ class OrderDetailsView extends StatelessWidget {
                 error
                     ? Icon( // WWrap in gesture detector and call you refresh future here
                         Icons.refresh,
-                        color: Colors.white,
+                        color: primarySwatch,
                         size: 45.0,
                       )
                     : Container()

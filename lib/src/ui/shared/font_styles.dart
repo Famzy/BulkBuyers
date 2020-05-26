@@ -140,7 +140,7 @@ const TextStyle formTextError = TextStyle(
   color: Colors.red,
   fontFamily: 'Helvetica',
   fontWeight: FontWeight.w500,
-  fontSize: 16,
+  fontSize: 14,
 );
 const TextStyle formTextSucces = TextStyle(
   color: Colors.green,

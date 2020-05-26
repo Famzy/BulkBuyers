@@ -1,24 +1,33 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bulk_buyers/src/data/local/database_helper.dart';
-import 'package:bulk_buyers/src/data/remote/store_api_provider.dart';
+import 'package:bulk_buyers/src/data/remote/model/store_api_provider.dart';
 import 'package:bulk_buyers/src/data/repository.dart';
 import 'package:bulk_buyers/src/models/cart_model.dart';
 import 'package:bulk_buyers/src/models/cart_items.dart';
+import 'package:bulk_buyers/src/models/discount_models.dart';
 import 'package:bulk_buyers/src/models/products_model.dart';
 import 'package:bulk_buyers/src/models/place_order_model.dart';
+import 'package:bulk_buyers/src/models/search_model.dart';
 import 'package:bulk_buyers/src/models/shop_model.dart';
 import 'package:bulk_buyers/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' show post;
 
 import '../base_model.dart';
-
 export 'package:bulk_buyers/src/enums/view_state.dart';
 
 /// Contains logic for a list view with the general expected functionality.
+
 class ShopViewModel extends BaseModel {
+  
+  static final ShopViewModel _instance = new ShopViewModel.internal();
+  factory ShopViewModel() => _instance;
+  ShopViewModel.internal();
+  HttpClient dicountClient = new HttpClient();
   List<StoreItems> listData;
+  var items = List<String>();
+  var store = List<String>();
   List _productData = [];
   List _cart = [];
   List _details = [];
@@ -42,7 +51,6 @@ class ShopViewModel extends BaseModel {
   final _root = Constants.BASE_URL;
 
   Future populateShop() async {
-    // var res = db.insertRemoteData();
     var res = repo.fetchUser();
     res = repo.fetchProducts();
     this.fetchCartData();
@@ -53,12 +61,18 @@ class ShopViewModel extends BaseModel {
   }
 
   Future fecthStoreProducts() async {
+     var res = repo.fetchProducts();
+       print(res);
     setState(ViewState.Busy);
     _productData = await db.getAllProducts();
     for (int i = 0; i < _productData.length; i++) {
       Shop shop = Shop.map(_productData[i]);
+      items.add("${_productData[i]['productname'].toLowerCase()} \u{20A6}${_productData[i]['price']}");
+      store.add("${_productData[i]['productname'].toLowerCase()} \u{20A6} ${_productData[i]['price']}");
+
     }
 
+    print(items);
     await Future.delayed(Duration(seconds: 0));
 
     _productData = List<StoreItems>.generate(
@@ -72,6 +86,7 @@ class ShopViewModel extends BaseModel {
             price: _productData[index]['price'],
             wishlist: _productData[index]['wishlist'] == 0,
             quantity: _productData[index]['quantity']));
+            
 
     if (_productData == null) {
       setState(ViewState.Error);
@@ -199,32 +214,38 @@ class ShopViewModel extends BaseModel {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString("token");
 
-    Map body = {"code": discountCode};
-
+    Discount discount = Discount(code: discountCode);
+    var body = discount.toJson();
     try {
-      var response = await post("$_root/discount/code",
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-          body: body);
+      dicountClient.badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+      String url = "$_root/discount/code";
+      HttpClientRequest request = await dicountClient.postUrl(Uri.parse(url));
+      request.headers.set('content-type', 'application/json');
+      request.headers.set('authorization', 'Bearer $token');
+      request.add(utf8.encode(json.encode(body)));
+      HttpClientResponse response = await request.close();
+      int status = await response.statusCode;
+      var res = await response.transform(utf8.decoder).join();
+      var value = json.decode(res);
 
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        pragma(response.body);
-        var data = json.decode(response.body);
-        var code = data['percent'];
-        percentage = code.toDouble();
-        id = data['discountid'];
-        print("this is ye pervebt: $percentage");
-        isDiscounted = true;
-        discountMsg = "";
-        this.sum();
-        notifyListeners();
-      } else if (response.statusCode == 203) {
-        discountMsg = "You have used this code before";
-      } else {
-        discountMsg = "Discount Code Does not exist";
+      switch (status) {
+        case HttpStatus.ok:
+          var code = value['percent'];
+          percentage = code.toDouble();
+          id = value['discountid'];
+          print("this is the percentage: $percentage");
+          isDiscounted = true;
+          discountMsg = "";
+          this.sum();
+          notifyListeners();
+          break;
+        case HttpStatus.nonAuthoritativeInformation:
+          discountMsg = "You have used this code before";
+          break;
+        default:
+          discountMsg = "Discount Code Does not exist";
+          break;
       }
     } catch (execption) {
       print(execption);
@@ -258,7 +279,10 @@ class ShopViewModel extends BaseModel {
     }
     notifyListeners();
   }
-
+getProductFromSearch(int index){
+  print(_productData[index].productname);
+  this.addToCart(_productData[index].productid, _productData[index].productname, _productData[index].price, _productData[index].quantity, _productData[index].productimg, _productData[index].price, _productData[index].discount);
+}
   updateCartPrice(int productid, int price, int quantity) async {
     var response = db.updateCartPriceAndQty(productid, price, quantity);
     notifyListeners();
@@ -301,4 +325,21 @@ class ShopViewModel extends BaseModel {
     var response = await db.clearCartDB();
     print(response);
   }
+
+   void filterSearch(String query){
+    List<String> dummuySearchList = List<String>();
+    dummuySearchList.addAll(items);
+    if(query.isEmpty){
+      List<String> dummyListData = List<String>();
+      dummuySearchList.forEach((stuff){
+        if(stuff.contains(query)){
+          dummyListData.add(stuff);
+        }
+      });
+      items.clear();
+      items.addAll(store);
+    }
+  }
 }
+
+

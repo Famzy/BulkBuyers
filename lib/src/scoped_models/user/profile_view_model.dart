@@ -1,5 +1,5 @@
 import 'package:bulk_buyers/src/data/local/database_helper.dart';
-import 'package:bulk_buyers/src/data/remote/store_api_provider.dart';
+import 'package:bulk_buyers/src/data/remote/model/store_api_provider.dart';
 import 'package:bulk_buyers/src/data/repository.dart';
 import 'package:bulk_buyers/src/models/user_model.dart';
 

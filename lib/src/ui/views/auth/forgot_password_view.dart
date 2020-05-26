@@ -2,18 +2,22 @@ import 'package:bulk_buyers/src/ui/shared/font_styles.dart';
 import 'package:bulk_buyers/src/ui/shared/ui_helpers.dart';
 import 'package:bulk_buyers/src/ui/views/auth/login_view.dart';
 import 'package:bulk_buyers/src/ui/views/auth/password_rest_confirmation_view.dart';
+import 'package:bulk_buyers/src/ui/widgets/busy_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:bulk_buyers/src/scoped_models/auth/forgot_password_view_model.dart';
 import 'package:bulk_buyers/src/ui/views/base_view.dart';
+import 'package:lottie/lottie.dart';
 
 class ForgotPasswordView extends StatelessWidget {
   TextEditingController forgotPassswordController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     return BaseView<ForgotPasswordViewModel>(
         builder: (context, child, model) => Scaffold(
             backgroundColor: Theme.of(context).backgroundColor,
-            body: Container(
+            body: Stack(children: <Widget>[
+              Container(
                 padding: EdgeInsets.only(left: 25.0, right: 25.0),
                 child: Container(
                   child: ListView(
@@ -28,8 +32,7 @@ class ForgotPasswordView extends StatelessWidget {
                           UIHelper.pageTitle(title: "Forgot Password"),
                           UIHelper.verticalSpaceLarge(),
                           UIHelper.inputFormField(
-                            validationMessage: model.emailError,
-                            action: model.emailValid(forgotPassswordController.text) ,
+                              validationMessage: model.emailError,
                               controller: forgotPassswordController,
                               placeholder: "Enter Email"),
                           UIHelper.verticalSpace(5.0),
@@ -54,21 +57,48 @@ class ForgotPasswordView extends StatelessWidget {
                       ),
                     ],
                   ),
-                ))));
+                ),
+              ),
+              IgnorePointer(
+                child: Opacity(
+                  opacity: model.state == ViewState.Busy ? 1.0 : 00,
+                  child: Container(
+                      width: screenSize.width,
+                      height: screenSize.height,
+                      child: Container(
+                        width: screenSize.width,
+                        height: screenSize.height,
+                        alignment: Alignment.center,
+                        color: Color.fromARGB(100, 0, 0, 0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Lottie.asset('assets/lottie/loading.json', height: 100),
+                          ],
+                        ),
+                      )
+                  ),
+                ),
+              )
+            ])));
   }
 
   Widget _getLoginButton(BuildContext context, ForgotPasswordViewModel model) {
     return UIHelper.fullScreenButton(
         title: "Email Password",
         onTap: () async {
-         if(model.isValidEmail){
-          var viewState =
-              await model.passwordReset(forgotPassswordController.text);
-          if (viewState == 200) {
-            print("This is block ran");
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ResetConfrimation()));
-          } else {}}
+          if (await model.emailValid(forgotPassswordController.text)) {
+            print(await model.emailValid(forgotPassswordController.text));
+            var viewState =
+                await model.passwordReset(forgotPassswordController.text);
+            if (viewState == 200) {
+              print("This is block ran");
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ResetConfrimation()));
+            } else {
+              print(await model.emailValid(forgotPassswordController.text));
+            }
+          }
           return null;
         });
   }
@@ -77,11 +107,10 @@ class ForgotPasswordView extends StatelessWidget {
     switch (model.state) {
       case ViewState.Busy:
         return Center(
-          child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).primaryColor)),
-        );
-        break;
+            child: Text(
+              '',
+              style: formTextError,
+            ));
       case ViewState.Error:
         return Center(
             child: Text(
@@ -102,97 +131,4 @@ class ForgotPasswordView extends StatelessWidget {
         return Container();
     }
   }
-
-//  Widget _getBodyUi(BuildContext context, ForgotPasswordViewModel model){
-//    switch (model.state) {
-//      case ViewState.Busy:
-//        return _getLoadingUi(context);
-//      case ViewState.NoDataAvailable:
-//        return _noDataUi(context, model);
-//      case ViewState.Error:
-//        return _errorUi(context, model);
-//      case ViewState.DataFetched:
-//      default:
-//        return _getListUi(model);
-//    }
-//  }
-
-//  Widget _getLoadingUi(BuildContext context) {
-//    return Center(
-//        child: Column(
-//          mainAxisSize: MainAxisSize.min,
-//          children: <Widget>[
-//            CircularProgressIndicator(
-//                valueColor:
-//                AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor)),
-//            Text('Fetching data ...')
-//          ],
-//        ));
-//  }
-//  Widget _noDataUi(BuildContext context, ForgotPasswordViewModel model) {
-//    return _getCenteredViewMessage(
-//        context,
-//        "No data available yet",
-//        model);
-//  }
-//  Widget _errorUi(BuildContext context, ForgotPasswordViewModel model) {
-//    return _getCenteredViewMessage(
-//        context,
-//        "Error retrieving your data. Tap to try again",
-//        model,
-//        error: true);
-//  }
-//  Widget _getCenteredViewMessage(
-//      BuildContext context, String message, ForgotPasswordViewModel model,
-//      {bool error = false}) {
-//    return Center(
-//        child: Padding(
-//            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-//            child: Column(
-//              mainAxisSize: MainAxisSize.min,
-//              children: <Widget>[
-//                Text(
-//                  message,
-//                  style: viewErrorTitle,
-//                  textAlign: TextAlign.center,
-//                ),
-//                error
-//                    ? Icon( // WWrap in gesture detector and call you refresh future here
-//                  Icons.refresh,
-//                  color: Colors.white,
-//                  size: 45.0,
-//                )
-//                    : Container()
-//              ],
-//            )));
-//  }
-//  Widget _getFeedbackUI(ForgotPasswordViewModel model) {
-//    switch (model.state) {
-//      case ViewState.Busy:
-//        return Center(
-//          child: CircularProgressIndicator(
-//              valueColor: AlwaysStoppedAnimation<Color>(
-//                  Theme.of(context).primaryColor)),
-//        );
-//        break;
-//      case ViewState.Error:
-//        return Center(
-//            child: Text(
-//          'Could not log in at this moment',
-//          style: formTextError,
-//        ));
-//      case ViewState.Success:
-//        {
-//          return Center(
-//              child: Text(
-//            'Login Success',
-//            style: formTextSucces,
-//          ));
-//        }
-//        break;
-//      case ViewState.WaitingForInput:
-//      default:
-//        return Container();
-//    }
-//  }
 }

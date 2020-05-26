@@ -2,7 +2,6 @@ import 'package:bulk_buyers/src/ui/shared/app_colors.dart';
 import 'package:bulk_buyers/src/ui/shared/font_styles.dart';
 import 'package:bulk_buyers/src/ui/shared/ui_helpers.dart';
 import 'package:bulk_buyers/src/ui/views/store/shop_view.dart';
-import 'package:bulk_buyers/src/ui/views/what_we_stand_for_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -272,7 +271,7 @@ class About extends StatelessWidget {
                           child:  SvgPicture.asset('assets/svgs/checkmark_circle.svg'),
                         ),
                         Text(
-                          "Get the best value for their money and \nmake tremendous savings on their regular \nmonthly household purchases.",
+                          "Get the best value for your money and \nmake tremendous savings on their regular \nmonthly household purchases.",
                           style: TextStyle(
                             fontFamily: 'Roboto',
                             color: Color(0xff000000),
@@ -314,15 +313,172 @@ class About extends StatelessWidget {
                   ),
                 ),
                 UIHelper.verticalSpaceSmall(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    UIHelper.ScreenButton(title: "What we stand for", onTap: () =>Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                            transitionDuration: const Duration(milliseconds: 350),
-                            pageBuilder: (context, _, __) => WhatWeStandFor()))),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 1.0, horizontal: 10.0),
+                  child: Text("What We Stand For",
+                      style: const TextStyle(
+                          color: const Color(0xfffb6500),
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Helvetica",
+                          fontStyle: FontStyle.normal,
+                          fontSize: 16.0),
+                      textAlign: TextAlign.left),
+                ),
+                Divider(),
+                UIHelper.verticalSpaceSmaller(),
+                // Rectangle 2107
+                Center(
+                  child: Container(
+                    width: 360,
+                    height: 325,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        color: const Color(0xffb3e0fc)),
+                    child: Column(
+                      children: <Widget>[
+                        UIHelper.verticalSpace(2),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Image.asset(
+                                'assets/images/quality.png',
+                                scale: 1.5,
+                              ),
+                            ),
+                            UIHelper.horizontalSpaceSmall(),
+                            Text(
+                              'Quality',
+                              style: const TextStyle(
+                                  color: const Color(0xff000000),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Roboto",
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 29.0),
+                            ),
+                          ],
+                        ),
+                        Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Image.asset(
+                                'assets/images/price.png',
+                                scale: 1.5,
+                              ),
+                            ),
+                            UIHelper.horizontalSpaceMedium(),
+                            Text(
+                              'Price',
+                              style: const TextStyle(
+                                  color: const Color(0xff000000),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Roboto",
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 29.0),
+                            ),
+                          ],
+                        ),
+                        Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Image.asset(
+                                'assets/images/speed.png',
+                                scale: 1.5,
+                              ),
+                            ),
+                            UIHelper.horizontalSpaceSmall(),
+                            Text(
+                              'Speed',
+                              style: const TextStyle(
+                                  color: const Color(0xff000000),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Roboto",
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 29.0),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                UIHelper.verticalSpaceMedium(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 1.0, horizontal: 30.0),
+                  child: Text("Feedback and Support",
+                      style: const TextStyle(
+                          color: const Color(0xfffb6500),
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Helvetica",
+                          fontStyle: FontStyle.normal,
+                          fontSize: 16.0),
+                      textAlign: TextAlign.left),
+                ),
+                Divider(),
+                // Call us: +234 809 975 5559
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(
+                                style: const TextStyle(
+                                    color:  const Color(0xff000000),
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Roboto",
+                                    fontStyle:  FontStyle.normal,
+                                    fontSize: 16.0
+                                ),
+                                text: "Call us: "),
+                            TextSpan(
+                                style: const TextStyle(
+                                    color:  const Color(0xff000000),
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Roboto",
+                                    fontStyle:  FontStyle.normal,
+                                    fontSize: 16.0
+                                ),
+                                text: "+234 809 975 5559")
+                          ]
+                      )
+                  ),
+                ),
+                // Email us:  info@bulkbuyersconnect.com
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(
+                                style: const TextStyle(
+                                    color:  const Color(0xff000000),
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Roboto",
+                                    fontStyle:  FontStyle.normal,
+                                    fontSize: 16.0
+                                ),
+                                text: "Email us:  "),
+                            TextSpan(
+                                style: const TextStyle(
+                                    color:  const Color(0xff000000),
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Roboto",
+                                    fontStyle:  FontStyle.normal,
+                                    fontSize: 16.0
+                                ),
+                                text: " contact@bulkbuyersconnect.com")
+                          ]
+                      )
+                  ),
                 ),
                 UIHelper.verticalSpaceLarge()
               ],

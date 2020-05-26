@@ -7,7 +7,7 @@ import 'package:http/http.dart' show post;
 
 export 'package:bulk_buyers/src/enums/view_state.dart';
 class ForgotPasswordViewModel extends BaseModel {
-  String emailError = null;
+  String emailError = "";
   bool isValidEmail = false;
   //Client client = Client();
   final _root = Constants.BASE_URL;
@@ -28,6 +28,7 @@ class ForgotPasswordViewModel extends BaseModel {
       }
       return response.statusCode;
     } catch (exeption) {
+      setState(ViewState.Error);
       print(exeption);
     }
   }
@@ -35,8 +36,6 @@ class ForgotPasswordViewModel extends BaseModel {
     await Future.delayed(Duration(seconds: 1));
     var loginResult = valid ? true : false;
 
-    // Get real response here from service
-    // determine state of the view based on response.
     var resetStateBasedOnReponse =
     loginResult ? ViewState.Success : ViewState.Error;
 
@@ -46,16 +45,11 @@ class ForgotPasswordViewModel extends BaseModel {
     return true;
   }
 
-   emailValid(String email) {
+ Future<bool>  emailValid(String email) async {
     print(email);
-    var vaild = StringUtils.isValidEmail(email);
-    if (vaild) {
-      isValidEmail = true;
-      emailError = null;
-    } else {
-      isValidEmail = false;
-      emailError = "Please enter a vaild Email";
-    }
+    bool vaild = StringUtils.isValidEmail(email);
+    vaild ? emailError = "" : "Invalid email format";
     notifyListeners();
+    return vaild;
   }
 }

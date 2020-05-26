@@ -1,5 +1,5 @@
 import 'package:bulk_buyers/src/data/local/database_helper.dart';
-import 'package:bulk_buyers/src/data/remote/store_api_provider.dart';
+import 'package:bulk_buyers/src/data/remote/model/store_api_provider.dart';
 import 'package:bulk_buyers/src/models/cart_model.dart';
 import 'package:bulk_buyers/src/models/cart_items.dart';
 import 'package:bulk_buyers/service_locator.dart';

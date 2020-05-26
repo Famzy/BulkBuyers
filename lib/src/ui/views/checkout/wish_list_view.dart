@@ -9,6 +9,7 @@ import 'package:bulk_buyers/src/utils/constants.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../base_view.dart';
@@ -247,7 +248,7 @@ class WishListView extends StatelessWidget {
                           placeholder: (context, url) =>
                               CircularProgressIndicator(),
                           errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
+                              const Icon(Icons.add_shopping_cart, color: primarySwatch,),
                         ),
                       ),
                     ],
@@ -359,10 +360,13 @@ class WishListView extends StatelessWidget {
       {bool error = false}) {
     return Center(
         child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                Container(
+                    height: 150,
+                    child: Lottie.asset('assets/lottie/no_wishlist.json')),
                 Text(
                   message,
                   style: viewErrorTitle,

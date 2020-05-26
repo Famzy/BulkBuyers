@@ -11,6 +11,7 @@ import 'package:bulk_buyers/src/ui/views/user/you_view.dart';
 import 'package:bulk_buyers/src/utils/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../base_view.dart';
@@ -176,258 +177,306 @@ class CartView extends StatelessWidget {
               ),
             ),
             backgroundColor: Color.fromARGB(242, 243, 243, 243),
-            body: Container(
-                margin: EdgeInsets.only(bottom: 10.0),
-                decoration: BoxDecoration(
-                    color: whiteSwatch,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0))),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          "Your Cart",
-                          style: display3,
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context)
+                  .requestFocus(FocusNode()),
+              child: Container(
+                  margin: EdgeInsets.only(bottom: 10.0),
+                  decoration: BoxDecoration(
+                      color: whiteSwatch,
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0))),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Card(
+                        elevation: 2,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "Your Cart",
+                            style: display3,
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(flex: 2, child: _getBodyUi(context, model)),
-                    UIHelper.verticalSpaceSmaller(),
-                    Expanded(
-                      flex: 2,
-                      child: hasData
-                          ? SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () => FocusScope.of(context)
-                                        .requestFocus(FocusNode()),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            Column(
-                                              children: <Widget>[
-                                                Text("Discount Code:"),
-                                                ScopedModelDescendant<
-                                                        ShopViewModel>(
-                                                    builder: (context, child,
-                                                        model) {
-                                                  return Text(
-                                                    "${model.discountMsg}",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.red),
-                                                  );
-                                                }),
-                                              ],
-                                            ),
-                                            UIHelper.horizontalSpaceSmall(),
-                                            // Rectangle 2081
-                                            Container(
-                                              width: 140,
-                                              height: 40,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 10.0, left: 10.0),
-                                                child: TextField(
-                                                  decoration: InputDecoration(
-                                                    contentPadding:
-                                                        EdgeInsets.only(
-                                                            bottom: -5,
-                                                            left: 10),
-                                                    hintText: "",
-                                                    border:
-                                                        OutlineInputBorder(),
+                      Expanded(flex: 2, child: _getBodyUi(context, model)),
+                      UIHelper.verticalSpaceSmaller(),
+                      Expanded(
+                        flex: 2,
+                        child: hasData
+                            ? SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () => FocusScope.of(context)
+                                          .requestFocus(FocusNode()),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: <Widget>[
+                                              Column(
+                                                children: <Widget>[
+                                                  Text("Discount Code:"),
+                                                  ScopedModelDescendant<
+                                                          ShopViewModel>(
+                                                      builder: (context, child,
+                                                          model) {
+                                                    return Text(
+                                                      "${model.discountMsg}",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.red),
+                                                    );
+                                                  }),
+                                                ],
+                                              ),
+                                              UIHelper.horizontalSpaceSmall(),
+                                              // Rectangle 2081
+                                              Container(
+                                                width: 140,
+                                                height: 40,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      right: 10.0, left: 10.0),
+                                                  child: TextField(
+                                                    decoration: InputDecoration(
+                                                      contentPadding:
+                                                          EdgeInsets.only(
+                                                              bottom: -5,
+                                                              left: 10),
+                                                      hintText: "",
+                                                      border:
+                                                          OutlineInputBorder(),
+                                                    ),
+                                                    controller:
+                                                        dicscountController,
                                                   ),
-                                                  controller:
-                                                      dicscountController,
                                                 ),
                                               ),
+                                              UIHelper.horizontalSpaceSmall(),
+                                            ],
+                                          ),
+                                          UIHelper.verticalSpaceSmaller(),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: <Widget>[
+                                              // Rectangle 2082
+                                              ScopedModelDescendant<
+                                                      ShopViewModel>(
+                                                  builder:
+                                                      (context, child, model) {
+                                                return !model.isDiscounted
+                                                    ? GestureDetector(
+                                                        onTap: () {
+                                                          model.getDiscount(
+                                                              dicscountController
+                                                                  .text);
+                                                          print(
+                                                              dicscountController
+                                                                  .text);
+                                                        },
+                                                        child: Container(
+                                                          width: 124,
+                                                          height: 30,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                              Radius.circular(18),
+                                                            ),
+                                                            color: const Color(
+                                                                0xffe96100),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              "APPLY CODE",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontFamily:
+                                                                      "Roboto",
+                                                                  color:
+                                                                      whiteSwatch),
+                                                              textAlign:
+                                                                  TextAlign.left,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : GestureDetector(
+                                                        onTap: () {
+                                                          model.undoDiscount();
+                                                          dicscountController.clear();
+                                                        },
+                                                        child: Container(
+                                                          width: 124,
+                                                          height: 30,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                              Radius.circular(18),
+                                                            ),
+                                                            color: blackSwatch,
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              "REMOVE CODE",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontFamily:
+                                                                      "Roboto",
+                                                                  color:
+                                                                      whiteSwatch),
+                                                              textAlign:
+                                                                  TextAlign.left,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                              }),
+                                              UIHelper.horizontalSpaceSmall(),
+                                            ],
+                                          ),
+                                          UIHelper.verticalSpace(5),
+                                        ],
+                                      ),
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: Text("Subtotal"),
+                                        ),
+                                        ScopedModelDescendant<ShopViewModel>(
+                                            builder: (context, child, model) {
+                                          return Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 18.0),
+                                              child: Text(
+                                                "\u{20A6}${model.subtotal.toString()}",
+                                                textAlign: TextAlign.right,
+                                              ),
                                             ),
-                                            UIHelper.horizontalSpaceSmall(),
-                                          ],
-                                        ),
-                                        UIHelper.verticalSpaceSmaller(),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            // Rectangle 2082
-                                            ScopedModelDescendant<
-                                                    ShopViewModel>(
-                                                builder:
-                                                    (context, child, model) {
-                                              return !model.isDiscounted
-                                                  ? GestureDetector(
-                                                      onTap: () {
-                                                        model.getDiscount(
-                                                            dicscountController
-                                                                .text);
-                                                        print(
-                                                            dicscountController
-                                                                .text);
-                                                      },
-                                                      child: Container(
-                                                        width: 124,
-                                                        height: 30,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                            Radius.circular(18),
-                                                          ),
-                                                          color: const Color(
-                                                              0xffe96100),
-                                                        ),
-                                                        child: Center(
-                                                          child: Text(
-                                                            "APPLY CODE",
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                fontFamily:
-                                                                    "Roboto",
-                                                                color:
-                                                                    whiteSwatch),
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : GestureDetector(
-                                                      onTap: () {
-                                                        model.undoDiscount();
-                                                        dicscountController.clear();
-                                                      },
-                                                      child: Container(
-                                                        width: 124,
-                                                        height: 30,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                            Radius.circular(18),
-                                                          ),
-                                                          color: blackSwatch,
-                                                        ),
-                                                        child: Center(
-                                                          child: Text(
-                                                            "REMOVE CODE",
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                fontFamily:
-                                                                    "Roboto",
-                                                                color:
-                                                                    whiteSwatch),
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                            }),
-                                            UIHelper.horizontalSpaceSmall(),
-                                          ],
-                                        ),
-                                        UIHelper.verticalSpace(5),
+                                          );
+                                        }),
                                       ],
                                     ),
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text("Subtotal"),
-                                      ),
-                                      ScopedModelDescendant<ShopViewModel>(
-                                          builder: (context, child, model) {
-                                        return Expanded(
+                                    Divider(
+                                      color: graySwatch,
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
                                           flex: 1,
                                           child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 8.0),
+                                            child: Text("Discount Fee"),
+                                          ),
+                                        ),
+                                        ScopedModelDescendant<ShopViewModel>(
+                                            builder: (context, child, model) {
+                                          return Padding(
                                             padding: const EdgeInsets.only(
                                                 right: 18.0),
                                             child: Text(
-                                              "\u{20A6}${model.subtotal.toString()}",
+                                              "-${model.discount.hashCode}",
                                               textAlign: TextAlign.right,
+                                              style: TextStyle(color: Colors.red),
                                             ),
-                                          ),
-                                        );
-                                      }),
-                                    ],
-                                  ),
-                                  Divider(
-                                    color: graySwatch,
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 1,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8.0),
-                                          child: Text("Dicount Fee"),
-                                        ),
-                                      ),
-                                      ScopedModelDescendant<ShopViewModel>(
-                                          builder: (context, child, model) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 18.0),
-                                          child: Text(
-                                            "-${model.discount.hashCode}",
-                                            textAlign: TextAlign.right,
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        );
-                                      }),
-                                    ],
-                                  ),
-                                  UIHelper.verticalSpaceSmaller(),
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 1,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8.0),
-                                          child: Text("Total"),
-                                        ),
-                                      ),
-                                      ScopedModelDescendant<ShopViewModel>(
-                                          builder: (context, child, model) {
-                                        return Expanded(
+                                          );
+                                        }),
+                                      ],
+                                    ),
+                                    UIHelper.verticalSpaceSmaller(),
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
                                           flex: 1,
                                           child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 18.0),
+                                            padding:
+                                                const EdgeInsets.only(left: 8.0),
+                                            child: Text("Total"),
+                                          ),
+                                        ),
+                                        ScopedModelDescendant<ShopViewModel>(
+                                            builder: (context, child, model) {
+                                          return Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 18.0),
+                                              child: Text(
+                                                "\u{20A6}${model.total}",
+                                                textAlign: TextAlign.right,
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ],
+                                    ),
+                                    Divider(
+                                      color: graySwatch,
+                                    ),
+                                    UIHelper.verticalSpaceSmaller(),
+                                    ScopedModelDescendant<ShopViewModel>(
+                                        builder: (context, child, model) {
+                                      return Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Container(
+                                          width: 300,
+                                          height: 35,
+                                          margin: EdgeInsets.only(bottom: 20),
+                                          child: RaisedButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                    transitionDuration:
+                                                        const Duration(
+                                                            milliseconds: 350),
+                                                    pageBuilder:
+                                                        (context, _, __) =>
+                                                            PaymentView(
+                                                      total: model.total,
+                                                      discount:
+                                                          model.discount.round(),
+                                                      discountid: model.disID,
+                                                    ),
+                                                  ));
+                                              print(model.total);
+                                            },
+                                            color: primarySwatch,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(25)),
+                                            ),
+                                            textColor:
+                                                Color.fromARGB(255, 0, 0, 0),
+                                            padding: EdgeInsets.all(8.0),
                                             child: Text(
-                                              "\u{20A6}${model.total}",
-                                              textAlign: TextAlign.right,
+                                              "CHECKOUT NOW      | \u{20A6}${model.total.toString()}",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontFamily: "Roboto",
+                                                  color: whiteSwatch),
+                                              textAlign: TextAlign.left,
                                             ),
                                           ),
-                                        );
-                                      }),
-                                    ],
-                                  ),
-                                  Divider(
-                                    color: graySwatch,
-                                  ),
-                                  UIHelper.verticalSpaceSmaller(),
-                                  ScopedModelDescendant<ShopViewModel>(
-                                      builder: (context, child, model) {
-                                    return Align(
+                                        ),
+                                      );
+                                    }),
+                                    Align(
                                       alignment: Alignment.topCenter,
                                       child: Container(
                                         width: 300,
@@ -438,83 +487,39 @@ class CartView extends StatelessWidget {
                                             Navigator.push(
                                                 context,
                                                 PageRouteBuilder(
-                                                  transitionDuration:
-                                                      const Duration(
-                                                          milliseconds: 350),
-                                                  pageBuilder:
-                                                      (context, _, __) =>
-                                                          PaymentView(
-                                                    total: model.total,
-                                                    discount:
-                                                        model.discount.round(),
-                                                    discountid: model.disID,
-                                                  ),
-                                                ));
-                                            print(model.total);
+                                                    transitionDuration:
+                                                        const Duration(
+                                                            milliseconds: 350),
+                                                    pageBuilder:
+                                                        (context, _, __) =>
+                                                            ShopView()));
                                           },
-                                          color: primarySwatch,
+                                          color: whiteSwatch,
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(25)),
                                           ),
-                                          textColor:
-                                              Color.fromARGB(255, 0, 0, 0),
+                                          textColor: Color.fromARGB(255, 0, 0, 0),
                                           padding: EdgeInsets.all(8.0),
                                           child: Text(
-                                            "CHECKOUT NOW      | \u{20A6}${model.total.toString()}",
+                                            "CONTINUE SHOPING",
                                             style: TextStyle(
                                                 fontSize: 12,
                                                 fontFamily: "Roboto",
-                                                color: whiteSwatch),
+                                                color: primarySwatch),
                                             textAlign: TextAlign.left,
                                           ),
                                         ),
                                       ),
-                                    );
-                                  }),
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Container(
-                                      width: 300,
-                                      height: 35,
-                                      margin: EdgeInsets.only(bottom: 20),
-                                      child: RaisedButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              PageRouteBuilder(
-                                                  transitionDuration:
-                                                      const Duration(
-                                                          milliseconds: 350),
-                                                  pageBuilder:
-                                                      (context, _, __) =>
-                                                          ShopView()));
-                                        },
-                                        color: whiteSwatch,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(25)),
-                                        ),
-                                        textColor: Color.fromARGB(255, 0, 0, 0),
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "CONTINUE SHOPING",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: "Roboto",
-                                              color: primarySwatch),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Container(),
-                    )
-                  ],
-                ))));
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                      )
+                    ],
+                  )),
+            )));
   }
 
   Widget _getBodyUi(BuildContext context, ShopViewModel model) {
@@ -537,15 +542,16 @@ class CartView extends StatelessWidget {
         itemCount: model.cartListing.length,
         itemBuilder: (context, itemIndex) {
           var item = model.cartListing[itemIndex];
-          return _getListItemUi(item, itemIndex);
+          return _getListItemUi(item, itemIndex, context);
         });
   }
 
-  Widget _getListItemUi(CartItems result, itemIndex) {
+  Widget _getListItemUi(CartItems result, itemIndex, context)  {
     return GestureDetector(
       onTap: () {},
       child: GestureDetector(
-        onTap: () {},
+          onTap: () => FocusScope.of(context)
+              .requestFocus(FocusNode()),
         child: Card(
           elevation: 2,
           margin: EdgeInsets.all(2.0),
@@ -588,7 +594,7 @@ class CartView extends StatelessWidget {
                             placeholder: (context, url) =>
                                 Center(child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                                const Icon(Icons.add_shopping_cart, color: primarySwatch,),
                           ),
                         ),
                       ],
@@ -715,6 +721,9 @@ class CartView extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                Container(
+                    height: 150,
+                    child: Lottie.asset('assets/lottie/cancel_order.json')),
                 Text(
                   message,
                   style: viewErrorTitle,

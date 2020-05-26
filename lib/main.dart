@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bulk_buyers/src/scoped_models/store/shop_view_model.dart';
 import 'package:bulk_buyers/src/ui/shared/app_colors.dart';
 import 'package:bulk_buyers/src/ui/views/store/shop_view.dart';
@@ -15,13 +17,20 @@ void main() async {
   setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
   bool value = await navigation();
+  HttpOverrides.global = new MyHttpOverrides();
   runApp(MyApp(
     isAthenicated: value,
   ));
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 }
-
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
 class MyApp extends StatelessWidget {
   MyApp({this.isAthenicated});
   ShopViewModel shopViewModel = ShopViewModel();

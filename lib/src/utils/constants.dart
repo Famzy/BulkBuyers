@@ -5,10 +5,8 @@
  ///
 
 class Constants {
-  static const BASE_URL = "http://bulkbuyersconnect.com/api/v1";
+  static const BASE_URL = "https://bulkbuyersconnect.com/api/v1";
   static const IMAGE_BASE_URL = "http://bulkbuyersconnect.com";
-//  static const PAYSTACK_API_TEST_KEY =
-//      "pk_test_9e9679dc146af4f8291a14401df7b94cf44d5ee1";
   static const PAYSTACK_API_LIVE_KEY =
       "pk_live_6ddeaa47abab16a035b0ce5ca97a252b24c11806";
 

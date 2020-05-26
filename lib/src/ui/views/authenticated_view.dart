@@ -22,8 +22,15 @@ class AuthenticatedView extends StatelessWidget {
         builder: (context, child, model) => Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.black,
-              leading: Image.asset(
-                "assets/images/icon-ios-menu.png",
+              leading: GestureDetector(
+                onTap: () => Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 350),
+                        pageBuilder: (context, _, __) => YouView())),
+                child: Image.asset(
+                  "assets/images/icon-ios-menu.png",
+                ),
               ),
               actions: <Widget>[
                 Padding(
@@ -214,7 +221,7 @@ class AuthenticatedView extends StatelessWidget {
                               textColor: Color.fromARGB(255, 0, 0, 0),
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                "START SHOPING !",
+                                "START SHOPPING !",
                                 style: TextStyle(
                                     fontSize: 12,
                                     fontFamily: "Roboto",

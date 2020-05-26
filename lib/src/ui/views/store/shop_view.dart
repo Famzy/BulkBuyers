@@ -7,7 +7,6 @@ import 'package:bulk_buyers/src/ui/shared/font_styles.dart';
 import 'package:bulk_buyers/src/ui/shared/ui_helpers.dart';
 import 'package:bulk_buyers/src/ui/views/checkout/cart_view.dart';
 import 'package:bulk_buyers/src/ui/views/checkout/wish_list_view.dart';
-import 'package:bulk_buyers/src/ui/views/store/product_grid_view.dart';
 import 'package:bulk_buyers/src/ui/views/user/profile_view.dart';
 import 'package:bulk_buyers/src/ui/views/user/you_view.dart';
 import 'package:bulk_buyers/src/utils/constants.dart';
@@ -35,7 +34,7 @@ class _ShopViewState extends State<ShopView> {
       ),
       backgroundColor: (flag) ? primarySwatch : Colors.red[500],
       action: SnackBarAction(
-          label: 'undo',
+          label: '',
           textColor: whiteSwatch,
           onPressed: () {
             print("test");
@@ -46,6 +45,7 @@ class _ShopViewState extends State<ShopView> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return BaseView<ShopViewModel>(
         onModelReady: (model) => model.fecthStoreProducts(),
         builder: (context, childe, model) => Scaffold(
@@ -209,35 +209,61 @@ class _ShopViewState extends State<ShopView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    UIHelper.verticalSpaceSmaller(),
-                    Row(
-                      children: <Widget>[
-                        IconButton(
-                          onPressed: null,
-                          icon: Image.asset(
-                              'assets/images/material_cart_orange.png'),
-                        ),
-                        UIHelper.horizontalSpace(10),
-                        Expanded(
-                            child: Container(
-                          margin: EdgeInsets.only(right: 5.0),
-                          decoration: BoxDecoration(
-                            color: whiteSwatch,
-                            border: Border.all(color: ashSwatch),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(right: 10.0, left: 10.0),
-                            child: TextField(
-                              decoration: InputDecoration.collapsed(
-                                  hintText: "Search products"),
-                              controller: searchCOntroller,
-                            ),
-                          ),
-                        ))
-                      ],
-                    ),
+//                    UIHelper.verticalSpaceSmaller(),
+//                    Container(
+//                      height: 50,
+//                      child: Row(
+//                        children: <Widget>[
+//                          Padding(
+//                            padding: const EdgeInsets.symmetric(horizontal: 15),
+//                            child: Icon(
+//                              Icons.add_shopping_cart,
+//                              color: primarySwatch,
+//                            ),
+//                          ),
+//                          GestureDetector(
+//                            onTap: () {
+//                              showSearch(
+//                                  context: context,
+//                                  delegate: ProductSearch(model.items, model));
+//
+//                            },
+//                            child: Container(
+//                              height: 35,
+//                              width: width / 1.22,
+//                              decoration: BoxDecoration(
+//                                borderRadius:
+//                                    BorderRadius.all(Radius.circular(4)),
+//                                border: Border.all(color: graySwatch, width: 1),
+//                              ),
+//                              child: Row(
+//                                mainAxisAlignment:
+//                                    MainAxisAlignment.spaceBetween,
+//                                crossAxisAlignment: CrossAxisAlignment.center,
+//                                children: <Widget>[
+//                                  Padding(
+//                                    padding: const EdgeInsets.only(left: 8.0),
+//                                    child: Text(
+//                                      "search products",
+//                                      style: TextStyle(color: graySwatch),
+//                                    ),
+//                                  ),
+//                                  Padding(
+//                                    padding: const EdgeInsets.only(
+//                                        left: 5, right: 10),
+//                                    child: Icon(
+//                                      Icons.search,
+//                                      size: 20,
+//                                      color: graySwatch,
+//                                    ),
+//                                  )
+//                                ],
+//                              ),
+//                            ),
+//                          ),
+//                        ],
+//                      ),
+//                    ),
                     UIHelper.verticalSpaceSmaller(),
                     Row(
                       children: <Widget>[
@@ -256,57 +282,6 @@ class _ShopViewState extends State<ShopView> {
                           ),
                         ),
                         UIHelper.horizontalSpace(90.0),
-//                        GestureDetector(
-//                          onTap: () {},
-//                          child: Container(
-//                            margin: EdgeInsets.only(left: 10.0),
-//                            decoration: BoxDecoration(
-//                              borderRadius: BorderRadius.circular(3.0),
-//                              color: ashSwatch,
-//                            ),
-//                            child: Padding(
-//                              padding: const EdgeInsets.only(
-//                                  top: 3.0,
-//                                  bottom: 3.0,
-//                                  left: 15.0,
-//                                  right: 15.0),
-//                              child: Text(
-//                                "LIST",
-//                                style: TextStyle(color: graySwatch),
-//                              ),
-//                            ),
-//                          ),
-//                        ),
-//                        GestureDetector(
-//                          onTap: () {
-//                            Navigator.push(
-//                                context,
-//                                PageRouteBuilder(
-//                                    transitionDuration:
-//                                        const Duration(milliseconds: 350),
-//                                    pageBuilder: (context, _, __) =>
-//                                        ProductGridView()));
-//                          },
-//                          child: Container(
-//                            margin: EdgeInsets.only(left: 10.0),
-//                            decoration: BoxDecoration(
-//                              border: Border.all(color: ashSwatch),
-//                              borderRadius: BorderRadius.circular(3.0),
-//                              color: whiteSwatch,
-//                            ),
-//                            child: Padding(
-//                              padding: const EdgeInsets.only(
-//                                  top: 3.0,
-//                                  bottom: 3.0,
-//                                  left: 15.0,
-//                                  right: 15.0),
-//                              child: Text(
-//                                "GRID",
-//                                style: TextStyle(color: primarySwatch),
-//                              ),
-//                            ),
-//                          ),
-//                        ),
                       ],
                     ),
                     UIHelper.verticalSpaceSmall(),
@@ -361,7 +336,10 @@ class _ShopViewState extends State<ShopView> {
                   imageUrl: "${Constants.IMAGE_BASE_URL}/${result.productimg}",
                   placeholder: (context, url) =>
                       Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.shopping_cart,
+                    color: primarySwatch,
+                  ),
                 ),
               ),
             ),
@@ -504,5 +482,120 @@ class _ShopViewState extends State<ShopView> {
                     : Container()
               ],
             )));
+  }
+}
+
+class ProductSearch extends SearchDelegate<String> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  showCartSnak(String msg, bool flag) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(
+        msg,
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: (flag) ? primarySwatch : Colors.red[500],
+      action: SnackBarAction(
+          label: '',
+          textColor: whiteSwatch,
+          onPressed: () {
+            print("test");
+          }),
+      duration: Duration(seconds: 2),
+    ));
+  }
+
+  final List storeProducts;
+  ShopViewModel model;
+  ProductSearch(this.storeProducts, this.model);
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // Actions for search field
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          if (query.isEmpty) {
+            close(context, null);
+          }
+          query = "";
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // leading icon on the left of the stuff
+    return IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults based on selection
+    return Center(
+      child: Text(query),
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // show when someone search
+    final suggestionList = query.isEmpty
+        ? storeProducts
+        : storeProducts.where((search) => search.startsWith(query.toLowerCase())).toList();
+    //       : storeProducts.where((search) => search.startsWith(query)).toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        leading: GestureDetector(
+          onTap: () {
+            print(storeProducts.indexOf(suggestionList[index]));
+            int position = storeProducts.indexOf(suggestionList[index]);
+            model.getProductFromSearch(position);
+            Timer(Duration(milliseconds: 500), () {
+              showCartSnak(model.cartMsg, model.isSuccessful);
+            });
+            close(context, null);
+          },
+          child: Icon(
+            Icons.add_shopping_cart,
+            color: primarySwatch,
+          ),
+        ),
+        title: GestureDetector(
+          onTap: () {
+            print(storeProducts.indexOf(suggestionList[index]));
+            int position = storeProducts.indexOf(suggestionList[index]);
+            model.getProductFromSearch(position);
+            Timer(Duration(milliseconds: 500), () {
+
+              showCartSnak(model.cartMsg, model.isSuccessful);
+            });
+            close(context, null);
+          },
+          child: RichText(
+            text: TextSpan(
+                text: suggestionList[index].substring(0, query.length),
+                style: TextStyle(
+                    color: primarySwatch, fontWeight: FontWeight.bold),
+                children: [
+                  TextSpan(
+                      text: suggestionList[index].substring(query.length),
+                      style: TextStyle(color: Colors.grey))
+                ]),
+          ),
+        ),
+      ),
+      itemCount: suggestionList.length,
+    );
   }
 }

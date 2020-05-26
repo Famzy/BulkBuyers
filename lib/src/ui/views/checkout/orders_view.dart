@@ -1,4 +1,3 @@
-import 'package:bulk_buyers/src/models/orders_post_model.dart';
 import 'package:bulk_buyers/src/models/orders_model.dart';
 import 'package:bulk_buyers/src/scoped_models/checkout/orders_view_model.dart';
 import 'package:bulk_buyers/src/ui/shared/app_colors.dart';
@@ -285,7 +284,6 @@ class OrdersView extends StatelessWidget {
 
   Widget _getListUi(OrdersViewModel model) {
     return ListView.builder(
-      reverse: true,
         itemCount: model.placedOrders.length,
         itemBuilder: (context, itemIndex) {
           var item = model.placedOrders[itemIndex];
@@ -302,9 +300,16 @@ class OrdersView extends StatelessWidget {
               context,
               PageRouteBuilder(
                   transitionDuration: const Duration(milliseconds: 350),
-                  pageBuilder: (context, _, __) => OrderDetailsView(id: result.orderid, ref: result.orderrefno, date: result.created_at, status: result.orderstatid, total: result.totalcost, discount: result.discount,)));
+                  pageBuilder: (context, _, __) => OrderDetailsView(
+                        id: result.orderid,
+                        ref: result.orderrefno,
+                        date: result.created_at,
+                        status: result.orderstatid,
+                        total: result.totalcost,
+                        discount: result.discount,
+                      )));
           print("from view: ${result.orderid}");
-         // model.getOrderDetails(result.orderid);
+          // model.getOrderDetails(result.orderid);
         },
         child: Card(
           elevation: 3,
@@ -420,7 +425,7 @@ class OrdersView extends StatelessWidget {
   }
 
   Widget _noDataUi(BuildContext context, OrdersViewModel model) {
-    return _getCenteredViewMessage(context, "No data available yet", model);
+    return _getCenteredViewMessage(context, "No Orders Yet", model);
   }
 
   Widget _errorUi(BuildContext context, OrdersViewModel model) {

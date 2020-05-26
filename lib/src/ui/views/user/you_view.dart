@@ -19,6 +19,7 @@ import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../base_view.dart';
+import '../faq.dart';
 import '../welcome_view.dart';
 
 class YouView extends StatefulWidget {
@@ -34,6 +35,7 @@ class _YouViewState extends State<YouView> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black,
@@ -319,7 +321,7 @@ class _YouViewState extends State<YouView> {
                             transitionDuration:
                             const Duration(milliseconds: 350),
                             pageBuilder: (context, _, __) =>
-                                HowItWorks()));
+                                FAQs()));
                   },
                   child: Row(
                     children: <Widget>[
@@ -332,10 +334,10 @@ class _YouViewState extends State<YouView> {
                                   transitionDuration:
                                   const Duration(milliseconds: 350),
                                   pageBuilder: (context, _, __) =>
-                                      HowItWorks()));
+                                      FAQs()));
                         },
                       ),
-                      Text("How it works"),
+                      Text("FAQs"),
                     ],
                   ),
                 ),
@@ -343,8 +345,8 @@ class _YouViewState extends State<YouView> {
                   onTap: ()async {
                     print("click");
                     final RenderBox box = context.findRenderObject();
-                    Share.share("Sample",
-                        subject: "Get Bulk Buyers",
+                    Share.share("Join me to buy your groceries in bulk from Bulk Buyers Connect. https://bit.ly/2LS9V9f",
+                        subject: "Get Bulk Buyers Connect",
                         sharePositionOrigin:
                         box.localToGlobal(Offset.zero) &
                         box.size);
@@ -356,8 +358,8 @@ class _YouViewState extends State<YouView> {
                         onPressed: () async {
                           print("click");
                           final RenderBox box = context.findRenderObject();
-                          Share.share("https://bulkbuyersconnect.com/",
-                              subject: "Get Bulk Buyers",
+                          Share.share("Join me to buy your groceries in bulk from Bulk Buyers Connect. https://bit.ly/2LS9V9f",
+                              subject: "Get Bulk Buyers Connect",
                               sharePositionOrigin:
                               box.localToGlobal(Offset.zero) &
                               box.size);
@@ -385,14 +387,29 @@ class _YouViewState extends State<YouView> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.shop, color: primarySwatch,),
-                      UIHelper.horizontalSpace(20),
-                      Text("v0.1"),
-                    ],
+                UIHelper.verticalSpace(height/9.9),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                       Text("Bulk Buyers Connect", style :
+                        TextStyle(
+                            color:  primarySwatch,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "Roboto",
+                            fontStyle:  FontStyle.normal,
+                            fontSize: 12.0
+                        ),
+                        textAlign: TextAlign.left
+                    ),
+                        UIHelper.verticalSpace(5),
+                        Text("App Version 1.0", style: TextStyle(fontSize: 12, color:  const Color(0xff908888),
+                          fontWeight: FontWeight.w400,),),
+                        UIHelper.verticalSpace(5),
+                      ],
+                    ),
                   ),
                 ),
               ],
