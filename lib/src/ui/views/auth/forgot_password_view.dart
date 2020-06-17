@@ -46,7 +46,7 @@ class ForgotPasswordView extends StatelessWidget {
 //                  UIHelper.fullScreenButton(title: "Email Password"),
                           UIHelper.verticalSpaceSmaller(),
                           UIHelper.formLInkText(
-                              title: "I Think I remeber my password",
+                              title: "I Think I remember my password",
                               onTap: () {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(

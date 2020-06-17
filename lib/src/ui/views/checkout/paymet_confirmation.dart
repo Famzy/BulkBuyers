@@ -14,17 +14,16 @@ import 'cart_view.dart';
 
 class PaymentConfiramtion extends StatelessWidget {
   String ref;
-  int discount;
-  int discountid;
-  String address;
-  PaymentConfiramtion({this.ref, this.discountid, this.discount, this.address});
+  int orderid;
+  int totalcost;
+  PaymentConfiramtion({this.ref, this.orderid, this.totalcost});
   MediaQueryData queryData;
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
     return BaseView<ShopViewModel>(
-        onModelReady: (model) => model.completeOrder(ref, discountid, discount, address),
+        onModelReady: (model) => model.ordersPaidFor(ref, orderid, totalcost),
         builder: (context, child, model) => Scaffold(
               appBar: AppBar(
               backgroundColor: Colors.black,
@@ -262,7 +261,7 @@ class PaymentConfiramtion extends StatelessWidget {
                               height: 40,
                               margin: EdgeInsets.only(bottom: 20),
                               child: RaisedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   Navigator.push(
                                       context,
                                       PageRouteBuilder(

@@ -452,6 +452,12 @@ class About extends StatelessWidget {
                       )
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(left:40.0),
+                  child: Text(
+                    "(Mon - Fri / 9am-5pm, Sat / 9am - 3pm)"
+                  ),
+                ),
                 // Email us:  info@bulkbuyersconnect.com
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

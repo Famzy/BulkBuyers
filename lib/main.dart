@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:bulk_buyers/src/scoped_models/store/shop_view_model.dart';
 import 'package:bulk_buyers/src/ui/shared/app_colors.dart';
-import 'package:bulk_buyers/src/ui/views/store/shop_view.dart';
+import 'package:bulk_buyers/src/ui/views/network_splash_screen.dart';
 import 'package:bulk_buyers/src/ui/views/welcome_view.dart';
 import 'package:bulk_buyers/src/utils/page_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:async/async.dart';
 
@@ -31,15 +32,39 @@ class MyHttpOverrides extends HttpOverrides{
       ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({this.isAthenicated});
-  ShopViewModel shopViewModel = ShopViewModel();
   static AsyncMemoizer apiMemo = new AsyncMemoizer();
   bool isAthenicated;
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  AppUpdateInfo _updateInfo;
+  ShopViewModel shopViewModel = ShopViewModel();
 
   final routes = <String, WidgetBuilder>{
     //  DemoShopList.route: (BuildContext context) => DemoShopList()
   };
+
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+
+  bool _flexibleUpdateAvailable = false;
+
+// Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        _updateInfo = info;
+      });
+    }).catchError((e) => _showError(e));
+  }
+  void _showError(dynamic exception) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(exception.toString())));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModel<ShopViewModel>(
@@ -54,7 +79,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: whiteSwatch,
               bottomAppBarTheme:
                   BottomAppBarTheme(elevation: 0, color: Colors.blue)),
-          home: isAthenicated ? ShopView() : WelcomeView()),
+          home: widget.isAthenicated ? NetworkSplashScreen() : WelcomeView()),
     );
   }
 }

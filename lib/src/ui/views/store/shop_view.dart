@@ -7,6 +7,7 @@ import 'package:bulk_buyers/src/ui/shared/font_styles.dart';
 import 'package:bulk_buyers/src/ui/shared/ui_helpers.dart';
 import 'package:bulk_buyers/src/ui/views/checkout/cart_view.dart';
 import 'package:bulk_buyers/src/ui/views/checkout/wish_list_view.dart';
+import 'package:bulk_buyers/src/ui/views/store/product_details_view.dart';
 import 'package:bulk_buyers/src/ui/views/user/profile_view.dart';
 import 'package:bulk_buyers/src/ui/views/user/you_view.dart';
 import 'package:bulk_buyers/src/utils/constants.dart';
@@ -209,61 +210,60 @@ class _ShopViewState extends State<ShopView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-//                    UIHelper.verticalSpaceSmaller(),
-//                    Container(
-//                      height: 50,
-//                      child: Row(
-//                        children: <Widget>[
-//                          Padding(
-//                            padding: const EdgeInsets.symmetric(horizontal: 15),
-//                            child: Icon(
-//                              Icons.add_shopping_cart,
-//                              color: primarySwatch,
-//                            ),
-//                          ),
-//                          GestureDetector(
-//                            onTap: () {
-//                              showSearch(
-//                                  context: context,
-//                                  delegate: ProductSearch(model.items, model));
-//
-//                            },
-//                            child: Container(
-//                              height: 35,
-//                              width: width / 1.22,
-//                              decoration: BoxDecoration(
-//                                borderRadius:
-//                                    BorderRadius.all(Radius.circular(4)),
-//                                border: Border.all(color: graySwatch, width: 1),
-//                              ),
-//                              child: Row(
-//                                mainAxisAlignment:
-//                                    MainAxisAlignment.spaceBetween,
-//                                crossAxisAlignment: CrossAxisAlignment.center,
-//                                children: <Widget>[
-//                                  Padding(
-//                                    padding: const EdgeInsets.only(left: 8.0),
-//                                    child: Text(
-//                                      "search products",
-//                                      style: TextStyle(color: graySwatch),
-//                                    ),
-//                                  ),
-//                                  Padding(
-//                                    padding: const EdgeInsets.only(
-//                                        left: 5, right: 10),
-//                                    child: Icon(
-//                                      Icons.search,
-//                                      size: 20,
-//                                      color: graySwatch,
-//                                    ),
-//                                  )
-//                                ],
-//                              ),
-//                            ),
-//                          ),
-//                        ],
-//                      ),
-//                    ),
+                    UIHelper.verticalSpaceSmaller(),
+                    Container(
+                      height: 50,
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Icon(
+                              Icons.add_shopping_cart,
+                              color: primarySwatch,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              showSearch(
+                                  context: context,
+                                  delegate: ProductSearch(model.items, model));
+                            },
+                            child: Container(
+                              height: 35,
+                              width: width / 1.22,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4)),
+                                border: Border.all(color: graySwatch, width: 1),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      "search products",
+                                      style: TextStyle(color: graySwatch),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 10),
+                                    child: Icon(
+                                      Icons.search,
+                                      size: 20,
+                                      color: graySwatch,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     UIHelper.verticalSpaceSmaller(),
                     Row(
                       children: <Widget>[
@@ -318,7 +318,14 @@ class _ShopViewState extends State<ShopView> {
 
   Widget _getListItemUi(StoreItems result) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        print(result.productid);
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+                transitionDuration: const Duration(milliseconds: 350),
+                pageBuilder: (context, _, __) => ProductDetailsView(id: result.productid,)));
+      },
       child: Card(
         elevation: 2,
         margin: EdgeInsets.all(2),
@@ -541,8 +548,67 @@ class ProductSearch extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     // TODO: implement buildResults based on selection
-    return Center(
-      child: Text(query),
+//    return Center(
+//      child: Text(query),
+//    );
+    final suggestionList = query.isEmpty
+        ? storeProducts
+        : storeProducts
+        .where((search) => search.startsWith(query.toLowerCase()))
+        .toList();
+    //       : storeProducts.where((search) => search.startsWith(query)).toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        leading: GestureDetector(
+          onTap: () async {
+            print(storeProducts.indexOf(suggestionList[index]));
+            int position = storeProducts.indexOf(suggestionList[index]);
+            var productID = await model.getProductFromSearch(position);
+            print(productID);
+            Navigator.push(
+                context,
+                PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 350),
+                    pageBuilder: (context, _, __) => ProductDetailsView(
+                      id: productID,
+                    )));
+            // close(context, null);
+          },
+          child: Icon(
+            Icons.search,
+            color: primarySwatch,
+          ),
+        ),
+        title: GestureDetector(
+          onTap: () async {
+            print(storeProducts.indexOf(suggestionList[index]));
+            int position = storeProducts.indexOf(suggestionList[index]);
+            var productID = await model.getProductFromSearch(position);
+            print(productID);
+            // close(context, null);
+            Navigator.push(
+                context,
+                PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 350),
+                    pageBuilder: (context, _, __) => ProductDetailsView(
+                      id: productID,
+                    )));
+          },
+          child: RichText(
+            text: TextSpan(
+                text: suggestionList[index].substring(0, query.length),
+                style: TextStyle(
+                    color: primarySwatch, fontWeight: FontWeight.bold),
+                children: [
+                  TextSpan(
+                      text: suggestionList[index].substring(query.length),
+                      style: TextStyle(color: Colors.grey))
+                ]),
+          ),
+        ),
+      ),
+      itemCount: suggestionList.length,
     );
   }
 
@@ -551,36 +617,47 @@ class ProductSearch extends SearchDelegate<String> {
     // show when someone search
     final suggestionList = query.isEmpty
         ? storeProducts
-        : storeProducts.where((search) => search.startsWith(query.toLowerCase())).toList();
+        : storeProducts
+            .where((search) => search.startsWith(query.toLowerCase()))
+            .toList();
     //       : storeProducts.where((search) => search.startsWith(query)).toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         leading: GestureDetector(
-          onTap: () {
+          onTap: () async {
             print(storeProducts.indexOf(suggestionList[index]));
             int position = storeProducts.indexOf(suggestionList[index]);
-            model.getProductFromSearch(position);
-            Timer(Duration(milliseconds: 500), () {
-              showCartSnak(model.cartMsg, model.isSuccessful);
-            });
-            close(context, null);
+            var productID = await model.getProductFromSearch(position);
+            print(productID);
+            Navigator.push(
+                context,
+                PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 350),
+                    pageBuilder: (context, _, __) => ProductDetailsView(
+                          id: productID,
+                        )));
+            // close(context, null);
           },
           child: Icon(
-            Icons.add_shopping_cart,
+            Icons.search,
             color: primarySwatch,
           ),
         ),
         title: GestureDetector(
-          onTap: () {
+          onTap: () async {
             print(storeProducts.indexOf(suggestionList[index]));
             int position = storeProducts.indexOf(suggestionList[index]);
-            model.getProductFromSearch(position);
-            Timer(Duration(milliseconds: 500), () {
-
-              showCartSnak(model.cartMsg, model.isSuccessful);
-            });
-            close(context, null);
+            var productID = await model.getProductFromSearch(position);
+            print(productID);
+            // close(context, null);
+            Navigator.push(
+                context,
+                PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 350),
+                    pageBuilder: (context, _, __) => ProductDetailsView(
+                          id: productID,
+                        )));
           },
           child: RichText(
             text: TextSpan(

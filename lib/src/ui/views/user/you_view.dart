@@ -345,7 +345,7 @@ class _YouViewState extends State<YouView> {
                   onTap: ()async {
                     print("click");
                     final RenderBox box = context.findRenderObject();
-                    Share.share("Join me to buy your groceries in bulk from Bulk Buyers Connect. https://bit.ly/2LS9V9f",
+                    Share.share("Join me to buy your groceries in bulk from Bulk Buyers Connect. https://play.google.com/store/apps/details?id=com.bulkbuyersconnect.bulk_buyers",
                         subject: "Get Bulk Buyers Connect",
                         sharePositionOrigin:
                         box.localToGlobal(Offset.zero) &
@@ -358,7 +358,7 @@ class _YouViewState extends State<YouView> {
                         onPressed: () async {
                           print("click");
                           final RenderBox box = context.findRenderObject();
-                          Share.share("Join me to buy your groceries in bulk from Bulk Buyers Connect. https://bit.ly/2LS9V9f",
+                          Share.share("Join me to buy your groceries in bulk from Bulk Buyers Connect. https://play.google.com/store/apps/details?id=com.bulkbuyersconnect.bulk_buyers",
                               subject: "Get Bulk Buyers Connect",
                               sharePositionOrigin:
                               box.localToGlobal(Offset.zero) &

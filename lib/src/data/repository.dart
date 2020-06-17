@@ -37,6 +37,20 @@ class Repository {
     return dbProducts;
   }
 
+  Future<List> refreshProducts() async {
+    print("we don come");
+    List productUpdate = await productService.fetchProducts();
+    print(productUpdate);
+    if (productUpdate.length > 0) {
+      print("cleraing DB");
+      await databaseProvider.clearProducts();
+      print("DB Cleared");
+      await databaseProvider.insertRemoteProducts(productUpdate);
+      print("Products updated");
+      return productUpdate;
+    }
+    return productUpdate;
+  }
   /*Get product Details First check database cif null then check the remote
   * server to fech the item and then save it back into the local DB
   * */
@@ -68,6 +82,10 @@ class Repository {
     return localOrders;
   }
 
+  placeOrders() async {
+    //  var result = orderService.postOrders()
+  }
+
   getOrderDetails(int id) async {
     var item = await databaseProvider.getOrderDetails(id);
     if (item != null) {
@@ -82,7 +100,7 @@ class Repository {
 
   Future<List> fetchUser() async {
     var localUser = await databaseProvider.getUsers();
-    var data = await userService .fetchUser();
+    var data = await userService.fetchUser();
     var remoteUser = data;
     if (remoteUser.length == localUser.length) {
       return localUser;

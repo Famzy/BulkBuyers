@@ -16,6 +16,10 @@ class SignUpViewModel extends BaseModel {
   final _root = Constants.BASE_URL;
   final HttpClient client = new HttpClient();
   String emailError = "";
+  String phoneError = "";
+  var error;
+  bool terms = false;
+
   Future<bool> signUpUser(String firstName, String lastName, String password,
       String email, String phone) async {
     setState(ViewState.Busy);
@@ -29,7 +33,7 @@ class SignUpViewModel extends BaseModel {
       var rigisterFields = register.toJson();
 
       client.badCertificateCallback =
-      ((X509Certificate cert, String host, int port) => true);
+          ((X509Certificate cert, String host, int port) => true);
       String url = "$_root/register";
       HttpClientRequest request = await client.postUrl(Uri.parse(url));
       request.headers.set('content-type', 'application/json');
@@ -37,36 +41,46 @@ class SignUpViewModel extends BaseModel {
 
       HttpClientResponse response = await request.close();
       String reply = await response.transform(utf8.decoder).join();
-      print(reply);
+      var signUpRes = json.decode(reply);
+
       int status = await response.statusCode;
       switch (status) {
         case HttpStatus.ok:
           var signUpResponse = true;
           var signupStateBasedOnResponse =
-          signUpResponse ? ViewState.Success : ViewState.Error;
+              signUpResponse ? ViewState.Success : ViewState.Error;
           setState(signupStateBasedOnResponse);
           return signUpResponse;
           break;
         case HttpStatus.unauthorized:
           var signUpResponse = false;
-          emailError = "The email has already been taken";
+
+          error = signUpRes['errors'];
+          emailError = error['email'].toString();
+          phoneError = error['phone'].toString();
+          notifyListeners();
           var signupStateBasedOnResponse =
-          signUpResponse ? ViewState.Success : ViewState.Error;
+              signUpResponse ? ViewState.Success : ViewState.Error;
           setState(signupStateBasedOnResponse);
           return signUpResponse;
           break;
       }
-    }
-    catch (e){
+    } on SocketException {
+      setState(ViewState.NoDataAvailable);
+    } catch (e) {
       setState(ViewState.Error);
+      throw("No Network");
     }
   }
 
-  Future<bool> correctEmail(String email) async{
-  bool  valid =  StringUtils.isValidEmail(email);
-  emailError = "Invalid Email format";
-  notifyListeners();
-  return valid;
+  Future<bool> correctEmail(String email) async {
+    bool valid = StringUtils.isValidEmail(email);
+    if(valid == false){
+      emailError = "Invalid Email format";
+      notifyListeners();
+    }
+
+    return valid;
   }
 
   String checkConfirmationPasswordValid(
@@ -74,7 +88,11 @@ class SignUpViewModel extends BaseModel {
     if (password != confirmationPassword) {
       return 'Please confirm that your passwords are the same';
     }
-
     return null;
+  }
+
+  void acceptTerms(bool newValue) {
+    terms = newValue;
+    notifyListeners();
   }
 }

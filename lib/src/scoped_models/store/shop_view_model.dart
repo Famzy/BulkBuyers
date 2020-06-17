@@ -20,7 +20,6 @@ export 'package:bulk_buyers/src/enums/view_state.dart';
 /// Contains logic for a list view with the general expected functionality.
 
 class ShopViewModel extends BaseModel {
-  
   static final ShopViewModel _instance = new ShopViewModel.internal();
   factory ShopViewModel() => _instance;
   ShopViewModel.internal();
@@ -44,6 +43,15 @@ class ShopViewModel extends BaseModel {
   int id = 0;
   double percentage = 0;
   bool isDiscounted = false;
+  // Product Details Fields
+  String detailsProductImg = "";
+  String detailsProductName = "";
+  String detailsDecription = "";
+  int detailsPrice = 0;
+  int detailsQuantity = 0;
+  int detaiilsProductId = 0;
+  int detailsDicount = 0;
+  bool detailsWishlist;
 
   var db = new DatabaseHelper();
   var api = new ApiProvider();
@@ -60,16 +68,26 @@ class ShopViewModel extends BaseModel {
     print(res);
   }
 
+  Future refresh() async{
+    print("hit");
+    var response = await repo.refreshProducts();
+    print(response);
+    await Future.delayed(Duration(seconds: 3));
+
+
+  }
+
   Future fecthStoreProducts() async {
-     var res = repo.fetchProducts();
-       print(res);
+    var res = repo.fetchProducts();
+    print(res);
     setState(ViewState.Busy);
     _productData = await db.getAllProducts();
     for (int i = 0; i < _productData.length; i++) {
       Shop shop = Shop.map(_productData[i]);
-      items.add("${_productData[i]['productname'].toLowerCase()} \u{20A6}${_productData[i]['price']}");
-      store.add("${_productData[i]['productname'].toLowerCase()} \u{20A6} ${_productData[i]['price']}");
-
+      items.add(
+          "${_productData[i]['productname'].toLowerCase()} \u{20A6}${_productData[i]['price']}");
+      store.add(
+          "${_productData[i]['productname'].toLowerCase()} \u{20A6} ${_productData[i]['price']}");
     }
 
     print(items);
@@ -86,7 +104,6 @@ class ShopViewModel extends BaseModel {
             price: _productData[index]['price'],
             wishlist: _productData[index]['wishlist'] == 0,
             quantity: _productData[index]['quantity']));
-            
 
     if (_productData == null) {
       setState(ViewState.Error);
@@ -102,6 +119,21 @@ class ShopViewModel extends BaseModel {
   List get cartListing => _cart;
   List get productDetails => _details;
   List get wishListing => _wishlist;
+
+  getDetails(id) async {
+    var db = DatabaseHelper();
+    var productDetails = await db.getProduct(id);
+    detailsProductImg = productDetails.productimg;
+    detailsPrice = productDetails.price;
+    detailsProductName = productDetails.productname;
+    detailsDecription = productDetails.description;
+    detaiilsProductId = productDetails.productid;
+    detailsDicount = productDetails.discount;
+    detailsQuantity = productDetails.quantity;
+    detailsWishlist = productDetails.wishlist;
+    notifyListeners();
+    return productDetails;
+  }
 
   /*
   *
@@ -279,10 +311,11 @@ class ShopViewModel extends BaseModel {
     }
     notifyListeners();
   }
-getProductFromSearch(int index){
-  print(_productData[index].productname);
-  this.addToCart(_productData[index].productid, _productData[index].productname, _productData[index].price, _productData[index].quantity, _productData[index].productimg, _productData[index].price, _productData[index].discount);
-}
+
+  getProductFromSearch(int index) => _productData[index].productid;
+//  print(_productData[index].productname);
+  // this.addToCart(_productData[index].productid, _productData[index].productname, _productData[index].price, _productData[index].quantity, _productData[index].productimg, _productData[index].price, _productData[index].discount);
+
   updateCartPrice(int productid, int price, int quantity) async {
     var response = db.updateCartPriceAndQty(productid, price, quantity);
     notifyListeners();
@@ -303,36 +336,42 @@ getProductFromSearch(int index){
     notifyListeners();
   }
 
-  completeOrder(
-      String ref, int discountid, int discount, String address) async {
+  Future<int>placeOrder(int discountid, int discount, String address) async {
+    setState(ViewState.Busy);
     var sumation = await db.cartTotalPrice();
     var storeTotal = sumation - discount;
     _checkout = await db.getCartCheckoutItems();
     totalQty = await db.cartTotalQuantities();
     print(
-        "totalcost: $storeTotal, totalQTY: $totalQty, payref: $ref, products: $_checkout");
+        "totalcost: $storeTotal, totalQTY: $totalQty, products: $_checkout");
     var order = await api.postOrders(PostOrders(
         totalcost: storeTotal,
         totalqty: totalQty,
         discountid: discountid,
         discount: discount,
-        paymentrefno: ref,
         address: address,
         products: _checkout));
+
+
+    setState(ViewState.Success);
     //print(_checkout);
     print(order);
-
-    var response = await db.clearCartDB();
-    print(response);
+    return order;
   }
 
-   void filterSearch(String query){
+  ordersPaidFor(String ref, int orderId, int storeTotal) async{
+    var paidOrders = api.payOrders(PayOrders(paymentrefno: ref, orderid: orderId, totalcost: storeTotal));
+
+    var response = await db.clearCartDB();
+  }
+
+  void filterSearch(String query) {
     List<String> dummuySearchList = List<String>();
     dummuySearchList.addAll(items);
-    if(query.isEmpty){
+    if (query.isEmpty) {
       List<String> dummyListData = List<String>();
-      dummuySearchList.forEach((stuff){
-        if(stuff.contains(query)){
+      dummuySearchList.forEach((stuff) {
+        if (stuff.contains(query)) {
           dummyListData.add(stuff);
         }
       });
@@ -341,5 +380,3 @@ getProductFromSearch(int index){
     }
   }
 }
-
-

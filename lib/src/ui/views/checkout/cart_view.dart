@@ -29,7 +29,7 @@ class CartView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<ShopViewModel>(
         onModelReady: (model) => model.fetchCartData(),
-        builder: (context, childe, model) => Scaffold(
+        builder: (context, child, model) => Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.black,
               leading: GestureDetector(

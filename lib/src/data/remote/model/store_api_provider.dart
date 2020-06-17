@@ -29,7 +29,6 @@ class ApiProvider {
   final _root = Constants.BASE_URL;
   Client client = Client();
 
-
 //  // Auth Section
 //  Future<int> registration(Register register) async {
 //    print("Resgister call made");
@@ -155,7 +154,7 @@ class ApiProvider {
   }
 
   // Orders
-  Future<int> postOrders(PostOrders ordersPosted) async {
+  postOrders(PostOrders ordersPosted) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString("token");
 
@@ -172,7 +171,30 @@ class ApiProvider {
         body: orderData);
     print("This is the status Code: ${response.statusCode}");
     print("This is the msg Code: ${response.body}");
-    return response.statusCode;
+
+    var raw = json.decode(response.body);
+    var orderId = raw['orderid'];
+    print("tis is $orderId");
+    return orderId;
+  }
+
+  payOrders(PayOrders payOrders) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString("token");
+
+    var payOrdersFields = payOrders.toJson();
+    var paidOrders = json.encode(payOrdersFields);
+
+    print(paidOrders);
+
+    final response = await client.post("$_root/order/pay",
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json"
+        },
+        body: paidOrders);
+    print("${response.statusCode} ${response.body}");
   }
 
   fetchOrderList() async {
@@ -192,12 +214,12 @@ class ApiProvider {
     final response = await client.get("$_root/order/details/$id", headers: {
       "Accept": "application/json",
       "Authorization": "Bearer $token"
-
     });
     var order = json.decode(response.body);
     return order;
   }
-   fetchUser() async {
+
+  fetchUser() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString("token");
     final response = await client.get("$_root/user", headers: {
@@ -208,6 +230,7 @@ class ApiProvider {
     print(response.body);
     return user;
   }
+
   Future<int> updateProfile(User user) async {
     print("Update call made");
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

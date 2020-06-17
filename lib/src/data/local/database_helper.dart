@@ -200,6 +200,11 @@ class DatabaseHelper {
     response = await dbClient.delete(Constants.tableOrdersDetails);
     return response;
   }
+  Future<int> clearProducts() async{
+    var dbClient = await db;
+    var response = await dbClient.delete(Constants.tableShop);
+    return response;
+  }
 
   addToWishList(int productid, bool wishlist) async {
     var dbClient = await db;

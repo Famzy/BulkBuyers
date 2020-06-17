@@ -166,6 +166,24 @@ class UIHelper {
     );
   }
 
+  static Widget disabledButton(
+      {@required String title}) {
+    return GestureDetector(
+      child: Container(
+        width: double.infinity,
+        height: 50.0,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0), color: graySwatch),
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ),
+      ),
+    );
+  }
+
   static Widget ScreenButton(
       {@required String title, @required Function onTap}) {
     return GestureDetector(

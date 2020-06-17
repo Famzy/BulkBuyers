@@ -36,7 +36,6 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
-
     var screenSize = MediaQuery.of(context).size;
     return BaseView<SignUpViewModel>(
       builder: (context, child, model) => Scaffold(
@@ -65,13 +64,13 @@ class _SignUpViewState extends State<SignUpView> {
                       placeholder: 'Email Address',
                       controller: emailController,
                       keyboard: TextInputType.emailAddress,
-                      validationMessage: model.emailError),
+                      validationMessage: model.emailError == "null" ? "" : "Email already taken"),
                   UIHelper.verticalSpaceSmall(),
                   UIHelper.inputFormField(
-                    placeholder: 'Phone Number',
-                    controller: phoneController,
-                    keyboard: TextInputType.phone,
-                  ),
+                      placeholder: 'Phone Number',
+                      controller: phoneController,
+                      keyboard: TextInputType.phone,
+                      validationMessage: model.phoneError == "null" ? "" : "Phone Number already taken"),
                   UIHelper.verticalSpaceSmall(),
                   UIHelper.inputFormField(
                       title: 'Confirm Password',
@@ -85,8 +84,33 @@ class _SignUpViewState extends State<SignUpView> {
                       controller: confirmPasswordController,
                       validationMessage: _passwordConfirmaionValidation),
                   _getFeedbackUI(model),
-                  UIHelper.verticalSpaceSmall(),
-                  _getSignUpButton(model),
+                  UIHelper.verticalSpaceSmaller(),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Checkbox(
+                          value: model.terms,
+                          activeColor: primarySwatch,
+                          onChanged: model.acceptTerms,
+                        ),
+                        // I accept your Terms & Conditions
+                        Text("I accept your Terms & Conditions",
+                            style: const TextStyle(
+                                color: const Color(0xff283350),
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Roboto",
+                                fontStyle: FontStyle.normal,
+                                fontSize: 15.0),
+                            textAlign: TextAlign.center)
+                      ],
+                    ),
+                  ),
+                  model.terms
+                      ? _getSignUpButton(model)
+                      : UIHelper.disabledButton(
+                          title: 'SIGN UP',
+                        ),
                   UIHelper.verticalSpaceSmall(),
                   UIHelper.formLInkText(
                       title: "I have an Account? Login here",
@@ -114,15 +138,14 @@ class _SignUpViewState extends State<SignUpView> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Lottie.asset('assets/lottie/loading.json', height: 100),
+                          Lottie.asset('assets/lottie/loading.json',
+                              height: 100),
                         ],
                       ),
-                    )
-                ),
+                    )),
               ),
             )
           ],
-
         ),
       ),
     );
@@ -130,15 +153,16 @@ class _SignUpViewState extends State<SignUpView> {
 
   Widget _getFeedbackUI(SignUpViewModel model) {
     switch (model.state) {
-      case ViewState.Busy:
-      case ViewState.Error:
-        // NOTE: Place your Login error UI here
+      case ViewState.NoDataAvailable:
         return Center(
             child: Text(
-                'Could not sign up at this moment, check internet connection'));
+
+              'Could not sign up at this moment, \ncheck internet connection', softWrap: true,));
+      case ViewState.Busy:
+      case ViewState.Error:
+
       case ViewState.Success:
         // NOTE: Place your login success UI here
-        return Center(child: Text('Signup Success'));
       case ViewState.WaitingForInput:
       default:
         return Container();
@@ -153,25 +177,35 @@ class _SignUpViewState extends State<SignUpView> {
               password: passwordController.text,
               confirmationPassword: confirmPasswordController.text);
 
-        if (await model.correctEmail(emailController.text)){
-          if (passwordValidationMessage == null && _hasEnteredInformation) {
-            var viewState = await model.signUpUser(
-                firstNameController.text,
-                lastNameController.text,
-                passwordController.text,
-                emailController.text,
-                phoneController.text);
-            if (viewState) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => VerifyEmail()));
+          if (await model.correctEmail(emailController.text)) {
+            if (passwordValidationMessage == null && _hasEnteredInformation) {
+              if (model.terms) {
+                var viewState = await model.signUpUser(
+                    firstNameController.text,
+                    lastNameController.text,
+                    passwordController.text,
+                    emailController.text,
+                    phoneController.text);
+                print(viewState);
+                if (viewState) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => VerifyEmail()));
+                }
+              }
+            } else {
+              setState(() {
+                _passwordConfirmaionValidation = passwordValidationMessage;
+                passwordController.clear();
+                confirmPasswordController.clear();
+              });
             }
           } else {
             setState(() {
-              _passwordConfirmaionValidation = passwordValidationMessage;
+              emailController.clear();
+              passwordController.clear();
+              confirmPasswordController.clear();
             });
           }
-        }
-        else{}
         });
   }
 }

@@ -3,6 +3,7 @@ import 'package:bulk_buyers/src/ui/shared/app_colors.dart';
 import 'package:bulk_buyers/src/ui/shared/font_styles.dart';
 import 'package:bulk_buyers/src/ui/shared/ui_helpers.dart';
 import 'package:bulk_buyers/src/ui/views/checkout/cart_view.dart';
+import 'package:bulk_buyers/src/ui/views/checkout/orders_view.dart';
 import 'package:bulk_buyers/src/ui/views/checkout/wish_list_view.dart';
 import 'package:bulk_buyers/src/ui/views/store/shop_view.dart';
 import 'package:bulk_buyers/src/ui/views/user/edit_profile_view.dart';
@@ -207,27 +208,34 @@ class ProfileView extends StatelessWidget {
                             textAlign: TextAlign.left,
                           ),
                           UIHelper.verticalSpaceSmaller(),
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                "TOTAL \n ORDERS",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: graySwatch),
-                              ),
-                              UIHelper.horizontalSpace(10.0),
-                              Container(
-                                padding: EdgeInsets.only(
-                                    left: 10, right: 10, top: 5),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: primarySwatch,
+                          GestureDetector(
+                            onTap: ()=>  Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                    transitionDuration: const Duration(milliseconds: 350),
+                                    pageBuilder: (context, _, __) => OrdersView())),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  "TOTAL \n ORDERS",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: graySwatch),
                                 ),
-                                child: Text(
-                                  "${model.totalOrders}",
-                                  style: smallHeading,
+                                UIHelper.horizontalSpace(10.0),
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 10, top: 5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: primarySwatch,
+                                  ),
+                                  child: Text(
+                                    "${model.totalOrders}",
+                                    style: smallHeading,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),

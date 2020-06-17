@@ -33,7 +33,7 @@ class BusyOverlay extends StatelessWidget {
                 children: <Widget>[
                   Container(
                       height: 100,
-                      child: Lottie.asset('assets/lottie/cart_empty.json')),
+                      child:   Lottie.asset('assets/lottie/loading.json', height: 100)),
                   Text(title,
                       style: TextStyle(
                           fontSize: 16.0,

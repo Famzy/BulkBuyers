@@ -75,7 +75,6 @@ class Shop {
     this.wishlist = map['wishlist'] == 1;
     this.quantity = map['quantity'];
   }
-
 //  int get productid => _productid;
 //  String get productname => _productname;
 //  int get prodcatid => _prodcatid;
