@@ -25,13 +25,16 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 }
-class MyHttpOverrides extends HttpOverrides{
+
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext context){
+  HttpClient createHttpClient(SecurityContext context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
+
 class MyApp extends StatefulWidget {
   MyApp({this.isAthenicated});
   static AsyncMemoizer apiMemo = new AsyncMemoizer();
@@ -51,8 +54,6 @@ class _MyAppState extends State<MyApp> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
-  bool _flexibleUpdateAvailable = false;
-
 // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> checkForUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
@@ -60,9 +61,21 @@ class _MyAppState extends State<MyApp> {
         _updateInfo = info;
       });
     }).catchError((e) => _showError(e));
+    this.performUpdate();
   }
+
   void _showError(dynamic exception) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(exception.toString())));
+    _scaffoldKey.currentState
+        .showSnackBar(SnackBar(content: Text(exception.toString())));
+  }
+
+  performUpdate() {
+    _updateInfo?.updateAvailable == true
+        ? () {
+            InAppUpdate.performImmediateUpdate()
+                .catchError((e) => _showError(e));
+          }
+        : null;
   }
 
   @override
@@ -81,5 +94,11 @@ class _MyAppState extends State<MyApp> {
                   BottomAppBarTheme(elevation: 0, color: Colors.blue)),
           home: widget.isAthenicated ? NetworkSplashScreen() : WelcomeView()),
     );
+  }
+
+  @override
+  void initState() {
+    checkForUpdate();
+    super.initState();
   }
 }

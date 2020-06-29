@@ -7,8 +7,10 @@ class ProductDetailsViewModel extends BaseModel {
 
     var db = DatabaseHelper();
     var productDetails = await db.getProduct(id);
-    productimg = productDetails.productimg;
-    print(productDetails.productname);
+    print("this is what is to displayed: $productDetails");
+    //productimg = productDetails.productimg;
+    productimg = "";
+   // print(productDetails.productname);
     return productDetails;
   }
 }

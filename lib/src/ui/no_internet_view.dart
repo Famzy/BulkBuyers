@@ -5,6 +5,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import 'views/network_splash_screen.dart';
 import 'views/store/shop_view.dart';
 
 class NoInternetView extends StatefulWidget {
@@ -49,21 +50,35 @@ class _NoInternetViewState extends State<NoInternetView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text("Ooops You are disconnected"),
-        Center(
-          child: Container(
-          height: 300,
-          child: Lottie.asset('assets/lottie/no_network.json')),
-        ),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+          Center(
+            child: Container(
+            height: 300,
+            child: Lottie.asset('assets/lottie/no_network.json')),
+          ),
+            Text("An internet error occurred. please try again"),
 
-          UIHelper.verticalSpaceSmall(),
-          Icon(Icons.refresh, size: 40,),
-          Text("Retry"),
-        ],
+            UIHelper.verticalSpaceSmall(),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: FlatButton(
+                color: Colors.grey,
+                child: Text("Try Again"),
+                onPressed:()=> Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 350),
+                        pageBuilder: (context, _, __) => NetworkSplashScreen())),
+              ),
+            )
+
+          ],
+        ),
       ),
     );
   }

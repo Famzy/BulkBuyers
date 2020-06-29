@@ -7,11 +7,8 @@ navigation() async {
   String state = sharedPreferences.getString("state");
 
   if (state == null) {
-    print(state);
     status = false;
-    print(status);
   } else {
-    print(state);
     status = true;
   }
   return status;

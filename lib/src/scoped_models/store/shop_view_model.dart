@@ -76,11 +76,15 @@ class ShopViewModel extends BaseModel {
 
 
   }
-
+reload(){
+    this.fecthStoreProducts();
+}
   Future fecthStoreProducts() async {
-    var res = repo.fetchProducts();
-    print(res);
     setState(ViewState.Busy);
+    var res = await repo.fetchProducts();
+   print(res);
+
+    notifyListeners();
     _productData = await db.getAllProducts();
     for (int i = 0; i < _productData.length; i++) {
       Shop shop = Shop.map(_productData[i]);
@@ -91,7 +95,7 @@ class ShopViewModel extends BaseModel {
     }
 
     print(items);
-    await Future.delayed(Duration(seconds: 0));
+
 
     _productData = List<StoreItems>.generate(
         _productData.length,
@@ -104,7 +108,7 @@ class ShopViewModel extends BaseModel {
             price: _productData[index]['price'],
             wishlist: _productData[index]['wishlist'] == 0,
             quantity: _productData[index]['quantity']));
-
+    await Future.delayed(Duration(seconds: 3));
     if (_productData == null) {
       setState(ViewState.Error);
     } else {
@@ -121,8 +125,10 @@ class ShopViewModel extends BaseModel {
   List get wishListing => _wishlist;
 
   getDetails(id) async {
+    print(id);
     var db = DatabaseHelper();
     var productDetails = await db.getProduct(id);
+    print("$productDetails");
     detailsProductImg = productDetails.productimg;
     detailsPrice = productDetails.price;
     detailsProductName = productDetails.productname;
@@ -131,6 +137,9 @@ class ShopViewModel extends BaseModel {
     detailsDicount = productDetails.discount;
     detailsQuantity = productDetails.quantity;
     detailsWishlist = productDetails.wishlist;
+    notifyListeners();
+
+    print(productDetails);
     notifyListeners();
     return productDetails;
   }

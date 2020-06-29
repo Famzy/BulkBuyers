@@ -450,7 +450,7 @@ class _ShopViewState extends State<ShopView> {
             valueColor:
                 AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor)),
         UIHelper.verticalSpaceSmaller(),
-        Text('Fetching Products')
+        Text('Updating Products')
       ],
     ));
   }
@@ -474,11 +474,28 @@ class _ShopViewState extends State<ShopView> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text(
-                  message,
-                  style: viewErrorTitle,
-                  textAlign: TextAlign.center,
+                Column(
+                  children: <Widget>[
+                    Text(
+                      message,
+                      style: viewErrorTitle,
+                      textAlign: TextAlign.center,
+                    ),
+                    UIHelper.verticalSpaceSmall(),
+                    Text("Kindly refresh to see latest products"),
+                    UIHelper.verticalSpaceSmaller(),
+                    GestureDetector(
+                      onTap: ()=> model.reload(),
+                      child: Icon(
+                        // WWrap in gesture detector and call you refresh future here
+                        Icons.refresh,
+                        color: primarySwatch,
+                        size: 45.0,
+                      ),
+                    ),
+                  ],
                 ),
+
                 error
                     ? Icon(
                         // WWrap in gesture detector and call you refresh future here

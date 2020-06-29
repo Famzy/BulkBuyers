@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:bulk_buyers/src/data/local/database_helper.dart';
 import 'package:bulk_buyers/src/data/remote/model/store_api_provider.dart';
-import 'package:bulk_buyers/src/models/shop_model.dart';
 import 'package:bulk_buyers/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,8 +28,12 @@ class Repository {
     List dbProducts = await databaseProvider.getAllProducts();
     List remoteProducts = await productService.fetchProducts();
     if (dbProducts.length == remoteProducts.length) {
+      dbProducts = await productService.fetchProducts();
+      await databaseProvider.clearProducts();
+
       return dbProducts;
     }
+    await databaseProvider.clearProducts();
     dbProducts = await productService.fetchProducts();
 
     await databaseProvider.insertRemoteProducts(dbProducts);
@@ -55,7 +58,7 @@ class Repository {
   * server to fech the item and then save it back into the local DB
   * */
 
-  Future<Shop> getProducts(int id) async {
+ getProducts(int id) async {
     var item = await databaseProvider.getProduct(id);
     if (item != null) {
       return item;

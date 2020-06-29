@@ -405,7 +405,7 @@ class _YouViewState extends State<YouView> {
                         textAlign: TextAlign.left
                     ),
                         UIHelper.verticalSpace(5),
-                        Text("App Version 1.0", style: TextStyle(fontSize: 12, color:  const Color(0xff908888),
+                        Text("App Version 1.0.2", style: TextStyle(fontSize: 12, color:  const Color(0xff908888),
                           fontWeight: FontWeight.w400,),),
                         UIHelper.verticalSpace(5),
                       ],

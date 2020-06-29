@@ -137,6 +137,7 @@ class ApiProvider {
     });
     var data = json.decode(response.body);
 
+print("this is the data $token");
     return data;
   }
 
