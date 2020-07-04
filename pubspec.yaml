@@ -43,7 +43,6 @@ dependencies:
   flutter_paystack: 1.0.3+1
   #TokenGenrion
   random_string: ^2.0.1
-  font_awesome_flutter: ^8.2.0
   flutter_svg: ^0.17.4
   share: ^0.6.4+2
   lottie: ^0.3.6
