@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bulk_buyers/src/data/local/database_helper.dart';
+import 'package:bulk_buyers/src/data/local/sqflite_database_helper.dart';
 import 'package:bulk_buyers/src/data/remote/model/store_api_provider.dart';
 import 'package:bulk_buyers/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'local/hive_database_helper.dart';
 import 'remote/services/store.dart';
 
 class Repository {
@@ -16,7 +17,8 @@ class Repository {
 
   HttpClient client = new HttpClient();
   final _root = Constants.BASE_URL;
-  var databaseProvider = DatabaseHelper();
+  var databaseProvider = SqfLiteDatabaseHelper();
+  var hiveDBProvider = HiveDatabaseHelper();
   var apiProvider = ApiProvider();
   var productService = ProductService();
   var orderService = OrdersService();
@@ -36,7 +38,8 @@ class Repository {
     await databaseProvider.clearProducts();
     dbProducts = await productService.fetchProducts();
 
-    await databaseProvider.insertRemoteProducts(dbProducts);
+    await hiveDBProvider.addProducts(dbProducts);
+   // await databaseProvider.insertRemoteProducts(dbProducts);
     return dbProducts;
   }
 

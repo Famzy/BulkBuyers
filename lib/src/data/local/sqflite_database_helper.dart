@@ -13,10 +13,10 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:bulk_buyers/src/utils/constants.dart';
 
-class DatabaseHelper {
+class SqfLiteDatabaseHelper {
   ///
   ///   Project Bulk Buyers
-  ///  Class Name [DatabaseHelper]
+  ///  Class Name [SqfLiteDatabaseHelper]
   ///  Description : Function this class is meant to handle all basic CURD functions eliminating
   ///  making CURD on the Main UI Thread.
   ///  Author:  Eric Lekwa
@@ -24,10 +24,10 @@ class DatabaseHelper {
   ///  Last Upadted : null
   ///
   ///
-  static final DatabaseHelper _instance = new DatabaseHelper.internal();
+  static final SqfLiteDatabaseHelper _instance = new SqfLiteDatabaseHelper.internal();
   final LocalStorage storage = new LocalStorage('app_data');
 
-  factory DatabaseHelper() => _instance;
+  factory SqfLiteDatabaseHelper() => _instance;
 
   static Database _db;
 
@@ -42,7 +42,7 @@ class DatabaseHelper {
 
   var api = new ApiProvider();
 
-  DatabaseHelper.internal();
+  SqfLiteDatabaseHelper.internal();
 
   initDB() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();

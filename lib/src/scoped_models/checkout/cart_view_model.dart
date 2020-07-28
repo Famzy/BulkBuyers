@@ -1,4 +1,4 @@
-import 'package:bulk_buyers/src/data/local/database_helper.dart';
+import 'package:bulk_buyers/src/data/local/sqflite_database_helper.dart';
 import 'package:bulk_buyers/src/data/remote/model/store_api_provider.dart';
 import 'package:bulk_buyers/src/models/cart_model.dart';
 import 'package:bulk_buyers/src/models/cart_items.dart';
@@ -26,7 +26,7 @@ class CartViewModel extends BaseModel {
 
   final _root = Constants.BASE_URL;
   var api = ApiProvider();
-  var db = new DatabaseHelper();
+  var db = new SqfLiteDatabaseHelper();
 
   Future fetchCartData() async {
     setState(ViewState.Busy);
@@ -69,7 +69,7 @@ class CartViewModel extends BaseModel {
       cartMsg = "${name.toUpperCase()} already in Cart .";
       print(cartMsg);
     } else {
-      var db = DatabaseHelper();
+      var db = SqfLiteDatabaseHelper();
 
       var response = await db.addToCart(
           Cart(id, name, price, quantity, unitprice, image, discount));

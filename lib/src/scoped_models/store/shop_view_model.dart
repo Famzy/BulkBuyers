@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bulk_buyers/src/data/local/database_helper.dart';
+import 'package:bulk_buyers/src/data/local/sqflite_database_helper.dart';
 import 'package:bulk_buyers/src/data/remote/model/store_api_provider.dart';
 import 'package:bulk_buyers/src/data/repository.dart';
 import 'package:bulk_buyers/src/models/cart_model.dart';
@@ -11,9 +11,11 @@ import 'package:bulk_buyers/src/models/products_model.dart';
 import 'package:bulk_buyers/src/models/place_order_model.dart';
 import 'package:bulk_buyers/src/models/search_model.dart';
 import 'package:bulk_buyers/src/models/shop_model.dart';
+import 'package:bulk_buyers/src/services/dynamic_links_services.dart';
 import 'package:bulk_buyers/src/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../service_locator.dart';
 import '../base_model.dart';
 export 'package:bulk_buyers/src/enums/view_state.dart';
 
@@ -24,6 +26,7 @@ class ShopViewModel extends BaseModel {
   factory ShopViewModel() => _instance;
   ShopViewModel.internal();
   HttpClient dicountClient = new HttpClient();
+  final DynamicLinksService _dynamicLinksService = locator<DynamicLinksService>();
   List<StoreItems> listData;
   var items = List<String>();
   var store = List<String>();
@@ -53,12 +56,13 @@ class ShopViewModel extends BaseModel {
   int detailsDicount = 0;
   bool detailsWishlist;
 
-  var db = new DatabaseHelper();
+  var db = new SqfLiteDatabaseHelper();
   var api = new ApiProvider();
   var repo = new Repository();
   final _root = Constants.BASE_URL;
 
   Future populateShop() async {
+    await _dynamicLinksService.handleDynamicLinks();
     var res = repo.fetchUser();
     res = repo.fetchProducts();
     this.fetchCartData();
@@ -126,7 +130,7 @@ reload(){
 
   getDetails(id) async {
     print(id);
-    var db = DatabaseHelper();
+    var db = SqfLiteDatabaseHelper();
     var productDetails = await db.getProduct(id);
     print("$productDetails");
     detailsProductImg = productDetails.productimg;

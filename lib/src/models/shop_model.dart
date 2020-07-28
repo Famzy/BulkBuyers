@@ -1,3 +1,5 @@
+import 'package:hive/hive.dart';
+
 class Shop {
   int productid;
   int prodcatid;

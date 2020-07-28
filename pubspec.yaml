@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.2+3
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.5.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -47,15 +47,24 @@ dependencies:
   share: ^0.6.4+2
   lottie: ^0.3.6
   in_app_update: ^1.1.11
+  firebase_core: ^0.4.5
   firebase_dynamic_links: ^0.5.1
+  firebase_messaging: ^6.0.16
+
 #  social_share: ^2.0.4
+#Hive dependencies for faster database transaction
+  hive: ^1.0.0
+  #For OS specific directories
+  hive_flutter: ^0.2.1
+
 
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  hive_generator: ^0.5.1
+  build_runner:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

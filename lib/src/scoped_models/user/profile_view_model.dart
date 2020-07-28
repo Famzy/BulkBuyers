@@ -1,4 +1,4 @@
-import 'package:bulk_buyers/src/data/local/database_helper.dart';
+import 'package:bulk_buyers/src/data/local/sqflite_database_helper.dart';
 import 'package:bulk_buyers/src/data/remote/model/store_api_provider.dart';
 import 'package:bulk_buyers/src/data/repository.dart';
 import 'package:bulk_buyers/src/models/user_model.dart';
@@ -6,7 +6,7 @@ import 'package:bulk_buyers/src/models/user_model.dart';
 import '../base_model.dart';
 
 class ProfileViewModel extends BaseModel {
-  var db = DatabaseHelper();
+  var db = SqfLiteDatabaseHelper();
   var repo = Repository();
   var api = ApiProvider();
   List data;

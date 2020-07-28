@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bulk_buyers/src/models/discount_models.dart';
 import 'package:bulk_buyers/src/models/login_model.dart';
 import 'package:bulk_buyers/src/models/place_order_model.dart';
 import 'package:bulk_buyers/src/models/user_model.dart';

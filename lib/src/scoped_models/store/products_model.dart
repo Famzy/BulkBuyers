@@ -1,4 +1,4 @@
-import 'package:bulk_buyers/src/data/local/database_helper.dart';
+import 'package:bulk_buyers/src/data/local/sqflite_database_helper.dart';
 import 'package:bulk_buyers/src/models/cart_model.dart';
 import 'package:bulk_buyers/src/models/products_model.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -89,7 +89,7 @@ class ProductViewModel extends Model {
   }
 
   getCartCout() async{
-    var db = DatabaseHelper();
+    var db = SqfLiteDatabaseHelper();
     int cartCount = await db.getCartCount();
     var cartItems = await db.getCartList();
 

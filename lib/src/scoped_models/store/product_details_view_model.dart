@@ -1,11 +1,11 @@
-import 'package:bulk_buyers/src/data/local/database_helper.dart';
+import 'package:bulk_buyers/src/data/local/sqflite_database_helper.dart';
 
 import '../base_model.dart';
 class ProductDetailsViewModel extends BaseModel {
   String productimg;
   getDetails(id)async{
 
-    var db = DatabaseHelper();
+    var db = SqfLiteDatabaseHelper();
     var productDetails = await db.getProduct(id);
     print("this is what is to displayed: $productDetails");
     //productimg = productDetails.productimg;

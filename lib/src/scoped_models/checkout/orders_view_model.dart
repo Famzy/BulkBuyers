@@ -1,4 +1,4 @@
-import 'package:bulk_buyers/src/data/local/database_helper.dart';
+import 'package:bulk_buyers/src/data/local/sqflite_database_helper.dart';
 import 'package:bulk_buyers/src/data/repository.dart';
 import 'package:bulk_buyers/src/models/orders_model.dart';
 
@@ -11,7 +11,7 @@ export 'package:bulk_buyers/src/enums/view_state.dart';
 class OrdersViewModel extends BaseModel {
   List placedOrders = [];
   var repo = Repository();
-  var db = DatabaseHelper();
+  var db = SqfLiteDatabaseHelper();
 
   refreshOrders() async {
 

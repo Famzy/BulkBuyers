@@ -1,5 +1,7 @@
 import 'dart:io';
 
+
+
 import 'package:bulk_buyers/src/scoped_models/store/shop_view_model.dart';
 import 'package:bulk_buyers/src/ui/shared/app_colors.dart';
 import 'package:bulk_buyers/src/ui/views/network_splash_screen.dart';
@@ -10,13 +12,20 @@ import 'package:flutter/services.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:async/async.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 import './service_locator.dart';
+import 'src/models/shop_hive_model.dart';
+
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final appDoumentDirecvtory = await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDoumentDirecvtory.path);
+  Hive.registerAdapter(ShopHiveModleAdapter());
   // Register all the models and services before the app starts
   setupLocator();
-  WidgetsFlutterBinding.ensureInitialized();
   bool value = await navigation();
   HttpOverrides.global = new MyHttpOverrides();
   runApp(MyApp(
@@ -36,6 +45,7 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatefulWidget {
+
   MyApp({this.isAthenicated});
   static AsyncMemoizer apiMemo = new AsyncMemoizer();
   bool isAthenicated;

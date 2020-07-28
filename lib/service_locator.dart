@@ -15,6 +15,7 @@ import 'package:bulk_buyers/src/scoped_models/auth/sign_up_view_model.dart';
 import 'package:bulk_buyers/src/scoped_models/welcome_view_model.dart';
 import 'package:bulk_buyers/src/scoped_models/checkout/wish_list_view_model.dart';
 import 'package:bulk_buyers/src/scoped_models/user/you_view_model.dart';
+import 'package:bulk_buyers/src/services/dynamic_links_services.dart';
 import 'package:bulk_buyers/src/services/storage_service.dart';
 import 'package:get_it/get_it.dart';
 GetIt locator = new GetIt();
@@ -22,6 +23,7 @@ GetIt locator = new GetIt();
 void setupLocator() {
   // Register services
   locator.registerLazySingleton<StorageService>(() => StorageService());
+  locator.registerLazySingleton(() => DynamicLinksService());
   // Register ScopedModels
   locator.registerFactory<WelcomeViewModel>(() => WelcomeViewModel());
   locator.registerFactory<LoginViewModel>(() => LoginViewModel());
