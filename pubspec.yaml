@@ -11,7 +11,7 @@ description: A new Flutter project.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.2+3
+version: 1.0.2+4
 
 environment:
   sdk: ">=2.5.2 <3.0.0"
@@ -27,6 +27,10 @@ dependencies:
   scoped_model: ^1.0.1
   # get it
   get_it: ^1.0.3
+  # Functional programming thingies
+  dartz: ^0.8.6
+  # Value equality
+  equatable: ^0.4.0
   #ShredPrefrences package
   shared_preferences: any
   #SQFLite package
@@ -45,26 +49,26 @@ dependencies:
   random_string: ^2.0.1
   flutter_svg: ^0.17.4
   share: ^0.6.4+2
+  intl: ^0.16.1
   lottie: ^0.3.6
   in_app_update: ^1.1.11
   firebase_core: ^0.4.5
   firebase_dynamic_links: ^0.5.1
   firebase_messaging: ^6.0.16
-
+  auto_route: ^0.2.1
 #  social_share: ^2.0.4
 #Hive dependencies for faster database transaction
-  hive: ^1.0.0
+  #hive: 1.0.0
   #For OS specific directories
-  hive_flutter: ^0.2.1
-
-
+  #hive_flutter: ^0.2.1
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  hive_generator: ^0.5.1
+  #hive_generator: ^0.5.1
   build_runner:
+  auto_route_generator: ^0.2.1+3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -78,66 +82,66 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/quality.png
-    - assets/images/speed.png
-    - assets/images/price.png
-    - assets/images/welcome-bg.jpg
-    - assets/images/image-bg.png
-    - assets/images/img-20181004-wa0006-3.png
-    - assets/images/icon-ionic-ios-arrow-dropright.png
-    - assets/images/accepted_payments.png
-    - assets/images/icon.png
-    - assets/images/icon-ios-menu.png
-    - assets/images/icon-feather-heart-selected.png
-    - assets/images/home.png
-    - assets/images/home_selected.png
-    - assets/images/cart.png
-    - assets/images/cart_selected.png
-    - assets/images/you.png
-    - assets/images/list.png
-    - assets/images/you_selected.png
-    - assets/images/wishlist.png
-    - assets/images/refer.png
-    - assets/images/thumbs_up.png
-    - assets/images/settings.png
-    - assets/images/like.png
-    - assets/images/logout.png
-    - assets/images/about.png
-    - assets/images/how_it_works.png
-    - assets/images/wishlist_selected.png
-    - assets/images/material_cart_orange.png
-    - assets/images/material_cart_white.png
-    - assets/images/calandar.png
-    - assets/images/confirm.png
-    - assets/images/edit.png
-    - assets/images/profile.jpg
-    - assets/images/email.png
-    - assets/images/phone.png
-    - assets/images/material_home.png
-    - assets/images/location.png
-    - assets/images/icon-ionic-md-female.png
-    - assets/images/checkmark.png
-    - assets/svgs/checkmark_circle.svg
-    - assets/svgs/date.svg
-    - assets/svgs/envelope.svg
-    - assets/svgs/user.svg
-    - assets/svgs/female.svg
-    - assets/svgs/male.svg
-    - assets/svgs/phone.svg
-    - assets/svgs/location.svg
-    - assets/svgs/notifications.svg
-    - assets/svgs/home.svg
-    - assets/svgs/user_tie.svg
-    - assets/svgs/refresh.svg
-    - assets/svgs/envelope.svg
-    - assets/svgs/eye.svg
-    - assets/images/checkmark.png
-    - assets/images/logo.png
-    - assets/lottie/loading.json
-    - assets/lottie/no_wishlist.json
-    - assets/lottie/cancel_order.json
-    - assets/lottie/loading_check.json
-    - assets/lottie/no_network.json
+#    - assets/images/quality.png
+#    - assets/images/speed.png
+#    - assets/images/price.png
+#    - assets/images/welcome-bg.jpg
+#    - assets/images/image-bg.png
+#    - assets/images/img-20181004-wa0006-3.png
+#    - assets/images/icon-ionic-ios-arrow-dropright.png
+#    - assets/images/accepted_payments.png
+#    - assets/images/icon.png
+#    - assets/images/icon-ios-menu.png
+#    - assets/images/icon-feather-heart-selected.png
+#    - assets/images/home.png
+#    - assets/images/home_selected.png
+#    - assets/images/cart.png
+#    - assets/images/cart_selected.png
+#    - assets/images/you.png
+#    - assets/images/list.png
+#    - assets/images/you_selected.png
+#    - assets/images/wishlist.png
+#    - assets/images/refer.png
+#    - assets/images/thumbs_up.png
+#    - assets/images/settings.png
+#    - assets/images/like.png
+#    - assets/images/logout.png
+#    - assets/images/about.png
+#    - assets/images/how_it_works.png
+#    - assets/images/wishlist_selected.png
+#    - assets/images/material_cart_orange.png
+#    - assets/images/material_cart_white.png
+#    - assets/images/calandar.png
+#    - assets/images/confirm.png
+#    - assets/images/edit.png
+#    - assets/images/profile.jpg
+#    - assets/images/email.png
+#    - assets/images/phone.png
+#    - assets/images/material_home.png
+#    - assets/images/location.png
+#    - assets/images/icon-ionic-md-female.png
+    - assets/images/
+    - assets/svgs/
+#    - assets/svgs/date.svg
+#    - assets/svgs/envelope.svg
+#    - assets/svgs/user.svg
+#    - assets/svgs/female.svg
+#    - assets/svgs/male.svg
+#    - assets/svgs/phone.svg
+#    - assets/svgs/location.svg
+#    - assets/svgs/notifications.svg
+#    - assets/svgs/home.svg
+#    - assets/svgs/user_tie.svg
+#    - assets/svgs/refresh.svg
+#    - assets/svgs/envelope.svg
+#    - assets/svgs/eye.svg
+#    - assets/images/checkmark.png
+#    - assets/images/logo.png
+#    - assets/lottie/loading.json
+#    - assets/lottie/no_wishlist.json
+#    - assets/lottie/cancel_order.json
+#    - assets/lottie/loading_check.json
+    - assets/lottie/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

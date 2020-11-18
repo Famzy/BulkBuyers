@@ -1,0 +1,213 @@
+import 'package:bulk_buyers/core/router/routes.gr.dart';
+import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
+import 'package:bulk_buyers/src/presentation/scoped_models/auth/sign_up_view_model.dart';
+import 'package:bulk_buyers/src/presentation/shared/ui_helpers.dart';
+import 'package:bulk_buyers/src/presentation/views/auth/verify_email_view.dart';
+import 'package:bulk_buyers/src/presentation/widgets/snack_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+
+import '../base_view.dart';
+import 'login_view.dart';
+
+class SignUpView extends StatefulWidget {
+  @override
+  _SignUpViewState createState() => _SignUpViewState();
+}
+
+class _SignUpViewState extends State<SignUpView> {
+  String _passwordConfirmaionValidation;
+
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool get _hasEnteredInformation =>
+      emailController.text != '' &&
+      passwordController.text != '' &&
+      confirmPasswordController.text != '' &&
+      firstNameController.text != '' &&
+      lastNameController.text != '' &&
+      phoneController.text != '';
+
+  @override
+  Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
+    return BaseView<SignUpViewModel>(
+      builder: (context, child, model) => Scaffold(
+        key: scaffoldKey,
+        backgroundColor: whiteSwatch,
+        body: Stack(
+          children: <Widget>[
+            Form(
+              child: Container(
+                padding: EdgeInsets.all(15.0),
+                margin: EdgeInsets.only(top: 50.0),
+                child: ListView(children: <Widget>[
+                  UIHelper.appLogo(),
+                  UIHelper.pageTitle(title: "Sign Up"),
+                  UIHelper.verticalSpaceLarge(),
+                  UIHelper.inputFormField(
+                    placeholder: 'First Name',
+                    controller: firstNameController,
+                  ),
+                  UIHelper.verticalSpaceSmall(),
+                  UIHelper.inputFormField(
+                    placeholder: 'Last Name',
+                    controller: lastNameController,
+                  ),
+                  UIHelper.verticalSpaceSmall(),
+                  UIHelper.inputFormField(
+                      placeholder: 'Email Address',
+                      controller: emailController,
+                      keyboard: TextInputType.emailAddress,
+                      validationMessage: model.emailError == null
+                          ? ""
+                          : "Email already taken"),
+                  UIHelper.verticalSpaceSmall(),
+                  UIHelper.inputFormField(
+                      placeholder: 'Phone Number',
+                      controller: phoneController,
+                      keyboard: TextInputType.phone,
+                      validationMessage: model.phoneError == null
+                          ? ""
+                          : "Phone Number already taken"),
+                  UIHelper.verticalSpaceSmall(),
+                  UIHelper.inputFormField(
+                      title: 'Confirm Password',
+                      placeholder: 'Enter password',
+                      isPassword: true,
+                      controller: passwordController),
+                  UIHelper.verticalSpaceSmall(),
+                  UIHelper.inputFormField(
+                      placeholder: 'Confirm password',
+                      isPassword: true,
+                      controller: confirmPasswordController,
+                      validationMessage: _passwordConfirmaionValidation),
+                  // _getFeedbackUI(model),
+                  UIHelper.verticalSpaceSmaller(),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Checkbox(
+                          value: model.terms,
+                          activeColor: primarySwatch,
+                          onChanged: model.acceptTerms,
+                        ),
+                        // I accept your Terms & Conditions
+                        Text("I accept your Terms & Conditions",
+                            style: const TextStyle(
+                                color: const Color(0xff283350),
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Roboto",
+                                fontStyle: FontStyle.normal,
+                                fontSize: 15.0),
+                            textAlign: TextAlign.center)
+                      ],
+                    ),
+                  ),
+                  model.terms
+                      
+                       ? _getSignUpButton(model)
+                      : UIHelper.disabledButton(
+                          title: 'SIGN UP',
+                        ),
+                  UIHelper.verticalSpaceSmall(),
+                  UIHelper.formLInkText(
+                      title: "I have an Account? Login here",
+                      onTap: () => Router.navigator.pushNamed(Router.loginView)),
+                ]),
+              ),
+            ),
+            IgnorePointer(
+              child: Opacity(
+                opacity: model.state == ViewState.Busy ? 1.0 : 00,
+                child: Container(
+                    width: screenSize.width,
+                    height: screenSize.height,
+                    child: Container(
+                      width: screenSize.width,
+                      height: screenSize.height,
+                      alignment: Alignment.center,
+                      color: Color.fromARGB(100, 0, 0, 0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Lottie.asset('assets/lottie/loading.json',
+                              height: 100),
+                        ],
+                      ),
+                    )),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+//  Widget _getFeedbackUI(SignUpViewModel model) {
+//    switch (model.state) {
+//      case ViewState.NoDataAvailable:
+//        return Center(
+//            child: Text(
+//
+//              'Could not sign up at this moment, \ncheck internet connection', softWrap: true,));
+//      case ViewState.Busy:
+//      case ViewState.Error:
+//
+//      case ViewState.Success:
+//        // NOTE: Place your login success UI here
+//      case ViewState.WaitingForInput:
+//      default:
+//        return Container();
+//    }
+//  }
+//
+ Widget _getSignUpButton(SignUpViewModel model) {
+   return UIHelper.fullScreenButton(
+       title: 'SIGN UP',
+       onTap: () async {
+
+          Router.navigator.pushReplacementNamed(Router.verifyEmail);
+         var passwordValidationMessage = model.checkConfirmationPasswordValid(
+             password: passwordController.text,
+             confirmationPassword: confirmPasswordController.text);
+
+         if (await model.correctEmail(emailController.text)) {
+           if (passwordValidationMessage == null && _hasEnteredInformation) {
+             if (model.terms) {
+               var viewState = await model.signUpUser(
+                   firstNameController.text,
+                   lastNameController.text,
+                   passwordController.text,
+                   emailController.text,
+                   phoneController.text);
+               print(viewState);
+               if (viewState) {
+                showCartSnak(scaffoldKey: scaffoldKey, msg: model.authErr, duration: 10, color: graySwatch);
+               }
+             }
+           } else {
+             setState(() {
+               _passwordConfirmaionValidation = passwordValidationMessage;
+               passwordController.clear();
+               confirmPasswordController.clear();
+             });
+           }
+         } else {
+           setState(() {
+             emailController.clear();
+             passwordController.clear();
+             confirmPasswordController.clear();
+           });
+         }
+       });
+ }
+}
+
+//firstName: firstNameController.text, lastName: lastNameController.text, password: passwordController.text, email: emailController.text, phone: phoneController.text
