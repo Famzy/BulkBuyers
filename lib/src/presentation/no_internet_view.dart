@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:bulk_buyers/core/router/routes.gr.dart';
+import 'package:bulk_buyers/core/utils/theme/ui_reducers.dart';
 import 'package:bulk_buyers/src/presentation/shared/ui_helpers.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import 'views/network_splash_screen.dart';
-import 'views/store/shop_view.dart';
 
 class NoInternetView extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _NoInternetViewState extends State<NoInternetView> {
       switch (status) {
         case DataConnectionStatus.connected:
           setState(() {
-            Navigator.pop(context);
+            Router.navigator.pop();
           });
 
           break;
@@ -65,7 +66,7 @@ class _NoInternetViewState extends State<NoInternetView> {
             Text("An internet error occurred. please try again"),
             UIHelper.verticalSpaceSmall(),
             Container(
-              width: MediaQuery.of(context).size.width,
+              width: screenWidth(context),
               child: FlatButton(
                 color: Colors.grey,
                 child: Text("Try Again"),

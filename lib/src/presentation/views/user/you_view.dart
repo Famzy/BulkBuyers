@@ -1,6 +1,7 @@
 import 'package:bulk_buyers/core/router/routes.gr.dart';
 import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
 import 'package:bulk_buyers/core/utils/theme/font_styles.dart';
+import 'package:bulk_buyers/core/utils/theme/ui_reducers.dart';
 import 'package:bulk_buyers/src/presentation/shared/ui_helpers.dart';
 import 'package:bulk_buyers/src/presentation/widgets/app_bar.dart';
 import 'package:bulk_buyers/src/presentation/widgets/navigation/buttom_nav.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:share/share.dart';
+
 class YouView extends StatefulWidget {
   @override
   _YouViewState createState() => _YouViewState();
@@ -17,11 +19,10 @@ class YouView extends StatefulWidget {
 class _YouViewState extends State<YouView> {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: backAppBar(context: context),
       backgroundColor: Color.fromARGB(242, 243, 243, 243),
-       bottomNavigationBar: BottomNav.nav(index: 3),
+      bottomNavigationBar: BottomNav.nav(index: 3),
       body: Container(
         margin: EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
@@ -49,7 +50,8 @@ class _YouViewState extends State<YouView> {
                   children: <Widget>[
                     IconButton(
                       icon: Image.asset('assets/images/list.png'),
-                      onPressed:  () => Router.navigator.pushNamed(Router.orders),
+                      onPressed: () =>
+                          Router.navigator.pushNamed(Router.orders),
                     ),
                     Text("My Orders"),
                   ],
@@ -73,7 +75,8 @@ class _YouViewState extends State<YouView> {
                   children: <Widget>[
                     IconButton(
                       icon: Image.asset('assets/images/settings.png'),
-                      onPressed: () => Router.navigator.pushNamed(Router.profile),
+                      onPressed: () =>
+                          Router.navigator.pushNamed(Router.profile),
                     ),
                     Text("My Account"),
                   ],
@@ -133,19 +136,21 @@ class _YouViewState extends State<YouView> {
               ),
               GestureDetector(
                 onTap: () async {
-                 Router.navigator.pushNamedAndRemoveUntil(Router.loginView, (r)=> false);
+                  Router.navigator
+                      .pushNamedAndRemoveUntil(Router.loginView, (r) => false);
                 },
                 child: Row(
                   children: <Widget>[
                     IconButton(
                       icon: Image.asset('assets/images/logout.png'),
-                      onPressed: () => Router.navigator.pushNamedAndRemoveUntil(Router.loginView, (r)=> false),
+                      onPressed: () => Router.navigator.pushNamedAndRemoveUntil(
+                          Router.loginView, (r) => false),
                     ),
                     Text("Logout of your account"),
                   ],
                 ),
               ),
-              UIHelper.verticalSpace(height / 9.9),
+              UIHelper.verticalSpace(screenHeight(context) / 9.9),
               Container(
                 alignment: Alignment.bottomCenter,
                 child: Center(
@@ -162,7 +167,7 @@ class _YouViewState extends State<YouView> {
                           textAlign: TextAlign.left),
                       UIHelper.verticalSpace(5),
                       Text(
-                        "App Version 1.0.3",
+                        "App Version 1.1",
                         style: TextStyle(
                           fontSize: 12,
                           color: const Color(0xff908888),

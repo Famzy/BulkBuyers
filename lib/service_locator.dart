@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bulk_buyers/src/data/datasource/local/local_data_source_impl.dart';
 import 'package:bulk_buyers/src/data/datasource/local/local_data_source.dart';
 import 'package:bulk_buyers/src/domain/usecase/auth_usecase.dart';
+import 'package:bulk_buyers/src/presentation/scoped_models/store/products_view_model.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,7 +63,8 @@ void initScopedModels() {
       () => ForgotPasswordViewModel(auth: di()));
   di.registerFactory<FrameworkViewModel>(() => FrameworkViewModel());
   di.registerFactory<AuthenticatedViewModel>(() => AuthenticatedViewModel());
-  di.registerFactory<ShopViewModel>(() => ShopViewModel());
+  di.registerFactory<ShopViewModel>(() => ShopViewModel(products: di()));
+  di.registerFactory<ProductViewModel>(() => ProductViewModel(product: di()));
   di.registerFactory<ProductGridViewModel>(() => ProductGridViewModel());
   di.registerFactory<ProductDetailsViewModel>(() => ProductDetailsViewModel());
   di.registerFactory<CartViewModel>(() => CartViewModel());

@@ -15,9 +15,12 @@ abstract class Repository {
   Future<Either<Failure, List<ProductsEntitiy>>> fetchCachedProducts();
   Future<Either<Failure, List<ProductsEntitiy>>> refreshProducts();
   Future<Either<Failure, List<ProductsEntitiy>>> getProducts(int id);
+  Future<Either<Failure, List<ProductsEntitiy>>> getFilter({int id});
   Future<List> fetchUserOrders();
   getOrderDetails(int id);
   Future<List> fetchUser();
   Future<int> logout();
+  Future<int> getProCount();
+  updateWishList({int id, bool state});
   Future<Either<Failure, List<CategoriesEntities>>> getCategories();
 }

@@ -6,6 +6,7 @@ import '../base_view.dart';
 class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return Scaffold();
 //    return BaseView<ProfileViewModel>(
 //      onModelReady: (model) => model.loadUserDetails(),
 //      builder: (context, child, model) => Scaffold(

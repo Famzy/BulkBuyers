@@ -6,12 +6,10 @@ import 'package:bulk_buyers/src/data/models/order_details_model.dart';
 import 'package:bulk_buyers/src/data/models/order_products_model.dart';
 import 'package:bulk_buyers/src/data/models/orders_model.dart';
 import 'package:bulk_buyers/src/data/models/shop_model.dart';
-import 'package:bulk_buyers/src/data/models/user_model.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:bulk_buyers/core/utils/constants.dart';
 
 class SqfLiteDatabaseHelper {
   ///

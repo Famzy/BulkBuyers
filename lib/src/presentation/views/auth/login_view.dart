@@ -1,6 +1,7 @@
 import 'package:bulk_buyers/core/router/routes.gr.dart';
 import 'package:bulk_buyers/core/utils/string_utils.dart';
 import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
+import 'package:bulk_buyers/core/utils/theme/ui_reducers.dart';
 import 'package:bulk_buyers/src/presentation/scoped_models/auth/login_view_model.dart';
 import 'package:bulk_buyers/src/presentation/shared/ui_helpers.dart';
 import 'package:bulk_buyers/src/presentation/widgets/busy_overlay.dart';
@@ -77,7 +78,7 @@ class _LoginViewState extends State<LoginView> {
                               },
                               isPassword: model.isVisible,
                               controller: passwordController),
-                          UIHelper.verticalSpace(10),
+                          UIHelper.verticalSpace(screenHeight(context) / 25),
                           UIHelper.fullScreenButton(
                               title: "LOGIN",
                               onTap: () async {

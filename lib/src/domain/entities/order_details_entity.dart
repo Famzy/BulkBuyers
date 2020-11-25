@@ -11,6 +11,7 @@ class OrderDetailsEntity extends Equatable {
   final String productname;
   final String description;
   final OrderProducts product;
+  final String created_at;
 
   OrderDetailsEntity(
       {this.orderdetailid,
@@ -21,6 +22,7 @@ class OrderDetailsEntity extends Equatable {
       this.totalprice,
       this.productname,
       this.description,
+      this.created_at,
       this.product})
       : super([
           orderdetailid,
@@ -32,5 +34,40 @@ class OrderDetailsEntity extends Equatable {
           productname,
           description,
           product,
+          created_at
+        ]);
+}
+
+class OrdersEnitiy extends Equatable {
+  final int orderid;
+  final int userid;
+  final int orderstatid;
+  final String orderrefno;
+  final double totalcost;
+  final int qty;
+  final double discount;
+  final bool ispaid;
+  final String created_at;
+
+  OrdersEnitiy(
+      {this.orderid,
+      this.userid,
+      this.orderstatid,
+      this.orderrefno,
+      this.totalcost,
+      this.qty,
+      this.discount,
+      this.ispaid,
+      this.created_at})
+      : super([
+          orderid,
+          userid,
+          orderstatid,
+          orderrefno,
+          totalcost,
+          qty,
+          discount,
+          ispaid,
+          created_at,
         ]);
 }

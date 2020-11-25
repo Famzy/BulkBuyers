@@ -1,6 +1,10 @@
+import 'package:bulk_buyers/core/error/failures.dart';
 import 'package:bulk_buyers/src/data/models/cart_model.dart';
+import 'package:bulk_buyers/src/data/models/order_details_model.dart';
 import 'package:bulk_buyers/src/data/models/products_model.dart';
 import 'package:bulk_buyers/src/data/models/user_model.dart';
+import 'package:bulk_buyers/src/domain/entities/products_entities.dart';
+import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
 abstract class LocalData {
@@ -19,25 +23,28 @@ abstract class LocalData {
   Future<List> getCartList();
   Future<int> getCartCount();
   Future<int> deleteCartItems({@required int id});
-  Future<int> insertRemoteProducts({@required List products});
-  Future<List> getAllProducts();
+  Future<int> insertRemoteProducts({@required List<ProductsModels> products});
+  Future<List<ProductsEntitiy>> getAllProducts();
+  Future<Either<Failure, List<ProductsEntitiy>>> filterProducts(
+      {@required int id});
   Future<ProductsModels> getProduct({@required int id});
   Future<int> deleteProduct({@required int id});
   Future<int> clearStoreDB();
   Future<int> clearProducts();
   addToWishList({@required int productid, @required bool wishlist});
   Future<List> getWishLists();
-  Future<int> addToCart({@required CartModel shopItems});
+  Future<int> addToCart({@required CartModel cartItems});
   updateCartPriceAndQty(
       {@required int productid, @required int price, @required int qty});
   Future<int> clearCartDB();
   Future<int> cartTotalPrice();
   Future<int> cartTotalQuantities();
   Future<List> getCartCheckoutItems();
-  Future<int> insertRemoteOrders({@required var orders});
-  Future<int> insertRemoteOrdersDetails({@required var orders});
+  Future<int> insertRemoteOrders({@required List<OrdersModel> orders});
+  Future<int> insertRemoteOrdersDetails({@required OrderDetailsModel orders});
   Future<List> getOrderList();
   Future<int> getOrderCount();
+  Future<int> getProCount();
   getOrderDetails({@required int id});
   Future<List> getOrderDetailsList();
   Future<int> getOrderDetialsCount();
@@ -45,6 +52,9 @@ abstract class LocalData {
   Future<int> clearOrderDetails();
   Future<int> insertUsers({@required UserModels users});
   Future<List> getUsers();
+  Future<String> getToken();
+  Future<void> cacheToken({@required String token});
+  Future<void> cacheState({@required String state});
   updateUserDeatails(
       {@required int UserId,
       @required String firstName,

@@ -1,3 +1,4 @@
+import 'package:bulk_buyers/core/router/routes.gr.dart';
 import 'package:bulk_buyers/core/utils/string_utils.dart';
 import 'package:bulk_buyers/src/data/models/login_model.dart';
 import 'package:bulk_buyers/src/domain/usecase/auth_usecase.dart';
@@ -25,6 +26,9 @@ class LoginViewModel extends BaseModel {
       ));
       print("thar: $response");
       setState(ViewState.Success);
+      Router.navigator
+          .pushNamedAndRemoveUntil(Router.authenticated, (route) => false);
+      return false;
     } catch (e) {
       print("this: $e");
       setState(ViewState.Error);

@@ -1,6 +1,7 @@
 import 'package:bulk_buyers/core/error/exceptions.dart';
 import 'package:bulk_buyers/core/error/failures.dart';
 import 'package:bulk_buyers/core/network/network_info.dart';
+import 'package:bulk_buyers/core/utils/bulk_buyers_strings.dart';
 import 'package:bulk_buyers/src/data/datasource/local/local_data_source.dart';
 import 'package:bulk_buyers/src/data/datasource/remote/remote_data_source.dart';
 import 'package:bulk_buyers/src/data/models/login_model.dart';
@@ -63,6 +64,7 @@ class RepositoryImpl implements Repository {
   Future<Either<Failure, List<CategoriesEntities>>> getCategories() async {
     if (await networkInfo.isConnected) {
       try {
+        print("Oya");
         final categories = await remoteData.fetchCategories();
         print("CAT REPO $categories");
         return Right(categories);
@@ -96,8 +98,15 @@ class RepositoryImpl implements Repository {
   @override
   login(LoginModel loginModel) async {
     if (await networkInfo.isConnected) {
-      final response = await remoteData.login(loginModel);
-      return response;
+      try {
+        final response = await remoteData.login(loginModel);
+        print(response);
+        await localData.cacheToken(token: response);
+        await localData.cacheState(state: BCStrings.IS_VERIFIED);
+        return "Authenticated";
+      } catch (e) {
+        throw e;
+      }
     } else {
       throw NetworkException;
     }
@@ -145,4 +154,17 @@ class RepositoryImpl implements Repository {
       throw NetworkException;
     }
   }
+
+  @override
+  Future<int> getProCount() async {
+    return await localData.getProCount();
+  }
+
+  @override
+  Future<Either<Failure, List<ProductsEntitiy>>> getFilter({int id}) async =>
+      await localData.filterProducts(id: id);
+
+  @override
+  updateWishList({int id, bool state}) async =>
+      localData.addToWishList(productid: id, wishlist: state);
 }

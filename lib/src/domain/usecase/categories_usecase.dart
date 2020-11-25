@@ -14,10 +14,8 @@ class CategoriesUC implements UseCase<CategoriesEntities, NoParams> {
       throw UnimplementedError();
 
   @override
-  Future<Either<Failure, List<CategoriesEntities>>> get() async {
-    var data = await repository.getCategories();
-    print("CAT UC $data");
-  }
+  Future<Either<Failure, List<CategoriesEntities>>> get() async =>
+      await repository.getCategories();
 
   @override
   Future<Either<Failure, List<CategoriesEntities>>> post(NoParams parm) {
@@ -30,4 +28,6 @@ class CategoriesUC implements UseCase<CategoriesEntities, NoParams> {
     // TODO: implement send
     throw UnimplementedError();
   }
+
+  getOunt() async => await repository.getProCount();
 }

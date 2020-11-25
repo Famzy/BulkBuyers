@@ -1,4 +1,6 @@
 import 'package:auto_route/auto_route_annotations.dart';
+import 'package:bulk_buyers/src/home_container.dart';
+import 'package:bulk_buyers/src/presentation/no_internet_view.dart';
 import 'package:bulk_buyers/src/presentation/views/about_view.dart';
 import 'package:bulk_buyers/src/presentation/views/auth/forgot_password_view.dart';
 import 'package:bulk_buyers/src/presentation/views/auth/login_view.dart';
@@ -30,6 +32,7 @@ import 'package:bulk_buyers/src/presentation/views/welcome_view.dart';
 class $Router {
   @initial
   HomeView home;
+  HomeContainer container;
   LoginView loginView;
   ForgotPasswordView forgotPassword;
   SignUpView signUp;
@@ -44,7 +47,7 @@ class $Router {
   ProductDetailsView productDetails;
   ProductGridView productGrid;
   ProductListView productList;
-  ShopView shopView;
+  //ShopView shopView;
   EditProfileView editProfile;
   ProfileView profile;
   YouView you;
@@ -55,4 +58,5 @@ class $Router {
   NetworkSplashScreen networkSplashScreen;
   WelcomeView welcome;
   ResetConfrimation resetConfrimation;
+  NoInternetView noInternet;
 }

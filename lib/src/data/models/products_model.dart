@@ -30,13 +30,13 @@ class ProductsModels extends ProductsEntitiy {
         prodcatid: json['prodcatid'],
         productid: json['productid'],
         productname: json['productname'],
-        description: json[' description'],
-        price: json[' price'],
+        description: json['description'],
+        price: json['price'],
         discount: json['discount'],
-        quantity: json[' quantity'],
-        wishlist: json['wishlist'],
+        quantity: json['quantity'] ?? 1,
+        wishlist: json['wishlist'] == 1,
         status: json['status'],
-        productimg: json[' productimg']);
+        productimg: json['productimg']);
   }
   Map<String, dynamic> toJson() {
     return {
@@ -52,4 +52,11 @@ class ProductsModels extends ProductsEntitiy {
       'productimg': productimg
     };
   }
+//
+// factory ProductsModels.fromMap( Map<String, dynamic> map,){
+//    return ProductsModels(
+//
+//    );
+//
+// }
 }

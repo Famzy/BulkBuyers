@@ -20,16 +20,12 @@ class CategoriesModel extends CategoriesEntities {
         );
 
   factory CategoriesModel.formJson(Map<String, dynamic> json) {
-    var productsFromJson = json['quantity'];
-    List<CategoriesEntities> productList =
-        new List<CategoriesEntities>.from(productsFromJson);
     return CategoriesModel(
       prodcatid: json['prodcatid'],
       prodcatname: json['prodcatname'],
       description: json['description'],
       status: json['status'],
       productcatimg: json['productcatimg'],
-      products: productList,
     );
   }
   Map<String, dynamic> toJson() {
@@ -39,7 +35,6 @@ class CategoriesModel extends CategoriesEntities {
       'description': description,
       'status': status,
       'productcatimg': productcatimg,
-      'products': products,
     };
   }
 }

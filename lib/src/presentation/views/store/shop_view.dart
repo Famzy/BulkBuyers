@@ -1,43 +1,40 @@
-import 'dart:async';
-
-import 'package:bulk_buyers/core/router/routes.gr.dart';
-import 'package:bulk_buyers/core/utils/constants.dart';
-import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
-import 'package:bulk_buyers/src/presentation/scoped_models/store/shop_view_model.dart';
-import 'package:bulk_buyers/src/presentation/widgets/app_bar.dart';
-import 'package:bulk_buyers/src/presentation/widgets/app_body.dart';
-import 'package:bulk_buyers/src/presentation/widgets/navigation/buttom_nav.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
-
-import '../base_view.dart';
-
-class ShopView extends StatefulWidget {
-  @override
-  _ShopViewState createState() => _ShopViewState();
-}
-
-class _ShopViewState extends State<ShopView> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  TextEditingController searchCOntroller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return BaseView<ShopViewModel>(
-        onModelReady: (model) => model.fecthStoreProducts(),
-        builder: (context, child, model) => Scaffold(
-              key: _scaffoldKey,
-              appBar: backAppBar(context: context),
-              backgroundColor: Color.fromARGB(242, 243, 243, 243),
-              bottomNavigationBar: BottomNav.nav(index: 0),
-              body: GestureDetector(
-                onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-                child: appBody(child: Container()),
-              ),
-            ));
+//import 'dart:async';
+//
+//import 'package:bulk_buyers/core/router/routes.gr.dart';
+//import 'package:bulk_buyers/core/utils/constants.dart';
+//import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
+//import 'package:bulk_buyers/core/utils/theme/font_styles.dart';
+//import 'package:bulk_buyers/core/utils/theme/ui_reducers.dart';
+//import 'package:bulk_buyers/src/data/models/products_view_model.dart';
+//import 'package:bulk_buyers/src/presentation/scoped_models/store/shop_view_model.dart';
+//import 'package:bulk_buyers/src/presentation/shared/ui_helpers.dart';
+//import 'package:bulk_buyers/src/presentation/widgets/app_bar.dart';
+//import 'package:bulk_buyers/src/presentation/widgets/navigation/buttom_nav.dart';
+//import 'package:cached_network_image/cached_network_image.dart';
+//import 'package:flutter/material.dart';
+//import 'package:scoped_model/scoped_model.dart';
+//
+//import '../base_view.dart';
+//
+//class ShopView extends StatefulWidget {
+//  @override
+//  _ShopViewState createState() => _ShopViewState();
+//}
+//
+//class _ShopViewState extends State<ShopView> {
+//  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+//
+//  TextEditingController searchCOntroller = TextEditingController();
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return BaseView<ShopViewModel>(
+////        onModelReady: (model) => model.fecthStoreProducts(),
+//        builder: (context, child, model) => Scaffold(
+//            key: _scaffoldKey,
+//            appBar: backAppBar(context: context),
+//            backgroundColor: Color.fromARGB(242, 243, 243, 243),
+//            bottomNavigationBar: BottomNav.nav(index: 0),
 //            body: GestureDetector(
 //              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
 //              child: Container(
@@ -70,7 +67,7 @@ class _ShopViewState extends State<ShopView> {
 //                            },
 //                            child: Container(
 //                              height: 35,
-//                              width: width / 1.22,
+//                              width: screenWidth(context) / 1.22,
 //                              decoration: BoxDecoration(
 //                                borderRadius:
 //                                    BorderRadius.all(Radius.circular(4)),
@@ -148,8 +145,7 @@ class _ShopViewState extends State<ShopView> {
 //                ),
 //              ),
 //            )));
-    // body: Container(child: _getBodyUi(context, model))));
-  }
+//  }
 //
 //  Widget _getBodyUi(BuildContext context, ShopViewModel model) {
 //    switch (model.state) {
@@ -174,17 +170,12 @@ class _ShopViewState extends State<ShopView> {
 //        });
 //  }
 //
-//  Widget _getListItemUi(StoreItems result) {
+//  Widget _getListItemUi(ProductsModels result) {
 //    return GestureDetector(
 //      onTap: () {
 //        print(result.productid);
-//        Navigator.push(
-//            context,
-//            PageRouteBuilder(
-//                transitionDuration: const Duration(milliseconds: 350),
-//                pageBuilder: (context, _, __) => ProductDetailsView(
-//                      id: result.productid,
-//                    )));
+//        Router.navigator
+//            .pushNamed(Router.productDetails, arguments: result.productid);
 //      },
 //      child: Card(
 //        elevation: 2,
@@ -200,7 +191,7 @@ class _ShopViewState extends State<ShopView> {
 //                width: 150.0,
 //                padding: EdgeInsets.all(5.0),
 //                child: CachedNetworkImage(
-//                  imageUrl: "${DBConst.IMAGE_BASE_URL}/${result.productimg}",
+//                  imageUrl: "${Constants.IMAGE_BASE_URL}/${result.productimg}",
 //                  placeholder: (context, url) =>
 //                      Center(child: CircularProgressIndicator()),
 //                  errorWidget: (context, url, error) => const Icon(
@@ -257,19 +248,7 @@ class _ShopViewState extends State<ShopView> {
 //                          });
 //                          model.updateWishlist(
 //                              result.productid, result.wishlist);
-////                          productsBox.putAt(
-////                            index,
-////                            ShopHiveModle(
-////                                result.productid,
-////                                result.prodcatid,
-////                                result.productname,
-////                                result.description,
-////                                result.price,
-////                                result.discount,
-////                                result.quantity,
-////                                result.wishlist ? false : true,
-////                                result.productimg),
-////                          );
+//
 //                          // model.updateWishlistHive(index);
 //                        },
 //                        child: Icon(
@@ -287,17 +266,17 @@ class _ShopViewState extends State<ShopView> {
 //                        onTap: () async {
 //                          print(result.productname);
 ////
-//                          model.addToCart(
-//                              result.productid,
-//                              result.productname,
-//                              result.price,
-//                              result.quantity,
-//                              result.productimg,
-//                              result.price,
-//                              result.discount);
-//                          Timer(Duration(milliseconds: 500), () {
-//                            showCartSnak(model.cartMsg, model.isSuccessful);
-//                          });
+////                          model.addToCart(
+////                              result.productid,
+////                              result.productname,
+////                              result.price,
+////                              result.quantity,
+////                              result.productimg,
+////                              result.price,
+////                              result.discount);
+////                          Timer(Duration(milliseconds: 500), () {
+////                            showCartSnak(model.cartMsg, model.isSuccessful);
+////                          });
 //                        },
 //                        child: Icon(
 //                          Icons.add_circle,
@@ -380,8 +359,8 @@ class _ShopViewState extends State<ShopView> {
 //              ],
 //            )));
 //  }
-}
-
+//}
+//
 //class ProductSearch extends SearchDelegate<String> {
 //  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 //  // final productsBox = Hive.box('store_products');
@@ -447,16 +426,16 @@ class _ShopViewState extends State<ShopView> {
 //        : storeProducts
 //            .where((search) => search.startsWith(query.toLowerCase()))
 //            .toList();
-//    //       : storeProducts.where((search) => search.startsWith(query)).toList();
+//    storeProducts.where((search) => search.startsWith(query)).toList();
 //
-////    return ListView.builder(
-////      itemBuilder: (context, index) => ListTile(
-////        leading: GestureDetector(
-////          onTap: () async {
-////            print(storeProducts.indexOf(suggestionList[index]));
-////            int position = storeProducts.indexOf(suggestionList[index]);
-////            var productID = await model.getProductFromSearch(position);
-////            print(productID);
+//    return ListView.builder(
+//      itemBuilder: (context, index) => ListTile(
+//        leading: GestureDetector(
+//          onTap: () async {
+//            print(storeProducts.indexOf(suggestionList[index]));
+//            int position = storeProducts.indexOf(suggestionList[index]);
+//            var productID = await model.getProductFromSearch(position);
+//            print(productID);
 ////            Navigator.push(
 ////                context,
 ////                PageRouteBuilder(
@@ -464,20 +443,20 @@ class _ShopViewState extends State<ShopView> {
 ////                    pageBuilder: (context, _, __) => ProductDetailsView(
 ////                          id: productID,
 ////                        )));
-////            // close(context, null);
-////          },
-////          child: Icon(
-////            Icons.search,
-////            color: primarySwatch,
-////          ),
-////        ),
-////        title: GestureDetector(
-////          onTap: () async {
-////            print(storeProducts.indexOf(suggestionList[index]));
-////            int position = storeProducts.indexOf(suggestionList[index]);
-////            var productID = await model.getProductFromSearch(position);
-////            print(productID);
-////            // close(context, null);
+//            // close(context, null);
+//          },
+//          child: Icon(
+//            Icons.search,
+//            color: primarySwatch,
+//          ),
+//        ),
+//        title: GestureDetector(
+//          onTap: () async {
+//            print(storeProducts.indexOf(suggestionList[index]));
+//            int position = storeProducts.indexOf(suggestionList[index]);
+//            var productID = await model.getProductFromSearch(position);
+//            print(productID);
+//            // close(context, null);
 ////            Navigator.push(
 ////                context,
 ////                PageRouteBuilder(
@@ -485,22 +464,22 @@ class _ShopViewState extends State<ShopView> {
 ////                    pageBuilder: (context, _, __) => ProductDetailsView(
 ////                          id: productID,
 ////                        )));
-////          },
-////          child: RichText(
-////            text: TextSpan(
-////                text: suggestionList[index].substring(0, query.length),
-////                style: TextStyle(
-////                    color: primarySwatch, fontWeight: FontWeight.bold),
-////                children: [
-////                  TextSpan(
-////                      text: suggestionList[index].substring(query.length),
-////                      style: TextStyle(color: Colors.grey))
-////                ]),
-////          ),
-////        ),
-////      ),
-////      itemCount: suggestionList.length,
-////    );
+//          },
+//          child: RichText(
+//            text: TextSpan(
+//                text: suggestionList[index].substring(0, query.length),
+//                style: TextStyle(
+//                    color: primarySwatch, fontWeight: FontWeight.bold),
+//                children: [
+//                  TextSpan(
+//                      text: suggestionList[index].substring(query.length),
+//                      style: TextStyle(color: Colors.grey))
+//                ]),
+//          ),
+//        ),
+//      ),
+//      itemCount: suggestionList.length,
+//    );
 //  }
 //
 //  @override
@@ -513,14 +492,14 @@ class _ShopViewState extends State<ShopView> {
 //            .toList();
 //    //       : storeProducts.where((search) => search.startsWith(query)).toList();
 //
-////    return ListView.builder(
-////      itemBuilder: (context, index) => ListTile(
-////        leading: GestureDetector(
-////          onTap: () async {
-////            print(storeProducts.indexOf(suggestionList[index]));
-////            int position = storeProducts.indexOf(suggestionList[index]);
-////            var productID = await model.getProductFromSearch(position);
-////            print(productID);
+//    return ListView.builder(
+//      itemBuilder: (context, index) => ListTile(
+//        leading: GestureDetector(
+//          onTap: () async {
+//            print(storeProducts.indexOf(suggestionList[index]));
+//            int position = storeProducts.indexOf(suggestionList[index]);
+//            var productID = await model.getProductFromSearch(position);
+//            print(productID);
 ////            Navigator.push(
 ////                context,
 ////                PageRouteBuilder(
@@ -528,22 +507,23 @@ class _ShopViewState extends State<ShopView> {
 ////                    pageBuilder: (context, _, __) => ProductDetailsView(
 ////                          id: productID,
 ////                        )));
-////            // close(context, null);
-////          },
-////          child: Icon(
-////            Icons.search,
-////            color: primarySwatch,
-////          ),
-////        ),
-////        title: GestureDetector(
-////          onTap: () async {
-////            print(storeProducts.indexOf(suggestionList[index]));
-////            int position = storeProducts.indexOf(suggestionList[index]);
-////            // var productID = await model.getProductFromSearch(position);
-////            // var productID = productsBox.get(position) as ShopHiveModle;
-////            //  print("${productsBox.getAt(position)}");
-////            // print(productID.toString());
-////            // close(context, null);
+//            // close(context, null);
+//          },
+//          child: Icon(
+//            Icons.search,
+//            color: primarySwatch,
+//          ),
+//        ),
+//        title: GestureDetector(
+//          onTap: () async {
+//            print(storeProducts.indexOf(suggestionList[index]));
+//            int position = storeProducts.indexOf(suggestionList[index]);
+//            // var productID = await model.getProductFromSearch(position);
+//            // var productID = productsBox.get(position) as ShopHiveModle;
+//            //  print("${productsBox.getAt(position)}");
+//            // print(productID.toString());
+//            // close(context, null);
+//
 ////            Navigator.push(
 ////                context,
 ////                PageRouteBuilder(
@@ -551,21 +531,21 @@ class _ShopViewState extends State<ShopView> {
 ////                    pageBuilder: (context, _, __) => ProductDetailsView(
 ////                        //    id: productID.productid,
 ////                        id: 1)));
-////          },
-////          child: RichText(
-////            text: TextSpan(
-////                text: suggestionList[index].substring(0, query.length),
-////                style: TextStyle(
-////                    color: primarySwatch, fontWeight: FontWeight.bold),
-////                children: [
-////                  TextSpan(
-////                      text: suggestionList[index].substring(query.length),
-////                      style: TextStyle(color: Colors.grey))
-////                ]),
-////          ),
-////        ),
-////      ),
-////      itemCount: suggestionList.length,
-////    );
+//          },
+//          child: RichText(
+//            text: TextSpan(
+//                text: suggestionList[index].substring(0, query.length),
+//                style: TextStyle(
+//                    color: primarySwatch, fontWeight: FontWeight.bold),
+//                children: [
+//                  TextSpan(
+//                      text: suggestionList[index].substring(query.length),
+//                      style: TextStyle(color: Colors.grey))
+//                ]),
+//          ),
+//        ),
+//      ),
+//      itemCount: suggestionList.length,
+//    );
 //  }
 //}

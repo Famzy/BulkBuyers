@@ -1,9 +1,14 @@
 import 'dart:io';
+import 'package:bulk_buyers/core/error/exceptions.dart';
+import 'package:bulk_buyers/core/error/failures.dart';
+import 'package:bulk_buyers/core/utils/bulk_buyers_strings.dart';
 import 'package:bulk_buyers/src/data/datasource/constants/data_constants.dart';
 import 'package:bulk_buyers/src/data/models/cart_model.dart';
+import 'package:bulk_buyers/src/data/models/order_details_model.dart';
 import 'package:bulk_buyers/src/data/models/products_model.dart';
 import 'package:bulk_buyers/src/data/models/user_model.dart';
 import 'package:bulk_buyers/src/domain/entities/products_entities.dart';
+import 'package:dartz/dartz.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +22,7 @@ class LocalDataImpl implements LocalData {
   static Database _db;
 
   LocalDataImpl({this.sharedPreferences});
+
   Future<Database> get db async {
     if (_db != null) {
       return _db;
@@ -31,38 +37,65 @@ class LocalDataImpl implements LocalData {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, "shop.db");
 
-    var storeDB = await openDatabase(path, version: 1, onCreate: _onCreate);
+    var storeDB = await openDatabase(path, version: 2, onCreate: _onCreate);
     return storeDB;
   }
 
   @override
-  Future<int> addToCart({CartModel shopItems}) {
-    // TODO: implement addToCart
-    throw UnimplementedError();
+  Future<int> addToCart({CartModel cartItems}) async {
+    var dbClient = await db;
+    await dbClient.transaction((tranact) async {
+      try {
+        var queries =
+            'INSERT INTO ${DBConst.tableCart}(productid,productname,productimg, totalprice,unitprice,quantity,discount) VALUES(${cartItems.productid},"${cartItems.productname}","${cartItems.productimg}",${cartItems.totalprice},${cartItems.unitprice}, ${cartItems.quantity}, ${cartItems.discount})';
+        var _response = await tranact.execute(queries);
+        return _response;
+      } catch (exception) {
+        print("ERRR ==> ??InsertInCart?? <==");
+        print(exception);
+      }
+    });
   }
 
   @override
-  addToWishList({int productid, bool wishlist}) {
-    // TODO: implement addToWishList
-    throw UnimplementedError();
+  addToWishList({int productid, bool wishlist}) async {
+    print(
+        "this was hit %% Update WishList to update is $productid with value $wishlist %%");
+    var dbClient = await db;
+    try {
+      var qry =
+          "UPDATE ${DBConst.tableShop} set wishlist = ${wishlist ? 1 : 0} where productid = $productid";
+      dbClient.rawUpdate(qry).then((res) {
+        print("UPDATE RES $res");
+      }).catchError((e) {
+        print("UPDATE ERR $e");
+      });
+    } catch (e) {
+      print("ERRR @@");
+      print(e);
+    }
   }
 
   @override
-  Future<int> cartTotalPrice() {
-    // TODO: implement cartTotalPrice
-    throw UnimplementedError();
+  Future<int> cartTotalPrice() async {
+    var dbClient = await db;
+    return Sqflite.firstIntValue(await dbClient
+        .rawQuery("SELECT SUM(totalprice) FROM ${DBConst.tableCart}"));
   }
 
   @override
-  Future<int> cartTotalQuantities() {
-    // TODO: implement cartTotalQuantities
-    throw UnimplementedError();
+  Future<int> cartTotalQuantities() async {
+    var dbClient = await db;
+    return Sqflite.firstIntValue(await dbClient
+        .rawQuery("SELECT SUM(quantity) FROM ${DBConst.tableCart}"));
   }
 
   @override
-  Future<int> clearCartDB() {
-    // TODO: implement clearCartDB
-    throw UnimplementedError();
+  Future<int> clearCartDB() async {
+    var dbClient = await db;
+
+    var response = await dbClient.delete(DBConst.tableCart);
+    return response;
   }
 
   @override
@@ -73,21 +106,29 @@ class LocalDataImpl implements LocalData {
   }
 
   @override
-  Future<int> clearOrders() {
-    // TODO: implement clearOrders
-    throw UnimplementedError();
+  Future<int> clearOrders() async {
+    var dbClient = await db;
+    var response = await dbClient.delete(DBConst.tableOrders);
+    return response;
   }
 
   @override
-  Future<int> clearProducts() {
-    // TODO: implement clearProducts
-    throw UnimplementedError();
+  Future<int> clearProducts() async {
+    var dbClient = await db;
+    var response = await dbClient.delete(DBConst.tableShop);
+    return response;
   }
 
   @override
-  Future<int> clearStoreDB() {
-    // TODO: implement clearStoreDB
-    throw UnimplementedError();
+  Future<int> clearStoreDB() async {
+    var dbClient = await db;
+    var response = await dbClient.delete(DBConst.tableCart);
+    response = await dbClient.delete(DBConst.tableShop);
+    response = await dbClient.delete(DBConst.tableOrders);
+    response = await dbClient.delete(DBConst.tableCategories);
+    response = await dbClient.delete(DBConst.tableUser);
+    response = await dbClient.delete(DBConst.tableOrdersDetails);
+    return response;
   }
 
   @override
@@ -97,75 +138,104 @@ class LocalDataImpl implements LocalData {
   }
 
   @override
-  Future<int> deleteCartItems({int id}) {
-    // TODO: implement deleteCartItems
-    throw UnimplementedError();
+  Future<int> deleteCartItems({int id}) async {
+    var dbClient = await db;
+    return await dbClient.delete(DBConst.tableCart,
+        where: "${DBConst.ColumnCartID} = ?", whereArgs: [id]);
   }
 
   @override
-  Future<int> deleteProduct({int id}) {
-    // TODO: implement deleteProduct
-    throw UnimplementedError();
+  Future<int> deleteProduct({int id}) async {
+    var dbClient = await db;
+    return await dbClient.delete(DBConst.tableShop,
+        where: "${DBConst.ColumnProdID} = ?", whereArgs: [id]);
   }
 
   @override
-  Future<List> getAllProducts() {
-    // TODO: implement getAllProducts
-    throw UnimplementedError();
+  Future<List> getCartCheckoutItems() async {
+    var dbClient = await db;
+    var result = await dbClient.rawQuery(
+        "SELECT ${DBConst.ColumnProdID}, ${DBConst.ColumnProdQty}, ${DBConst.ColumnProdUnitPrice}, ${DBConst.ColumnProdTotalPrice}, ${DBConst.ColumnProdDiscnt} FROM ${DBConst.tableCart}");
+
+    return result.toList();
   }
 
   @override
-  Future<List> getCartCheckoutItems() {
-    // TODO: implement getCartCheckoutItems
-    throw UnimplementedError();
+  Future<int> getCartCount() async {
+    var dbClient = await db;
+    return Sqflite.firstIntValue(
+        await dbClient.rawQuery("SELECT COUNT(*) FROM ${DBConst.tableCart}"));
   }
 
   @override
-  Future<int> getCartCount() {
-    // TODO: implement getCartCount
-    throw UnimplementedError();
+  Future<List> getCartList() async {
+    var dbClient = await db;
+    var result = await dbClient.rawQuery("SELECT * FROM ${DBConst.tableCart}");
+
+    return result.toList();
   }
 
   @override
-  Future<List> getCartList() {
-    // TODO: implement getCartList
-    throw UnimplementedError();
+  Future<int> getOrderCount() async {
+    var dbClient = await db;
+    return Sqflite.firstIntValue(
+        await dbClient.rawQuery("SELECT COUNT(*) FROM ${DBConst.tableOrders}"));
   }
 
   @override
-  Future<int> getOrderCount() {
-    // TODO: implement getOrderCount
-    throw UnimplementedError();
+  Future<int> getProCount() async {
+    var dbClient = await db;
+    return Sqflite.firstIntValue(
+        await dbClient.rawQuery("SELECT COUNT(*) FROM ${DBConst.tableShop}"));
   }
 
   @override
-  getOrderDetails({int id}) {
-    // TODO: implement getOrderDetails
-    throw UnimplementedError();
+  getOrderDetails({int id}) async {
+    var dbClient = await db;
+
+    var result = await dbClient.rawQuery(
+        "SELECT * FROM  ${DBConst.tableOrdersDetails} WHERE ${DBConst.ColumnOrderID} = $id");
+    if (result.length == 0) return null;
+
+    //gets the firts itm on the table
+    return result;
   }
 
   @override
-  Future<List> getOrderDetailsList() {
-    // TODO: implement getOrderDetailsList
-    throw UnimplementedError();
+  Future<List> getOrderDetailsList() async {
+    var dbClient = await db;
+    var result =
+        await dbClient.rawQuery("SELECT * FROM ${DBConst.tableOrdersDetails}");
+
+    return result.toList();
   }
 
   @override
-  Future<int> getOrderDetialsCount() {
-    // TODO: implement getOrderDetialsCount
-    throw UnimplementedError();
+  Future<int> getOrderDetialsCount() async {
+    var dbClient = await db;
+    return Sqflite.firstIntValue(await dbClient
+        .rawQuery("SELECT COUNT(*) FROM ${DBConst.tableOrdersDetails}"));
   }
 
   @override
-  Future<List> getOrderList() {
-    // TODO: implement getOrderList
-    throw UnimplementedError();
+  Future<List> getOrderList() async {
+    var dbClient = await db;
+    var result =
+        await dbClient.rawQuery("SELECT * FROM ${DBConst.tableOrders}");
+
+    return result.toList();
   }
 
   @override
-  Future<ProductsModels> getProduct({int id}) {
-    // TODO: implement getProduct
-    throw UnimplementedError();
+  Future<ProductsModels> getProduct({int id}) async {
+    var dbClient = await db;
+
+    var result = await dbClient.rawQuery(
+        "SELECT * FROM ${DBConst.tableShop} WHERE ${DBConst.ColumnProdID} = $id");
+    if (result.length == 0) return null;
+
+    //gets the firts itm on the table
+    return new ProductsModels.formJson(result.first);
   }
 
   @override
@@ -176,48 +246,28 @@ class LocalDataImpl implements LocalData {
   }
 
   @override
-  Future<List> getWishLists() {
-    // TODO: implement getWishLists
-    throw UnimplementedError();
+  Future<List> getWishLists() async {
+    var dbClient = await db;
+    var result = await dbClient.rawQuery(
+        "SELECT * FROM ${DBConst.tableShop} WHERE ${DBConst.ColumnProdWishLst} = 1");
+
+    return result.toList();
   }
 
   @override
-  Future<int> insertRemoteOrders({orders}) {
-    // TODO: implement insertRemoteOrders
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<int> insertRemoteOrdersDetails({orders}) {
-    // TODO: implement insertRemoteOrdersDetails
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<int> insertRemoteProducts({List products}) async {
-    List<ProductsModels> product = List<ProductsModels>();
-    product = products;
+  Future<int> insertRemoteProducts({List<ProductsModels> products}) async {
     try {
+      print("To Be inserted: ");
       var dbClient = await db;
       var response = await dbClient.transaction((tranact) async {
         for (var i = 0; i < products.length; i++) {
           print("Called insert $i to products table");
 
-          ProductsEntitiy shopItems;
-          ;
-          // shopItems.productid = products[i]["productid"];
-//          shopItems.prodcatid = products[i]["prodcatid"];
-//          shopItems.productname = products[i]["productname"];
-//          shopItems.description = products[i]["description"];
-//          shopItems.productimg = products[i]["productimg"];
-//          shopItems.price = products[i]["price"];
-//          shopItems.discount = products[i]["discount"];
-//          shopItems.wishlist = false;
-//          shopItems.quantity = 1;
-
+          ProductsModels model = products[i];
+          print("To Be inserted:${model.description} ${model.productimg}");
           try {
             var qurries =
-                'INSERT INTO ${DBConst.tableShop}(productid,prodcatid,productname,description,productimg,price,quantity,discount,wishlist) VALUES(${shopItems.productid},${shopItems.prodcatid},"${shopItems.productname}","${shopItems.description}","${shopItems.productimg}", ${shopItems.price},${shopItems.quantity},${shopItems.discount},${shopItems.wishlist ? 1 : 0})';
+                'INSERT INTO ${DBConst.tableShop}(productid,prodcatid,productname,description,productimg,price,quantity,discount,wishlist) VALUES(${model.productid},${model.prodcatid},"${model.productname}","${model.description}","${model.productimg}", ${model.price},${model.quantity},${model.discount},${model.wishlist ? 1 : 0})';
             var response = await tranact.rawInsert(qurries);
             print(response);
           } catch (exception) {
@@ -232,6 +282,36 @@ class LocalDataImpl implements LocalData {
       print("ERRR ==> ??insertRemoteData?? <==");
       print(exception);
     }
+  }
+
+  @override
+  Future<Either<Failure, List<ProductsEntitiy>>> filterProducts(
+      {int id}) async {
+    print("this is cat id: $id");
+    var dbClient = await db;
+
+    try {
+      var result = await dbClient.rawQuery(
+          "SELECT * FROM  ${DBConst.tableShop} WHERE ${DBConst.ColumnProdCatID} = $id");
+      print("ths res $result");
+      if (result.length == 0) return null;
+      //gets the firts itm on the table
+      Iterable list = result;
+      return Right(
+          list.map((model) => ProductsModels.formJson(model)).toList());
+    } catch (e, s) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<List<ProductsEntitiy>> getAllProducts() async {
+    var dbClient = await db;
+    var result = await dbClient.rawQuery("SELECT * FROM  ${DBConst.tableShop}");
+    if (result.length == 0) return null;
+    //gets the firts itm on the table
+    Iterable list = result;
+    return list.map((model) => ProductsModels.formJson(model)).toList();
   }
 
   @override
@@ -261,9 +341,66 @@ class LocalDataImpl implements LocalData {
   }
 
   @override
-  updateCartPriceAndQty({int productid, int price, int qty}) {
-    // TODO: implement updateCartPriceAndQty
-    throw UnimplementedError();
+  updateCartPriceAndQty({int productid, int price, int qty}) async {
+    var dbClient = await db;
+    try {
+      var qry =
+          "UPDATE ${DBConst.tableCart} set totalprice = $price,quantity = $qty where productid = $productid";
+      dbClient.rawUpdate(qry).then((res) {
+        print("UPDATE RES $res");
+      }).catchError((e) {
+        print("UPDATE ERR $e");
+      });
+    } catch (e) {
+      print("ERRR @@");
+      print(e);
+    }
+  }
+
+  @override
+  Future<int> insertRemoteOrders({List<OrdersModel> orders}) async {
+    try {
+      var dbClient = await db;
+      var response = await dbClient.transaction((tranact) async {
+        for (var i = 0; i < orders.length; i++) {
+          print("Called insert $i: to orders table");
+          OrdersModel model = orders[i];
+          try {
+            var qurries =
+                'INSERT INTO ${DBConst.tableOrders}(orderid,userid,orderstatid,orderrefno,totalcost,qty,discount,ispaid,orderdetails,created_at) VALUES'
+                '(${model.orderid},${model.userid},${model.orderstatid},"${model.orderrefno}",${model.totalcost}, ${model.qty},${model.discount},${model.ispaid ? 1 : 0},"${model.created_at}")';
+            var response = await tranact.rawInsert(qurries);
+            print(response);
+          } catch (exception) {
+            print("ERRR ==> ??insertRemoteOrders inner?? <==");
+            print("this ihe error: $exception");
+          }
+        }
+        storage.setItem("isFirst", "true");
+      });
+      return response;
+    } catch (exception) {
+      print("ERRR ==> ??insertRemoteOrders?? <==");
+      print(exception);
+    }
+  }
+
+  @override
+  Future<int> insertRemoteOrdersDetails({OrderDetailsModel orders}) async {
+    var dbClient = await db;
+    var response = await dbClient.transaction((tranact) async {
+      try {
+        var qurries =
+            'INSERT INTO ${DBConst.tableOrdersDetails}(orderdetailid,orderid,productid,quantity,unitprice,totalprice,productname,description,created_at) VALUES'
+            '(${orders.orderdetailid},${orders.orderid},${orders.productid},${orders.quantity}, ${orders.unitprice},${orders.totalprice},"${orders.productname}","${orders.description}","${orders.created_at}")';
+        var response = await tranact.rawInsert(qurries);
+        print(response);
+      } catch (exception) {
+        print("ERRR ==> ??insert Remote Orders Detils Inner?? <==");
+        print("this ihe error: $exception");
+      }
+    });
+    return response;
   }
 
   @override
@@ -272,9 +409,20 @@ class LocalDataImpl implements LocalData {
       String firstName,
       String LastName,
       String address,
-      String dob}) {
-    // TODO: implement updateUserDeatails
-    throw UnimplementedError();
+      String dob}) async {
+    var dbClient = await db;
+    try {
+      var qry =
+          "UPDATE ${DBConst.tableUser} set fname = '$firstName',lname = '$LastName', address = '$address', dob = '$dob'  where userid = $UserId";
+      dbClient.rawUpdate(qry).then((res) {
+        print("UPDATE RES $res");
+      }).catchError((e) {
+        print("UPDATE ERR $e");
+      });
+    } catch (e) {
+      print("ERRR @@");
+      print(e);
+    }
   }
 
   void _onCreate(Database db, int version) async {
@@ -309,7 +457,6 @@ class LocalDataImpl implements LocalData {
         ${DBConst.ColumnOrderQTY} INTEGER,
         ${DBConst.ColumnProdDiscnt} REAL,
         ${DBConst.ColumnPaid} INTEGER,
-        ${DBConst.ColumnOrderDetils} BLOB,
         ${DBConst.ColumnOrderTime} DATETIME
         )""");
     await db.execute("""CREATE TABLE ${DBConst.tableOrdersDetails} (
@@ -343,5 +490,25 @@ class LocalDataImpl implements LocalData {
         ${DBConst.ColumnCatImg} TEXT,
         ${DBConst.ColumnProd} BLOB
         )""");
+  }
+
+  @override
+  Future<void> cacheToken({String token}) {
+    return sharedPreferences.setString(BCStrings.CACHE_TOKEN, token.toString());
+  }
+
+  @override
+  Future<String> getToken() {
+    final token = sharedPreferences.getString(BCStrings.CACHE_TOKEN);
+    if (token != null) {
+      return Future.value(token);
+    } else {
+      throw CacheException(BCStrings.CACHE_FAILURE_MESSAGE);
+    }
+  }
+
+  @override
+  Future<void> cacheState({String state}) {
+    return sharedPreferences.setString(BCStrings.CACHE_STATE, state.toString());
   }
 }

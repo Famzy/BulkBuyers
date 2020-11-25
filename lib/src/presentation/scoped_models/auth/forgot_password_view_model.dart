@@ -1,7 +1,6 @@
 import 'package:bulk_buyers/core/router/routes.gr.dart';
 import 'package:bulk_buyers/core/utils/string_utils.dart';
 import 'package:bulk_buyers/src/data/models/registration_model.dart';
-import 'package:bulk_buyers/src/domain/entities/registration_entity.dart';
 import 'package:bulk_buyers/src/domain/usecase/auth_usecase.dart';
 import 'package:meta/meta.dart';
 import '../base_model.dart';

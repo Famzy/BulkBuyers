@@ -1,7 +1,9 @@
 import 'package:bulk_buyers/src/data/datasource/local/sqflite_database_helper.dart';
 import 'package:bulk_buyers/src/data/models/cart_model.dart';
 import 'package:bulk_buyers/src/data/models/products_model.dart';
+import 'package:bulk_buyers/src/domain/usecase/products_usecase.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:meta/meta.dart';
 
 import '../base_model.dart';
 
@@ -9,6 +11,12 @@ export 'package:bulk_buyers/core/enums/view_state.dart';
 
 /// Contains logic for a list view with the general expected functionality.
 class ProductViewModel extends Model {
+  final ProductsUC productsUC;
+
+  ProductViewModel({@required ProductsUC product})
+      : assert(product != null),
+        productsUC = product;
+
   int id;
   int wishlist;
   List<ProductsModels> listData;
@@ -16,6 +24,7 @@ class ProductViewModel extends Model {
   bool isSuccessful = true;
   String cartMsg = "";
   ViewState _state = ViewState.Idle;
+
   ViewState get state => _state;
 
   void setState(ViewState newState) {

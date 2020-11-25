@@ -1,7 +1,5 @@
 import 'package:bulk_buyers/core/utils/constants.dart';
-import 'package:bulk_buyers/src/data/models/cart_model.dart';
 import 'package:bulk_buyers/src/data/models/categories_model.dart';
-import 'package:bulk_buyers/src/data/models/products_model.dart';
 import 'package:bulk_buyers/src/domain/usecase/categories_usecase.dart';
 import 'package:bulk_buyers/src/domain/usecase/products_usecase.dart';
 import 'package:meta/meta.dart';
@@ -26,13 +24,16 @@ class CategoriesViewModel extends BaseModel {
 
   Future fetchListData() async {
     setState(ViewState.Busy);
-    final data = await productsUC.get();
-    data.fold(
+    await productsUC.get();
+    final couut = await categoriesUC.getOunt();
+    print("count is $couut");
+    final cati = await categoriesUC.get();
+    cati.fold(
         (failure) => setState(ViewState.Error),
         (categoryData) => {
               print(" this is Cat VM: $categoryData"),
               setState(ViewState.Success),
-//              categories = categoryData
+              categories = categoryData
             });
 
     listData = List<CategoriesModel>.generate(

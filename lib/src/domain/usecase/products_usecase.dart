@@ -28,4 +28,10 @@ class ProductsUC implements UseCase<ProductsEntitiy, Params> {
     // TODO: implement send
     throw UnimplementedError();
   }
+
+  Future<Either<Failure, List<ProductsEntitiy>>> getFilter({int id}) async =>
+      await repository.getFilter(id: id);
+
+  updateWishList({int id, bool state}) async =>
+      repository.updateWishList(id: id, state: state);
 }

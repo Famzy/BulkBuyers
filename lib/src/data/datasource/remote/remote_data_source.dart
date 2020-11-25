@@ -11,7 +11,6 @@ import 'package:bulk_buyers/src/data/models/products_model.dart';
 import 'package:bulk_buyers/src/data/models/registration_model.dart';
 import 'package:bulk_buyers/src/domain/entities/categories_entities.dart';
 import 'package:bulk_buyers/src/domain/entities/products_entities.dart';
-import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' show Client;
 import 'package:meta/meta.dart';
 
@@ -42,11 +41,13 @@ class RemoteDataImpl with EndPoints implements RemoteData {
 
       HttpClientResponse response = await request.close();
       String reply = await response.transform(utf8.decoder).join();
+      final data = json.decode(reply);
+      final token = data['token'];
       int status = await response.statusCode;
       print(status);
       switch (status) {
         case HttpStatus.ok:
-          return reply;
+          return token;
         case HttpStatus.unauthorized:
           throw ServerException("UnAuthorised");
         default:
@@ -67,11 +68,12 @@ class RemoteDataImpl with EndPoints implements RemoteData {
       print(response.body);
       var data = json.decode(response.body);
       Iterable list = data;
-      print(list.length);
+//      print(list.length);
 
       switch (response.statusCode) {
         case HttpStatus.ok:
-          print(" this is the data $data");
+          print(" this is the data of Cat: $data");
+//          return CategoriesModel.formJson(data);
           return list.map((model) => CategoriesModel.formJson(model)).toList();
         default:
           throw ServerFailure();
