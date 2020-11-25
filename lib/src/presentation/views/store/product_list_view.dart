@@ -8,6 +8,7 @@ import 'package:bulk_buyers/src/presentation/views/base_view.dart';
 import 'package:bulk_buyers/src/presentation/widgets/app_bar.dart';
 import 'package:bulk_buyers/src/presentation/widgets/card_helpers.dart';
 import 'package:bulk_buyers/src/presentation/widgets/center_message.dart';
+import 'package:bulk_buyers/src/presentation/widgets/snack_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -15,13 +16,14 @@ class ProductListView extends StatelessWidget {
   final String name;
   final int categoryId;
 
-  const ProductListView({Key key, this.name, this.categoryId})
-      : super(key: key);
+  ProductListView({Key key, this.name, this.categoryId}) : super(key: key);
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return BaseView<ShopViewModel>(
       onModelReady: (model) => model.filteredProducts(productId: categoryId),
       builder: (context, child, model) => Scaffold(
+        key: scaffoldKey,
         appBar: backAppBar(context: context),
         body: Column(
           children: <Widget>[
@@ -68,9 +70,7 @@ class ProductListView extends StatelessWidget {
 //
   Widget _getListItemUi(ProductsModels result, ShopViewModel model) {
     return GestureDetector(
-      onTap: () {
-        print(result.productid);
-      },
+      onTap: () => model.viewProduct(id: result.productid),
       child: Card(
         elevation: 4,
         margin: EdgeInsets.all(2.0),
@@ -158,7 +158,21 @@ class ProductListView extends StatelessWidget {
                       onTap: () async {
                         //  addToCart(item['price'], 1, item['productId'], 1, item['price'], item['price']);
 
-                        print("${result.productname} is Added to cart");
+                        await model.addToCart(
+                            id: result.productid,
+                            name: result.productname,
+                            price: result.price,
+                            quantity: result.quantity,
+                            image: result.productimg,
+                            unitprice: result.price,
+                            discount: result.discount);
+                        model.show
+                            ? showCartSnak(
+                                color: model.color,
+                                msg: model.msg,
+                                duration: 5,
+                                scaffoldKey: scaffoldKey)
+                            : Container();
                       },
                       child: Icon(
                         Icons.add_circle,

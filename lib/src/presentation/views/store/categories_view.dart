@@ -64,40 +64,40 @@ class _CategoriesViewState extends State<CategoriesView>
                             context: context,
                             onTap: () => Router.navigator.pushNamed(
                                 Router.productList,
-                                arguments: ProductViewArguments(
-                                    name: "SPECIAL DEALS", categoryid: 8)),
+                                arguments: ProductListViewArguments(
+                                    name: "SPECIAL DEALS", categoryId: 8)),
                           ),
                           CardHelpers.promoCard(
                             context: context,
                             image: "promo1",
                             onTap: () => Router.navigator.pushNamed(
                                 Router.productList,
-                                arguments: ProductViewArguments(
-                                    name: "SPECIAL DEALS", categoryid: 8)),
+                                arguments: ProductListViewArguments(
+                                    name: "SPECIAL DEALS", categoryId: 8)),
                           ),
                           CardHelpers.promoCard(
                             context: context,
                             image: "promo2",
                             onTap: () => Router.navigator.pushNamed(
                                 Router.productList,
-                                arguments: ProductViewArguments(
-                                    name: "SPECIAL DEALS", categoryid: 8)),
+                                arguments: ProductListViewArguments(
+                                    name: "SPECIAL DEALS", categoryId: 8)),
                           ),
                           CardHelpers.promoCard(
                             context: context,
                             image: "promo3",
                             onTap: () => Router.navigator.pushNamed(
                                 Router.productList,
-                                arguments: ProductViewArguments(
-                                    name: "DEALS", categoryid: 8)),
+                                arguments: ProductListViewArguments(
+                                    name: "DEALS", categoryId: 8)),
                           ),
                           CardHelpers.promoCard(
                             context: context,
                             image: "promo4",
                             onTap: () => Router.navigator.pushNamed(
                                 Router.productList,
-                                arguments: ProductViewArguments(
-                                    name: "SPECIAL DEALS", categoryid: 8)),
+                                arguments: ProductListViewArguments(
+                                    name: "SPECIAL DEALS", categoryId: 8)),
                           )
                         ],
                       ),
@@ -190,8 +190,8 @@ class _CategoriesViewState extends State<CategoriesView>
   Widget _getListItemUi(CategoriesModel result, double ratio) {
     return GestureDetector(
       onTap: () => Router.navigator.pushNamed(Router.productList,
-          arguments: ProductViewArguments(
-              name: result.prodcatname, categoryid: result.prodcatid)),
+          arguments: ProductListViewArguments(
+              name: result.prodcatname, categoryId: result.prodcatid)),
       //  onTap: () => print(result.prodcatid.toString()),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),

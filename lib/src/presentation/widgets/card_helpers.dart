@@ -1,4 +1,5 @@
 import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
+import 'package:bulk_buyers/core/utils/theme/font_styles.dart';
 import 'package:bulk_buyers/core/utils/theme/ui_reducers.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -63,6 +64,19 @@ class CardHelpers {
           ),
         ),
       ],
+    );
+  }
+
+  static Card header({@required String title}) {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          title,
+          style: display3,
+        ),
+      ),
     );
   }
 }

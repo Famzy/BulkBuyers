@@ -11,11 +11,24 @@
 //import 'package:bulk_buyers/src/presentation/widgets/app_bar.dart';
 //import 'package:bulk_buyers/src/presentation/widgets/navigation/buttom_nav.dart';
 //import 'package:cached_network_image/cached_network_image.dart';
-//import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 //import 'package:scoped_model/scoped_model.dart';
 //
 //import '../base_view.dart';
 //
+
+class ShopView extends StatefulWidget {
+  @override
+  _ShopViewState createState() => _ShopViewState();
+}
+
+class _ShopViewState extends State<ShopView> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
 //class ShopView extends StatefulWidget {
 //  @override
 //  _ShopViewState createState() => _ShopViewState();

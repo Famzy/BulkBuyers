@@ -4,7 +4,9 @@ import 'package:bulk_buyers/core/network/network_info.dart';
 import 'package:bulk_buyers/core/utils/bulk_buyers_strings.dart';
 import 'package:bulk_buyers/src/data/datasource/local/local_data_source.dart';
 import 'package:bulk_buyers/src/data/datasource/remote/remote_data_source.dart';
+import 'package:bulk_buyers/src/data/models/cart_model.dart';
 import 'package:bulk_buyers/src/data/models/login_model.dart';
+import 'package:bulk_buyers/src/data/models/products_model.dart';
 import 'package:bulk_buyers/src/data/models/registration_model.dart';
 import 'package:bulk_buyers/src/domain/entities/categories_entities.dart';
 import 'package:bulk_buyers/src/domain/entities/products_entities.dart';
@@ -88,10 +90,12 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<ProductsEntitiy>>> getProducts(int id) async {
-    if (await networkInfo.isConnected) {
-    } else {
-      throw NetworkException;
+  Future<ProductsModels> getProducts(int id) async {
+    try {
+      final product = await localData.getProduct(id: id);
+      return product;
+    } catch (e, s) {
+      print(s);
     }
   }
 
@@ -167,4 +171,62 @@ class RepositoryImpl implements Repository {
   @override
   updateWishList({int id, bool state}) async =>
       localData.addToWishList(productid: id, wishlist: state);
+
+  @override
+  fetchWishList() async => await localData.getWishLists();
+
+  @override
+  addToCart(CartModel model) async {
+    final response = await localData.addToCart(cartItems: model);
+    print("from repo $response");
+    return response;
+  }
+
+  @override
+  Future<int> CartTotal() {
+    // TODO: implement CartTotal
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<int> cartTotalQuantities() {
+    // TODO: implement cartTotalQuantities
+    throw UnimplementedError();
+  }
+
+  @override
+  clearCart() {
+    // TODO: implement clearCart
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List> getCartCheckoutItems() {
+    // TODO: implement getCartCheckoutItems
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<int> getCartCount() {
+    // TODO: implement getCartCount
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List> getCartList() {
+    // TODO: implement getCartList
+    throw UnimplementedError();
+  }
+
+  @override
+  removeFromCart(int id) {
+    // TODO: implement removeFromCart
+    throw UnimplementedError();
+  }
+
+  @override
+  updateCartItems() {
+    // TODO: implement updateCartItems
+    throw UnimplementedError();
+  }
 }

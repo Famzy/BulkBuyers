@@ -227,6 +227,75 @@ class UIHelper {
     );
   }
 
+  static Widget midButton({
+    Color color = whiteSwatch,
+    Color textColor = blackSwatch,
+    @required Function onTap,
+    String title,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 276,
+        height: 42,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(19)),
+            boxShadow: [
+              BoxShadow(
+                  color: const Color(0x29000000),
+                  offset: Offset(0, 3),
+                  blurRadius: 6,
+                  spreadRadius: 0)
+            ],
+            color: const Color(0xffffffff)),
+        child: Center(
+          child: Text(title,
+              style: const TextStyle(
+                  color: const Color(0xfffc5455),
+                  fontWeight: FontWeight.w700,
+                  fontFamily: "Helvetica",
+                  fontStyle: FontStyle.normal,
+                  fontSize: 14.0),
+              textAlign: TextAlign.left),
+        ),
+      ),
+    );
+  }
+
+  static Widget midButtonGradient({Function onTap, String text}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 276,
+        height: 42,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(21)),
+            boxShadow: [
+              BoxShadow(
+                  color: const Color(0x29000000),
+                  offset: Offset(0, 3),
+                  blurRadius: 6,
+                  spreadRadius: 0)
+            ],
+            gradient: LinearGradient(
+                begin: Alignment(0.07608816772699356, 0.658575177192688),
+                end: Alignment(0.8989955186843872, 0.6693638563156128),
+                colors: [const Color(0xffff9300), const Color(0xffd83a00)])),
+        child: // ADD TO CART
+            Center(
+          child: Text(text,
+              style: const TextStyle(
+                  color: const Color(0xffffffff),
+                  fontWeight: FontWeight.w700,
+                  fontFamily: "Helvetica",
+                  fontStyle: FontStyle.normal,
+                  fontSize: 14.0),
+              textAlign: TextAlign.left),
+        ),
+      ),
+    );
+  }
+
   static Widget pageTitle({@required String title}) {
     return Align(
       alignment: Alignment.topCenter,

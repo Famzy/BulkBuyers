@@ -37,6 +37,7 @@ class $Router {
   ForgotPasswordView forgotPassword;
   SignUpView signUp;
   VerifyEmail verifyEmail;
+  @MaterialRoute(fullscreenDialog: true)
   PaymentConfiramtion paymentConfiramtion;
   CartView cartView;
   OrderDetailsView orderDetails;
@@ -44,10 +45,11 @@ class $Router {
   PaymentView payment;
   WishListView wishList;
   CategoriesView categories;
+  @MaterialRoute(fullscreenDialog: true)
   ProductDetailsView productDetails;
   ProductGridView productGrid;
   ProductListView productList;
-  //ShopView shopView;
+  ShopView shopView;
   EditProfileView editProfile;
   ProfileView profile;
   YouView you;

@@ -32,7 +32,7 @@ abstract class LocalData {
   Future<int> clearStoreDB();
   Future<int> clearProducts();
   addToWishList({@required int productid, @required bool wishlist});
-  Future<List> getWishLists();
+  Future<List<ProductsModels>> getWishLists();
   Future<int> addToCart({@required CartModel cartItems});
   updateCartPriceAndQty(
       {@required int productid, @required int price, @required int qty});

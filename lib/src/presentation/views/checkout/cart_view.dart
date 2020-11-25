@@ -16,6 +16,9 @@ class CartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+
+    );
 //    return BaseView<ShopViewModel>(
 //        onModelReady: (model) => model.fetchCartData(),
 //        builder: (context, child, model) => Scaffold(
@@ -739,5 +742,6 @@ class CartView extends StatelessWidget {
 //                    : Container()
 //              ],
 //            )));
-//  }
+// //  }
+// }
 }

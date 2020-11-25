@@ -48,8 +48,9 @@ class LocalDataImpl implements LocalData {
       try {
         var queries =
             'INSERT INTO ${DBConst.tableCart}(productid,productname,productimg, totalprice,unitprice,quantity,discount) VALUES(${cartItems.productid},"${cartItems.productname}","${cartItems.productimg}",${cartItems.totalprice},${cartItems.unitprice}, ${cartItems.quantity}, ${cartItems.discount})';
-        var _response = await tranact.execute(queries);
-        return _response;
+        var response = await tranact.execute(queries);
+
+        return response;
       } catch (exception) {
         print("ERRR ==> ??InsertInCart?? <==");
         print(exception);
@@ -246,12 +247,13 @@ class LocalDataImpl implements LocalData {
   }
 
   @override
-  Future<List> getWishLists() async {
+  Future<List<ProductsModels>> getWishLists() async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
         "SELECT * FROM ${DBConst.tableShop} WHERE ${DBConst.ColumnProdWishLst} = 1");
+    Iterable list = result;
 
-    return result.toList();
+    return list.map((model) => ProductsModels.formJson(model)).toList();
   }
 
   @override

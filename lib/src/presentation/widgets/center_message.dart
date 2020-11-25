@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 Widget getCenteredViewMessage(BuildContext context, String message,
-    {bool error = false}) {
+    {bool error = false, String json}) {
   return Center(
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -16,21 +16,15 @@ Widget getCenteredViewMessage(BuildContext context, String message,
                 textAlign: TextAlign.center,
               ),
               error
-                  ? Icon(
-                      // WWrap in gesture detector and call you refresh future here
-                      Icons.refresh,
-                      color: Colors.white,
-                      size: 45.0,
-                    )
+                  ? Container(height: 150, child: Lottie.asset(json))
                   : Container()
             ],
           )));
 }
 
-Widget noDataUi(
-  BuildContext context,
-) {
-  return getCenteredViewMessage(context, "No data available yet");
+Widget noDataUi(BuildContext context,
+    {String json = 'assets/lottie/cancel_order.json'}) {
+  return getCenteredViewMessage(context, "No data available yet", json: json);
 }
 
 Widget errorUi(

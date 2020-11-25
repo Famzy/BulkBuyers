@@ -1,6 +1,11 @@
 import 'dart:async';
 
+import 'package:bulk_buyers/core/router/routes.gr.dart';
 import 'package:bulk_buyers/core/utils/constants.dart';
+import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
+import 'package:bulk_buyers/src/presentation/scoped_models/store/shop_view_model.dart';
+import 'package:bulk_buyers/src/presentation/shared/ui_helpers.dart';
+import 'package:bulk_buyers/src/presentation/widgets/snack_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
@@ -9,13 +14,24 @@ import '../base_view.dart';
 
 class ProductDetailsView extends StatefulWidget {
   final int id;
-  ProductDetailsView({this.id});
+  final String name;
+  final int price;
+  final int quantity;
+  final String image;
+  final int discount;
+  ProductDetailsView(
+      {this.id,
+      this.name,
+      this.price,
+      this.quantity,
+      this.image,
+      this.discount});
   @override
   _ProductDetailsViewState createState() => _ProductDetailsViewState(id: id);
 }
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final int id;
   _ProductDetailsViewState({this.id});
 //
@@ -39,252 +55,115 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-//    return BaseView<ShopViewModel>(
-//        onModelReady: (model) => model.getDetails(id),
-//        builder: (context, child, model) => Scaffold(
-//            key: _scaffoldKey,
-//            appBar: AppBar(
-//              backgroundColor: Colors.black,
-//              leading: GestureDetector(
-//                  onTap: () => Navigator.pop(context),
-//                  child: Icon(Icons.arrow_back_ios)),
-//              actions: <Widget>[
-//                Padding(
-//                  padding: const EdgeInsets.all(8.0),
-//                  child: Image.asset("assets/images/icon.png"),
-//                )
-//              ],
-//            ),
-//            bottomNavigationBar: BottomAppBar(
-//              color: Colors.transparent,
-//              child: Row(
-//                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                children: <Widget>[
-//                  InkWell(
-//                    onTap: () {
-//                      Navigator.push(
-//                          context,
-//                          PageRouteBuilder(
-//                              transitionDuration:
-//                                  const Duration(milliseconds: 350),
-//                              pageBuilder: (context, _, __) => ShopView()));
-//                    },
-//                    child: Container(
-//                      height: 58,
-//                      child: Column(
-//                        children: <Widget>[
-//                          Expanded(
-//                              child: IconButton(
-//                            icon:
-//                                Image.asset('assets/images/home_selected.png'),
-//                            onPressed: () {
-//                              Navigator.push(
-//                                  context,
-//                                  PageRouteBuilder(
-//                                      transitionDuration:
-//                                          const Duration(milliseconds: 350),
-//                                      pageBuilder: (context, _, __) =>
-//                                          ShopView()));
-//                            },
-//                          )),
-//                          Text(
-//                            'Home',
-//                            style: TextStyle(color: primarySwatch),
-//                          )
-//                        ],
-//                      ),
-//                    ),
-//                  ),
-//                  InkWell(
-//                    onTap: () {
-//                      Navigator.push(
-//                          context,
-//                          PageRouteBuilder(
-//                              transitionDuration:
-//                                  const Duration(milliseconds: 350),
-//                              pageBuilder: (context, _, __) => CartView()));
-//                    },
-//                    child: Container(
-//                      height: 58,
-//                      child: Column(
-//                        children: <Widget>[
-//                          Expanded(
-//                              child: IconButton(
-//                            icon: Image.asset('assets/images/cart.png'),
-//                            onPressed: () {
-//                              Navigator.push(
-//                                  context,
-//                                  PageRouteBuilder(
-//                                      transitionDuration:
-//                                          const Duration(milliseconds: 350),
-//                                      pageBuilder: (context, _, __) =>
-//                                          CartView()));
-//                            },
-//                          )),
-//                          Text(
-//                            'Cart',
-//                            style: TextStyle(color: Colors.blue),
-//                          )
-//                        ],
-//                      ),
-//                    ),
-//                  ),
-//                  InkWell(
-//                    onTap: () {
-//                      Navigator.push(
-//                          context,
-//                          PageRouteBuilder(
-//                              transitionDuration:
-//                                  const Duration(milliseconds: 350),
-//                              pageBuilder: (context, _, __) => WishListView()));
-//                    },
-//                    child: Container(
-//                      height: 58,
-//                      child: Column(
-//                        children: <Widget>[
-//                          Expanded(
-//                              child: IconButton(
-//                            icon: Image.asset('assets/images/wishlist.png'),
-//                            onPressed: () {
-//                              Navigator.push(
-//                                  context,
-//                                  PageRouteBuilder(
-//                                      transitionDuration:
-//                                          const Duration(milliseconds: 350),
-//                                      pageBuilder: (context, _, __) =>
-//                                          WishListView()));
-//                            },
-//                          )),
-//                          Text('Wish List',
-//                              style: TextStyle(color: Colors.blue))
-//                        ],
-//                      ),
-//                    ),
-//                  ),
-//                  InkWell(
-//                    onTap: () {
-//                      Navigator.push(
-//                          context,
-//                          PageRouteBuilder(
-//                              transitionDuration:
-//                                  const Duration(milliseconds: 350),
-//                              pageBuilder: (context, _, __) => ProfileView()));
-//                    },
-//                    child: Container(
-//                      height: 58,
-//                      child: Column(
-//                        children: <Widget>[
-//                          Expanded(
-//                              child: IconButton(
-//                            icon: Image.asset(
-//                              'assets/images/you.png',
-//                            ),
-//                            onPressed: () {
-//                              Navigator.push(
-//                                  context,
-//                                  PageRouteBuilder(
-//                                      transitionDuration:
-//                                          const Duration(milliseconds: 350),
-//                                      pageBuilder: (context, _, __) =>
-//                                          ProfileView()));
-//                            },
-//                          )),
-//                          Text('You', style: TextStyle(color: Colors.blue))
-//                        ],
-//                      ),
-//                    ),
-//                  ),
-//                ],
-//              ),
-//            ),
-//            backgroundColor: Color.fromARGB(242, 243, 243, 243),
-//            body: ListView(
-//              children: <Widget>[
-//                Container(
-//                  height: screenHeight(context),
-//                  width: double.infinity,
-//                  margin: EdgeInsets.only(bottom: 25.0),
-//                  decoration: BoxDecoration(
-//                      color: whiteSwatch,
-//                      borderRadius: BorderRadius.only(
-//                          bottomLeft: Radius.circular(20.0),
-//                          bottomRight: Radius.circular(20.0))),
-//                  child: Column(
-//                    children: <Widget>[
-//                      // Rectangle 2050
-//
-//                      Container(
-//                        margin: EdgeInsets.only(top: 30.0),
-//                        width: screenWidth(context) / 1.1,
-//                        height: 610,
-//                        decoration: BoxDecoration(
-//                            borderRadius: BorderRadius.all(Radius.circular(10)),
-//                            boxShadow: [
-//                              BoxShadow(
-//                                  color: const Color(0x17000000),
-//                                  offset: Offset(0, 2),
-//                                  blurRadius: 52,
-//                                  spreadRadius: 0)
-//                            ],
-//                            color: const Color(0xffffffff)),
-//                        child: Column(
-//                          children: <Widget>[
-//                            Padding(
-//                              padding: const EdgeInsets.only(
-//                                  left: 15.0, right: 15.0),
-//                              child: Row(
-//                                crossAxisAlignment: CrossAxisAlignment.start,
-//                                children: <Widget>[
-//                                  Expanded(
-//                                    flex: 5,
-//                                    child: CachedNetworkImage(
-//                                      imageUrl:
-//                                          "${DBConst.IMAGE_BASE_URL}/${model.detailsProductImg}",
-//                                      placeholder: (context, url) => Center(
-//                                          child: CircularProgressIndicator()),
-//                                      errorWidget: (context, url, error) =>
-//                                          const Icon(
-//                                        Icons.shopping_cart,
-//                                        color: primarySwatch,
-//                                      ),
-//                                    ),
-//                                  ),
-//                                ],
-//                              ),
-//                            ),
-//                            UIHelper.verticalSpaceSmaller(),
-//                            Center(
-//                              child: Text("\u{20A6}${model.detailsPrice}",
-//                                  style: const TextStyle(
-//                                      color: const Color(0xffd83a00),
-//                                      fontWeight: FontWeight.w700,
-//                                      fontFamily: "Roboto",
-//                                      fontStyle: FontStyle.normal,
-//                                      fontSize: 21.0),
-//                                  textAlign: TextAlign.left),
-//                            ),
-//                            UIHelper.verticalSpaceSmaller(),
-//                            Center(
-//                              child: Text(model.detailsProductName,
-//                                  style: const TextStyle(
-//                                      color: const Color(0xffb7b7b7),
-//                                      fontWeight: FontWeight.w400,
-//                                      fontFamily: "Roboto",
-//                                      fontStyle: FontStyle.normal,
-//                                      fontSize: 16.0),
-//                                  textAlign: TextAlign.left),
-//                            ),
-//                            UIHelper.verticalSpaceSmaller(),
-//                            Center(
-//                              child: Text(model.detailsDecription,
-//                                  style: const TextStyle(
-//                                      color: const Color(0xff000000),
-//                                      fontWeight: FontWeight.w700,
-//                                      fontFamily: "Helvetica",
-//                                      fontStyle: FontStyle.normal,
-//                                      fontSize: 19.0),
-//                                  textAlign: TextAlign.center),
-//                            ),
+    return BaseView<ShopViewModel>(
+      //  onModelReady: (model) => model.getDetails(id),
+      builder: (context, child, model) => Scaffold(
+        key: scaffoldKey,
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: primarySwatch, size: 70),
+          elevation: 0,
+          backgroundColor: transparentSwatch,
+        ),
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: ListView(
+            children: <Widget>[
+              Container(
+                height: 610,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: const Color(0x17000000),
+                          offset: Offset(0, 2),
+                          blurRadius: 52,
+                          spreadRadius: 0)
+                    ],
+                    color: const Color(0xffffffff)),
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 5,
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    "${Constants.IMAGE_BASE_URL}/${widget.image}",
+                                placeholder: (context, url) =>
+                                    Center(child: CircularProgressIndicator()),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(
+                                  Icons.shopping_cart,
+                                  color: primarySwatch,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    UIHelper.verticalSpaceSmaller(),
+                    Center(
+                      child: Text("\u{20A6}${widget.price}",
+                          style: const TextStyle(
+                              color: const Color(0xffd83a00),
+                              fontWeight: FontWeight.w700,
+                              fontFamily: "Roboto",
+                              fontStyle: FontStyle.normal,
+                              fontSize: 21.0),
+                          textAlign: TextAlign.left),
+                    ),
+                    UIHelper.verticalSpaceSmaller(),
+                    Center(
+                      child: Text(widget.name,
+                          style: const TextStyle(
+                              color: const Color(0xff000000),
+                              fontWeight: FontWeight.w700,
+                              fontFamily: "Helvetica",
+                              fontStyle: FontStyle.normal,
+                              fontSize: 19.0),
+                          textAlign: TextAlign.center),
+                    ),
+                    UIHelper.verticalSpaceSmall(),
+                    UIHelper.midButtonGradient(
+                        onTap: () async {
+                          await model.addToCart(
+                              id: widget.id,
+                              name: widget.name,
+                              price: widget.price,
+                              quantity: widget.quantity,
+                              image: widget.image,
+                              unitprice: widget.price,
+                              discount: widget.discount);
+                          model.show
+                              ? showCartSnak(
+                                  color: model.color,
+                                  msg: model.msg,
+                                  duration: 5,
+                                  scaffoldKey: scaffoldKey)
+                              : Container();
+                        },
+                        text: "ADD TO CART"),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    UIHelper.midButton(
+                        onTap: () => Router.navigator.pop(),
+                        title: "BACK TO SHOP"),
+                    UIHelper.verticalSpaceMedium(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
 //                            UIHelper.verticalSpaceSmall(),
 //                            GestureDetector(
 //                              onTap: () async {
@@ -304,40 +183,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 //                                      model.cartMsg, model.isSuccessful);
 //                                });
 //                              },
-//                              child: Container(
-//                                width: 276,
-//                                height: 42,
-//                                decoration: BoxDecoration(
-//                                    borderRadius:
-//                                        BorderRadius.all(Radius.circular(21)),
-//                                    boxShadow: [
-//                                      BoxShadow(
-//                                          color: const Color(0x29000000),
-//                                          offset: Offset(0, 3),
-//                                          blurRadius: 6,
-//                                          spreadRadius: 0)
-//                                    ],
-//                                    gradient: LinearGradient(
-//                                        begin: Alignment(0.07608816772699356,
-//                                            0.658575177192688),
-//                                        end: Alignment(0.8989955186843872,
-//                                            0.6693638563156128),
-//                                        colors: [
-//                                          const Color(0xffff9300),
-//                                          const Color(0xffd83a00)
-//                                        ])),
-//                                child: // ADD TO CART
-//                                    Center(
-//                                  child: Text("ADD TO CART",
-//                                      style: const TextStyle(
-//                                          color: const Color(0xffffffff),
-//                                          fontWeight: FontWeight.w700,
-//                                          fontFamily: "Helvetica",
-//                                          fontStyle: FontStyle.normal,
-//                                          fontSize: 14.0),
-//                                      textAlign: TextAlign.left),
-//                                ),
-//                              ),
+
 //                            ),
 //                            UIHelper.verticalSpaceSmaller(),
 //                            // Rectangle 1579
@@ -349,31 +195,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 //                                          const Duration(milliseconds: 350),
 //                                      pageBuilder: (context, _, __) =>
 //                                          ShopView())),
-//                              child: Container(
-//                                width: 276,
-//                                height: 42,
-//                                decoration: BoxDecoration(
-//                                    borderRadius:
-//                                        BorderRadius.all(Radius.circular(19)),
-//                                    boxShadow: [
-//                                      BoxShadow(
-//                                          color: const Color(0x29000000),
-//                                          offset: Offset(0, 3),
-//                                          blurRadius: 6,
-//                                          spreadRadius: 0)
-//                                    ],
-//                                    color: const Color(0xffffffff)),
-//                                child: Center(
-//                                  child: Text("BACK TO SHOP",
-//                                      style: const TextStyle(
-//                                          color: const Color(0xfffc5455),
-//                                          fontWeight: FontWeight.w700,
-//                                          fontFamily: "Helvetica",
-//                                          fontStyle: FontStyle.normal,
-//                                          fontSize: 14.0),
-//                                      textAlign: TextAlign.left),
-//                                ),
-//                              ),
+
 //                            ),
 //                            UIHelper.verticalSpaceSmaller(),
 //                            Center(

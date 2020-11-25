@@ -1,6 +1,7 @@
 import 'package:bulk_buyers/core/error/failures.dart';
 import 'package:bulk_buyers/core/usecase/params.dart';
 import 'package:bulk_buyers/core/usecase/usecase.dart';
+import 'package:bulk_buyers/src/data/models/cart_model.dart';
 import 'package:bulk_buyers/src/domain/entities/products_entities.dart';
 import 'package:bulk_buyers/src/domain/repository/repository.dart';
 import 'package:dartz/dartz.dart';
@@ -11,7 +12,7 @@ class ProductsUC implements UseCase<ProductsEntitiy, Params> {
   ProductsUC(this.repository);
   @override
   Future<Either<Failure, List<ProductsEntitiy>>> call(Params parms) async =>
-      await repository.getProducts(parms.prodcatid);
+      throw UnimplementedError();
 
   @override
   Future<Either<Failure, List<ProductsEntitiy>>> get() async =>
@@ -34,4 +35,8 @@ class ProductsUC implements UseCase<ProductsEntitiy, Params> {
 
   updateWishList({int id, bool state}) async =>
       repository.updateWishList(id: id, state: state);
+
+  fetchWishList() async => await repository.fetchWishList();
+  addToCart(CartModel model) async => await repository.addToCart(model);
+  getProductDetails(int id) async => await repository.getProducts(id);
 }
