@@ -16,13 +16,13 @@ abstract class Repository {
   Future<Either<Failure, List<ProductsEntitiy>>> fetchCachedProducts();
   Future<Either<Failure, List<ProductsEntitiy>>> refreshProducts();
   Future<ProductsModels> getProducts(int id);
-  addToCart(CartModel model);
+  addToCart(List<CartModel> model);
   Future<int> CartTotal();
   Future<int> cartTotalQuantities();
   clearCart();
   removeFromCart(int id);
   updateCartItems();
-  Future<List> getCartList();
+  Future<List<CartModel>> getCartList();
   Future<int> getCartCount();
   Future<List> getCartCheckoutItems();
   Future<Either<Failure, List<ProductsEntitiy>>> getFilter({int id});

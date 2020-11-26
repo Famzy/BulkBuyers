@@ -32,11 +32,5 @@ class ProductsUC implements UseCase<ProductsEntitiy, Params> {
 
   Future<Either<Failure, List<ProductsEntitiy>>> getFilter({int id}) async =>
       await repository.getFilter(id: id);
-
-  updateWishList({int id, bool state}) async =>
-      repository.updateWishList(id: id, state: state);
-
-  fetchWishList() async => await repository.fetchWishList();
-  addToCart(CartModel model) async => await repository.addToCart(model);
   getProductDetails(int id) async => await repository.getProducts(id);
 }

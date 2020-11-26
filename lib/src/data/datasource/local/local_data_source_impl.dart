@@ -37,25 +37,57 @@ class LocalDataImpl implements LocalData {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, "shop.db");
 
-    var storeDB = await openDatabase(path, version: 2, onCreate: _onCreate);
+    var storeDB = await openDatabase(path, version: 1, onCreate: _onCreate);
     return storeDB;
   }
+  //
+  // @override
+  // Future<int> addToCart({CartModel shopItems}) async {
+  //   var dbClient = await db;
+  //   var res = await dbClient.transaction((tranact) async {
+  //     try {
+  //       var qurries =
+  //           'INSERT INTO ${DBConst.cartTable}(productid,productname,productimg, totalprice,unitprice,quantity,discount) VALUES(${shopItems.productid},"${shopItems.productname}","${shopItems.productimg}",${shopItems.totalprice},${shopItems.unitprice}, ${shopItems.quantity}, ${shopItems.discount})';
+  //       var response = await tranact.rawInsert(qurries);
+  //       print(response);
+  //     } catch (exception) {
+  //       print("ERRR ==> ??InsertInCart?? <==");
+  //       print(exception);
+  //     }
+  //     storage.setItem("isFirst", "true");
+  //   });
+  //   print("this is $res");
+  //   return res;
+  // }
 
   @override
-  Future<int> addToCart({CartModel cartItems}) async {
-    var dbClient = await db;
-    await dbClient.transaction((tranact) async {
-      try {
-        var queries =
-            'INSERT INTO ${DBConst.tableCart}(productid,productname,productimg, totalprice,unitprice,quantity,discount) VALUES(${cartItems.productid},"${cartItems.productname}","${cartItems.productimg}",${cartItems.totalprice},${cartItems.unitprice}, ${cartItems.quantity}, ${cartItems.discount})';
-        var response = await tranact.execute(queries);
+  Future<int> addToCart({List<CartModel> cart}) async {
+    try {
+      print("To Be inserted: ");
+      var dbClient = await db;
+      var response = await dbClient.transaction((tranact) async {
+        for (var i = 0; i < cart.length; i++) {
+          print("Called insert $i to carts table");
 
-        return response;
-      } catch (exception) {
-        print("ERRR ==> ??InsertInCart?? <==");
-        print(exception);
-      }
-    });
+          CartModel shopItems = cart[i];
+          print("To Be inserted: ${shopItems.productimg}");
+          try {
+            var qurries =
+                'INSERT INTO ${DBConst.cartTable}(productid,productname,productimg, totalprice,unitprice,quantity,discount) VALUES(${shopItems.productid},"${shopItems.productname}","${shopItems.productimg}",${shopItems.totalprice},${shopItems.unitprice}, ${shopItems.quantity}, ${shopItems.discount})';
+            var response = await tranact.rawInsert(qurries);
+            print(response);
+          } catch (exception) {
+            print("ERRR ==> ??insertCartData inner?? <==");
+            print("this ihe error: $exception");
+          }
+        }
+        storage.setItem("isFirst", "true");
+      });
+      return response;
+    } catch (exception) {
+      print("ERRR ==> ??insertCartData?? <==");
+      print(exception);
+    }
   }
 
   @override
@@ -81,21 +113,21 @@ class LocalDataImpl implements LocalData {
   Future<int> cartTotalPrice() async {
     var dbClient = await db;
     return Sqflite.firstIntValue(await dbClient
-        .rawQuery("SELECT SUM(totalprice) FROM ${DBConst.tableCart}"));
+        .rawQuery("SELECT SUM(totalprice) FROM ${DBConst.cartTable}"));
   }
 
   @override
   Future<int> cartTotalQuantities() async {
     var dbClient = await db;
     return Sqflite.firstIntValue(await dbClient
-        .rawQuery("SELECT SUM(quantity) FROM ${DBConst.tableCart}"));
+        .rawQuery("SELECT SUM(quantity) FROM ${DBConst.cartTable}"));
   }
 
   @override
   Future<int> clearCartDB() async {
     var dbClient = await db;
 
-    var response = await dbClient.delete(DBConst.tableCart);
+    var response = await dbClient.delete(DBConst.cartTable);
     return response;
   }
 
@@ -123,7 +155,7 @@ class LocalDataImpl implements LocalData {
   @override
   Future<int> clearStoreDB() async {
     var dbClient = await db;
-    var response = await dbClient.delete(DBConst.tableCart);
+    var response = await dbClient.delete(DBConst.cartTable);
     response = await dbClient.delete(DBConst.tableShop);
     response = await dbClient.delete(DBConst.tableOrders);
     response = await dbClient.delete(DBConst.tableCategories);
@@ -141,7 +173,7 @@ class LocalDataImpl implements LocalData {
   @override
   Future<int> deleteCartItems({int id}) async {
     var dbClient = await db;
-    return await dbClient.delete(DBConst.tableCart,
+    return await dbClient.delete(DBConst.cartTable,
         where: "${DBConst.ColumnCartID} = ?", whereArgs: [id]);
   }
 
@@ -156,7 +188,7 @@ class LocalDataImpl implements LocalData {
   Future<List> getCartCheckoutItems() async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        "SELECT ${DBConst.ColumnProdID}, ${DBConst.ColumnProdQty}, ${DBConst.ColumnProdUnitPrice}, ${DBConst.ColumnProdTotalPrice}, ${DBConst.ColumnProdDiscnt} FROM ${DBConst.tableCart}");
+        "SELECT ${DBConst.ColumnProdID}, ${DBConst.ColumnProdQty}, ${DBConst.ColumnProdUnitPrice}, ${DBConst.ColumnProdTotalPrice}, ${DBConst.ColumnProdDiscnt} FROM ${DBConst.cartTable}");
 
     return result.toList();
   }
@@ -165,15 +197,23 @@ class LocalDataImpl implements LocalData {
   Future<int> getCartCount() async {
     var dbClient = await db;
     return Sqflite.firstIntValue(
-        await dbClient.rawQuery("SELECT COUNT(*) FROM ${DBConst.tableCart}"));
+        await dbClient.rawQuery("SELECT COUNT(*) FROM ${DBConst.cartTable}"));
   }
 
   @override
-  Future<List> getCartList() async {
-    var dbClient = await db;
-    var result = await dbClient.rawQuery("SELECT * FROM ${DBConst.tableCart}");
+  Future<List<CartModel>> getCartList() async {
+    try {
+      var dbClient = await db;
+      var result =
+          await dbClient.rawQuery("SELECT * FROM ${DBConst.cartTable}");
+      print("this is result $result");
 
-    return result.toList();
+      Iterable list = result;
+
+      return list.map((model) => CartModel.formJson(model)).toList();
+    } catch (e, s) {
+      print({e, s});
+    }
   }
 
   @override
@@ -347,7 +387,7 @@ class LocalDataImpl implements LocalData {
     var dbClient = await db;
     try {
       var qry =
-          "UPDATE ${DBConst.tableCart} set totalprice = $price,quantity = $qty where productid = $productid";
+          "UPDATE ${DBConst.cartTable} set totalprice = $price,quantity = $qty where productid = $productid";
       dbClient.rawUpdate(qry).then((res) {
         print("UPDATE RES $res");
       }).catchError((e) {
@@ -428,6 +468,16 @@ class LocalDataImpl implements LocalData {
   }
 
   void _onCreate(Database db, int version) async {
+    await db.execute("""CREATE TABLE ${DBConst.cartTable} (
+        ${DBConst.ColumnCartID} INTEGER PRIMARY KEY,
+        ${DBConst.ColumnProdID} INTEGER,
+        ${DBConst.ColumnProdName} TEXT,
+        ${DBConst.ColumnProdImg} TEXT,
+        ${DBConst.ColumnProdTotalPrice} INTEGER,
+        ${DBConst.ColumnProdUnitPrice} INTEGER,
+        ${DBConst.ColumnProdQty} INTEGER,
+        ${DBConst.ColumnProdDiscnt} INTEGER
+        )""");
     await db.execute("""CREATE TABLE ${DBConst.tableShop} (
         ${DBConst.ColumnProdID} INTEGER PRIMARY KEY,
         ${DBConst.ColumnProdCatID} INTEGER,
@@ -440,16 +490,6 @@ class LocalDataImpl implements LocalData {
         ${DBConst.ColumnProdWishLst} INTEGER
         )""");
 
-    await db.execute("""CREATE TABLE ${DBConst.tableCart} (
-        ${DBConst.ColumnCartID} INTEGER PRIMARY KEY,
-        ${DBConst.ColumnProdID} INTEGER,
-        ${DBConst.ColumnProdName} TEXT,
-        ${DBConst.ColumnProdImg} TEXT,
-        ${DBConst.ColumnProdTotalPrice} INTEGER,
-        ${DBConst.ColumnProdUnitPrice} INTEGER,
-        ${DBConst.ColumnProdQty} INTEGER,
-        ${DBConst.ColumnProdDiscnt} INTEGER
-        )""");
     await db.execute("""CREATE TABLE ${DBConst.tableOrders} (
         ${DBConst.ColumnOrderID} INTEGER PRIMARY KEY,  
         ${DBConst.ColumnUserID} INTEGER, 

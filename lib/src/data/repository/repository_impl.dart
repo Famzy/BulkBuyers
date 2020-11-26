@@ -176,11 +176,8 @@ class RepositoryImpl implements Repository {
   fetchWishList() async => await localData.getWishLists();
 
   @override
-  addToCart(CartModel model) async {
-    final response = await localData.addToCart(cartItems: model);
-    print("from repo $response");
-    return response;
-  }
+  addToCart(List<CartModel> model) async =>
+      await localData.addToCart(cart: model);
 
   @override
   Future<int> CartTotal() {
@@ -195,10 +192,7 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  clearCart() {
-    // TODO: implement clearCart
-    throw UnimplementedError();
-  }
+  clearCart() async => await localData.clearCartDB();
 
   @override
   Future<List> getCartCheckoutItems() {
@@ -207,16 +201,10 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<int> getCartCount() {
-    // TODO: implement getCartCount
-    throw UnimplementedError();
-  }
+  Future<int> getCartCount() async => localData.getCartCount();
 
   @override
-  Future<List> getCartList() {
-    // TODO: implement getCartList
-    throw UnimplementedError();
-  }
+  Future<List<CartModel>> getCartList() async => localData.getCartList();
 
   @override
   removeFromCart(int id) {

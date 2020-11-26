@@ -38,7 +38,7 @@ class DBConst {
   static const ColumnOrderDetils = "orderdetails";
   static const ColumnOrderDetilsID = "orderdetailid";
   static const tableShop = "products";
-  static const tableCart = "carts";
+  static const cartTable = "carts";
   static const tableOrders = "orders";
   static const tableOrdersDetails = "orders_details";
   static const tableUser = "user";

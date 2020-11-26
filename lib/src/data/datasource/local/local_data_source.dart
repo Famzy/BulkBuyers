@@ -20,7 +20,7 @@ abstract class LocalData {
   ///
   ///
   initDB();
-  Future<List> getCartList();
+  Future<List<CartModel>> getCartList();
   Future<int> getCartCount();
   Future<int> deleteCartItems({@required int id});
   Future<int> insertRemoteProducts({@required List<ProductsModels> products});
@@ -33,7 +33,8 @@ abstract class LocalData {
   Future<int> clearProducts();
   addToWishList({@required int productid, @required bool wishlist});
   Future<List<ProductsModels>> getWishLists();
-  Future<int> addToCart({@required CartModel cartItems});
+  // Future<int> addToCart({@required CartModel shopItems});
+  Future<int> addToCart({@required List<CartModel> cart});
   updateCartPriceAndQty(
       {@required int productid, @required int price, @required int qty});
   Future<int> clearCartDB();

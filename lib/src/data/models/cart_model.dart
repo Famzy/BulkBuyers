@@ -10,7 +10,16 @@ class CartModel extends CartItemsEntity {
       @required quantity,
       @required unitprice,
       @required discount,
-      @required productimg});
+      @required productimg})
+      : super(
+            cartid: cartid,
+            productid: productid,
+            productname: productname,
+            totalprice: totalprice,
+            quantity: quantity,
+            unitprice: unitprice,
+            discount: discount,
+            productimg: productimg);
 
   Map<String, Object> toMap() {
     var map = new Map<String, Object>();
@@ -39,5 +48,17 @@ class CartModel extends CartItemsEntity {
         unitprice: map['unitprice'],
         quantity: map['quantity'],
         discount: map['discount']);
+  }
+
+  factory CartModel.formJson(Map<String, dynamic> json) {
+    return CartModel(
+        cartid: json['cartid'],
+        productid: json['productid'],
+        productname: json['productname'],
+        productimg: json['productimg'],
+        totalprice: json['totalprice'],
+        unitprice: json['unitprice'],
+        quantity: json['quantity'],
+        discount: json['discount']);
   }
 }

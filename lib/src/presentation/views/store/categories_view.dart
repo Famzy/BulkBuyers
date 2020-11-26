@@ -33,7 +33,7 @@ class _CategoriesViewState extends State<CategoriesView>
             child: Column(
           children: <Widget>[
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Container(
                 width: screenWidth(context),
                 child: Column(
@@ -150,7 +150,7 @@ class _CategoriesViewState extends State<CategoriesView>
               ),
             ),
             Expanded(
-              flex: 4,
+              flex: 5,
               child: _getBodyUi(context, model),
             ),
           ],
@@ -199,8 +199,10 @@ class _CategoriesViewState extends State<CategoriesView>
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              height: 164,
-              width: 165,
+              height: screenHeight(context) < 200
+                  ? screenHeight(context) / 4.9
+                  : screenHeight(context) / 5.5,
+              width: screenWidth(context) / 2,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(23)),
                   border: Border.all(color: const Color(0xffeaeaea), width: 1)),

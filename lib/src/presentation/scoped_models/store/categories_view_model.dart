@@ -25,8 +25,6 @@ class CategoriesViewModel extends BaseModel {
   Future fetchListData() async {
     setState(ViewState.Busy);
     await productsUC.get();
-    final couut = await categoriesUC.getOunt();
-    print("count is $couut");
     final cati = await categoriesUC.get();
     cati.fold(
         (failure) => setState(ViewState.Error),

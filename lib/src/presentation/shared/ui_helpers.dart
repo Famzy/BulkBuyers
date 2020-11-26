@@ -354,4 +354,106 @@ class UIHelper {
       ),
     );
   }
+
+  static GestureDetector discount({Function onTap, String title, Color color}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 124,
+        height: 30,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(18),
+          ),
+          color: color,
+        ),
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+                fontSize: 12, fontFamily: "Roboto", color: whiteSwatch),
+            textAlign: TextAlign.left,
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Widget gradient({Function onTap, String text}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 306,
+        height: 42,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(21)),
+          boxShadow: [
+            BoxShadow(
+                color: const Color(0x29000000),
+                offset: Offset(0, 3),
+                blurRadius: 6,
+                spreadRadius: 0)
+          ],
+          gradient: LinearGradient(
+              begin: Alignment(0.07608816772699356, 0.658575177192688),
+              end: Alignment(0.8989955186843872, 0.6693638563156128),
+              colors: [const Color(0xffff9300), const Color(0xffd83a00)]),
+        ),
+        child: Center(
+          child: Text(
+            "CHECKOUT NOW      | \u{20A6}$text",
+            style: TextStyle(
+                color: const Color(0xffffffff),
+                fontWeight: FontWeight.w700,
+                fontFamily: "Roboto",
+                fontStyle: FontStyle.normal,
+                fontSize: 14.0),
+            textAlign: TextAlign.left,
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Widget shopBTN({Function onTap, String text}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 280,
+        height: 42,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(19)),
+            boxShadow: [
+              BoxShadow(
+                  color: const Color(0x29000000),
+                  offset: Offset(0, 3),
+                  blurRadius: 6,
+                  spreadRadius: 0)
+            ],
+            color: const Color(0xffffffff)),
+        child: Center(
+          child: Text(
+            text,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget dismiss(
+    {@required String key,
+    @required Widget child,
+    @required Function onSwipe}) {
+  return Dismissible(
+      onDismissed: onSwipe,
+      background: Container(
+        color: Colors.red,
+        child: Icon(
+          Icons.delete_sweep,
+          color: whiteSwatch,
+        ),
+      ),
+      key: Key(key),
+      child: child);
 }

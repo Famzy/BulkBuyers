@@ -65,7 +65,7 @@ class SqfLiteDatabaseHelper {
         ${DBConst.ColumnProdWishLst} INTEGER
         )""");
 
-    await db.execute("""CREATE TABLE ${DBConst.tableCart} (
+    await db.execute("""CREATE TABLE ${DBConst.cartTable} (
         ${DBConst.ColumnCartID} INTEGER PRIMARY KEY,
         ${DBConst.ColumnProdID} INTEGER,
         ${DBConst.ColumnProdName} TEXT,
@@ -190,7 +190,7 @@ class SqfLiteDatabaseHelper {
 //this is triggered when the user logs out.
   Future<int> clearStoreDB() async {
     var dbClient = await db;
-    var response = await dbClient.delete(DBConst.tableCart);
+    var response = await dbClient.delete(DBConst.cartTable);
     response = await dbClient.delete(DBConst.tableShop);
     response = await dbClient.delete(DBConst.tableOrders);
     response = await dbClient.delete(DBConst.tableCategories);
@@ -237,7 +237,7 @@ class SqfLiteDatabaseHelper {
     await dbClient.transaction((tranact) async {
       try {
         var queries =
-            'INSERT INTO ${DBConst.tableCart}(productid,productname,productimg, totalprice,unitprice,quantity,discount) VALUES(${shopItems.productid},"${shopItems.productname}","${shopItems.productimg}",${shopItems.totalprice},${shopItems.unitprice}, ${shopItems.quantity}, ${shopItems.discount})';
+            'INSERT INTO ${DBConst.cartTable}(productid,productname,productimg, totalprice,unitprice,quantity,discount) VALUES(${shopItems.productid},"${shopItems.productname}","${shopItems.productimg}",${shopItems.totalprice},${shopItems.unitprice}, ${shopItems.quantity}, ${shopItems.discount})';
         var _response = await tranact.execute(queries);
         return _response;
       } catch (exception) {
@@ -253,7 +253,7 @@ class SqfLiteDatabaseHelper {
     var dbClient = await db;
     try {
       var qry =
-          "UPDATE ${DBConst.tableCart} set totalprice = $price,quantity = $qty where productid = $productid";
+          "UPDATE ${DBConst.cartTable} set totalprice = $price,quantity = $qty where productid = $productid";
       dbClient.rawUpdate(qry).then((res) {
         print("UPDATE RES $res");
       }).catchError((e) {
@@ -268,7 +268,7 @@ class SqfLiteDatabaseHelper {
   //Read all Products in the Carts Database
   Future<List> getCartList() async {
     var dbClient = await db;
-    var result = await dbClient.rawQuery("SELECT * FROM ${DBConst.tableCart}");
+    var result = await dbClient.rawQuery("SELECT * FROM ${DBConst.cartTable}");
 
     return result.toList();
   }
@@ -277,40 +277,40 @@ class SqfLiteDatabaseHelper {
   Future<int> getCartCount() async {
     var dbClient = await db;
     return Sqflite.firstIntValue(
-        await dbClient.rawQuery("SELECT COUNT(*) FROM ${DBConst.tableCart}"));
+        await dbClient.rawQuery("SELECT COUNT(*) FROM ${DBConst.cartTable}"));
   }
 
   //Delete Cart Items
   Future<int> deleteCartItems(int id) async {
     var dbClient = await db;
 
-    return await dbClient.delete(DBConst.tableCart,
+    return await dbClient.delete(DBConst.cartTable,
         where: "${DBConst.ColumnCartID} = ?", whereArgs: [id]);
   }
 
   Future<int> clearCartDB() async {
     var dbClient = await db;
 
-    var response = await dbClient.delete(DBConst.tableCart);
+    var response = await dbClient.delete(DBConst.cartTable);
     return response;
   }
 
   Future<int> cartTotalPrice() async {
     var dbClient = await db;
     return Sqflite.firstIntValue(await dbClient
-        .rawQuery("SELECT SUM(totalprice) FROM ${DBConst.tableCart}"));
+        .rawQuery("SELECT SUM(totalprice) FROM ${DBConst.cartTable}"));
   }
 
   Future<int> cartTotalQuantities() async {
     var dbClient = await db;
     return Sqflite.firstIntValue(await dbClient
-        .rawQuery("SELECT SUM(quantity) FROM ${DBConst.tableCart}"));
+        .rawQuery("SELECT SUM(quantity) FROM ${DBConst.cartTable}"));
   }
 
   Future<List> getCartCheckoutItems() async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        "SELECT ${DBConst.ColumnProdID}, ${DBConst.ColumnProdQty}, ${DBConst.ColumnProdUnitPrice}, ${DBConst.ColumnProdTotalPrice}, ${DBConst.ColumnProdDiscnt} FROM ${DBConst.tableCart}");
+        "SELECT ${DBConst.ColumnProdID}, ${DBConst.ColumnProdQty}, ${DBConst.ColumnProdUnitPrice}, ${DBConst.ColumnProdTotalPrice}, ${DBConst.ColumnProdDiscnt} FROM ${DBConst.cartTable}");
 
     return result.toList();
   }
