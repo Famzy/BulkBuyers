@@ -13,6 +13,7 @@ import 'package:bulk_buyers/src/presentation/views/checkout/order_details_view.d
 import 'package:bulk_buyers/src/presentation/views/checkout/orders_view.dart';
 import 'package:bulk_buyers/src/presentation/views/checkout/payment_view.dart';
 import 'package:bulk_buyers/src/presentation/views/checkout/paymet_confirmation.dart';
+import 'package:bulk_buyers/src/presentation/views/checkout/wishList_tb.dart';
 import 'package:bulk_buyers/src/presentation/views/checkout/wish_list_view.dart';
 import 'package:bulk_buyers/src/presentation/views/faq.dart';
 import 'package:bulk_buyers/src/presentation/views/home_view.dart';
@@ -24,6 +25,7 @@ import 'package:bulk_buyers/src/presentation/views/store/product_grid_view.dart'
 import 'package:bulk_buyers/src/presentation/views/store/product_list_view.dart';
 import 'package:bulk_buyers/src/presentation/views/store/shop_view.dart';
 import 'package:bulk_buyers/src/presentation/views/user/edit_profile_view.dart';
+import 'package:bulk_buyers/src/presentation/views/user/profile_topbar.dart';
 import 'package:bulk_buyers/src/presentation/views/user/profile_view.dart';
 import 'package:bulk_buyers/src/presentation/views/user/you_view.dart';
 import 'package:bulk_buyers/src/presentation/views/welcome_view.dart';
@@ -61,4 +63,6 @@ class $Router {
   WelcomeView welcome;
   ResetConfrimation resetConfrimation;
   NoInternetView noInternet;
+  WishListViewTB wishListViewTB;
+  ProfileViewTB profileViewTB;
 }

@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:bulk_buyers/src/data/datasource/local/local_data_source_impl.dart';
 import 'package:bulk_buyers/src/data/datasource/local/local_data_source.dart';
 import 'package:bulk_buyers/src/domain/usecase/auth_usecase.dart';
+import 'package:bulk_buyers/src/domain/usecase/cart_usecase.dart';
+import 'package:bulk_buyers/src/domain/usecase/orders_usecase.dart';
+import 'package:bulk_buyers/src/domain/usecase/user_usecse.dart';
+import 'package:bulk_buyers/src/domain/usecase/wishlist_usecase.dart';
 import 'package:bulk_buyers/src/presentation/scoped_models/store/products_view_model.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get_it/get_it.dart';
@@ -63,7 +67,8 @@ void initScopedModels() {
       () => ForgotPasswordViewModel(auth: di()));
   di.registerFactory<FrameworkViewModel>(() => FrameworkViewModel());
   di.registerFactory<AuthenticatedViewModel>(() => AuthenticatedViewModel());
-  di.registerFactory<ShopViewModel>(() => ShopViewModel(products: di()));
+  di.registerFactory<ShopViewModel>(
+      () => ShopViewModel(products: di(), cart: di(), wishlist: di()));
   di.registerFactory<ProductViewModel>(() => ProductViewModel(product: di()));
   di.registerFactory<ProductGridViewModel>(() => ProductGridViewModel());
   di.registerFactory<ProductDetailsViewModel>(() => ProductDetailsViewModel());
@@ -71,7 +76,7 @@ void initScopedModels() {
   di.registerFactory<WishListViewModel>(() => WishListViewModel());
   di.registerFactory<YouViewModel>(() => YouViewModel());
   di.registerFactory<ProfileViewModel>(() => ProfileViewModel());
-  di.registerFactory<PaymentViewModel>(() => PaymentViewModel());
+  di.registerFactory<PaymentViewModel>(() => PaymentViewModel(orders: di()));
   di.registerFactory<OrdersViewModel>(() => OrdersViewModel());
   di.registerFactory<OrderDetailsViewModel>(() => OrderDetailsViewModel());
   di.registerFactory<CategoriesViewModel>(
@@ -117,4 +122,8 @@ void usecase() {
   di.registerLazySingleton(() => CategoriesUC(di()));
   di.registerLazySingleton(() => ProductsUC(di()));
   di.registerLazySingleton(() => AuthUC(di()));
+  di.registerLazySingleton(() => WishListUC(di()));
+  di.registerLazySingleton(() => CartUC(di()));
+  di.registerLazySingleton(() => UserUC(di()));
+  di.registerLazySingleton(() => OrdersUC(di()));
 }

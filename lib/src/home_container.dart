@@ -4,6 +4,7 @@ import 'package:bulk_buyers/src/presentation/views/store/categories_view.dart';
 import 'package:bulk_buyers/src/presentation/views/user/profile_view.dart';
 import 'package:bulk_buyers/src/presentation/widgets/app_bar.dart';
 import 'package:bulk_buyers/src/presentation/widgets/navigation/buttom_nav.dart';
+import 'package:bulk_buyers/src/presentation/widgets/navigation/drawer_menu.dart';
 import 'package:flutter/material.dart';
 
 class HomeContainer extends StatefulWidget {
@@ -12,6 +13,7 @@ class HomeContainer extends StatefulWidget {
 }
 
 class _HomeContainerState extends State<HomeContainer> {
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   PageController _pageController = PageController();
   int _selectedIndex = 0;
   List<Widget> _screen = [
@@ -31,7 +33,9 @@ class _HomeContainerState extends State<HomeContainer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context: context),
+      key: scaffoldKey,
+      appBar: appBar(context: context, scaffoldKey: scaffoldKey),
+     drawer: AppDrawer(),
       bottomNavigationBar: Nav(
         defaultSelectedIndex: _selectedIndex,
         onChange: _onItemTaped,

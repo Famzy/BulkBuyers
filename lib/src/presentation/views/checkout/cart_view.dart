@@ -1,3 +1,4 @@
+import 'package:bulk_buyers/core/router/routes.gr.dart';
 import 'package:bulk_buyers/core/utils/constants.dart';
 import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
 import 'package:bulk_buyers/src/data/models/cart_model.dart';
@@ -18,7 +19,6 @@ class CartView extends StatelessWidget {
   int qty = 1;
   int subtotal = 0;
   int shippingFee = 500;
-  bool hasData = true;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class CartView extends StatelessWidget {
                 flex: 2,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: hasData
+                  child: model.state == ViewState.DataFetched
                       ? SingleChildScrollView(
                           child: Column(
                             children: <Widget>[
@@ -52,7 +52,7 @@ class CartView extends StatelessWidget {
                                           children: <Widget>[
                                             Text("Discount Code:"),
                                             Text(
-                                              "${"model.discountMsg"}",
+                                              "${model.discountMsg}",
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Colors.red),
@@ -109,7 +109,7 @@ class CartView extends StatelessWidget {
                                 children: <Widget>[
                                   Text("Subtotal"),
                                   Text(
-                                    "\u{20A6}${"model.subtotal.toString()"}",
+                                    "\u{20A6}${model.subtotal.toString()}",
                                     textAlign: TextAlign.right,
                                   )
                                 ],
@@ -120,7 +120,7 @@ class CartView extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text("Discount Fee"),
-                                  Text("-${"model.discount.hashCode"}",
+                                  Text("-${model.discount.hashCode}",
                                       textAlign: TextAlign.right,
                                       style: TextStyle(color: Colors.red)),
                                 ],
@@ -134,7 +134,7 @@ class CartView extends StatelessWidget {
                                 children: <Widget>[
                                   Text("Total"),
                                   Text(
-                                    "\u{20A6}${"model.subtotal.toString()"}",
+                                    "\u{20A6}${model.subtotal.toString()}",
                                     textAlign: TextAlign.right,
                                   )
                                 ],
@@ -144,11 +144,13 @@ class CartView extends StatelessWidget {
                                 height: 10,
                               ),
                               UIHelper.gradient(
-                                  onTap: null, text: 100.toString()),
+                                  onTap: () => model.checkout(),
+                                  text: model.total.toString()),
                               SizedBox(
                                 height: 10,
                               ),
-                              UIHelper.shopBTN(text: "CONTINUE SHOPPING")
+                              UIHelper.shopBTN(text: "CONTINUE SHOPPING"),
+                              UIHelper.verticalSpaceMedium(),
                             ],
                           ),
                         )
@@ -167,7 +169,11 @@ class CartView extends StatelessWidget {
       case ViewState.Busy:
         return getLoadingUi(context: context);
       case ViewState.NoDataAvailable:
-        return noDataUi(context);
+        return noDataUi(
+          context,
+          text: "Your cart is Empty",
+        );
+
       case ViewState.Error:
         return errorUi(context);
       case ViewState.DataFetched:
@@ -186,13 +192,14 @@ class CartView extends StatelessWidget {
         });
   }
 
-  Widget _getListItemUi(CartModel result, itemIndex, context, model) {
+  Widget _getListItemUi(
+      CartModel result, itemIndex, context, ShopViewModel model) {
     return dismiss(
       onSwipe: (direction) {
         if (direction == DismissDirection.endToStart) {
-          model.removeFromCart(id: result.productid);
+          model.removeFromCart(result.productid);
         } else if (direction == DismissDirection.startToEnd) {
-          model.deleteItem(id: result.productid);
+          //  model.deleteItem(id: result.productid);
         }
       },
       key: "$result",
@@ -202,7 +209,7 @@ class CartView extends StatelessWidget {
           elevation: 2,
           margin: EdgeInsets.all(2.0),
           child: Container(
-            height: 80,
+            height: 110,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -256,7 +263,7 @@ class CartView extends StatelessWidget {
                         Padding(
                           padding:
                               const EdgeInsets.only(left: 20.0, bottom: 4.0),
-                          child: Text("result.productname",
+                          child: Text(result.productname,
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
@@ -283,12 +290,14 @@ class CartView extends StatelessWidget {
                             int price = quantity * result.unitprice;
 
                             model.updateCartPrice(
-                                result.productid, price, quantity);
+                                id: result.productid,
+                                price: price,
+                                qty: quantity);
                           },
                           child: Icon(
                             Icons.add_circle,
                             color: Colors.green,
-                            // size: 20,
+                             size: 30,
                           ),
                         ),
                         Container(
@@ -302,13 +311,15 @@ class CartView extends StatelessWidget {
                               print(
                                   'this is q value: $quantity and p value $price');
                               model.updateCartPrice(
-                                  result.productid, price, quantity);
+                                  id: result.productid,
+                                  price: price,
+                                  qty: quantity);
                             }
                           },
                           child: Icon(
                             Icons.remove_circle,
                             color: Colors.red,
-                            //  size: 20,
+                              size: 30,
                           ),
                         ),
                       ],

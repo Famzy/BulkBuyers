@@ -20,7 +20,6 @@ class OrdersView extends StatelessWidget {
         builder: (context, child, model) => Scaffold(
             appBar: backAppBar(context: context),
             backgroundColor: Color.fromARGB(242, 243, 243, 243),
-            bottomNavigationBar: BottomNav.nav(index: 3),
             body: Container(
                 margin: EdgeInsets.only(bottom: 10.0),
                 decoration: BoxDecoration(

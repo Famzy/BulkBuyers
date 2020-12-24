@@ -19,3 +19,4 @@ class LoginModel extends LoginEntity {
     return login;
   }
 }
+  

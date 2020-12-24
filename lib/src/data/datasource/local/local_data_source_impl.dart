@@ -553,4 +553,19 @@ class LocalDataImpl implements LocalData {
   Future<void> cacheState({String state}) {
     return sharedPreferences.setString(BCStrings.CACHE_STATE, state.toString());
   }
+
+  @override
+  Future<void> cacheEmail({String email}) {
+    return sharedPreferences.setString(BCStrings.CACHE_EMAIL, email.toString());
+  }
+
+  @override
+  Future<String> getEmail() {
+    final token = sharedPreferences.getString(BCStrings.CACHE_EMAIL);
+    if (token != null) {
+      return Future.value(token);
+    } else {
+      throw CacheException(BCStrings.CACHE_FAILURE_MESSAGE);
+    }
+  }
 }

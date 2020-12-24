@@ -2,8 +2,13 @@ import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 showCartSnak(
-    {String msg, var scaffoldKey, int duration = 2, bool flag = true, Color color = primarySwatch}) {
+    {String msg,
+    var scaffoldKey,
+    int duration = 2,
+    bool flag = true,
+    Color color = primarySwatch}) {
   scaffoldKey.currentState.showSnackBar(SnackBar(
+    behavior: SnackBarBehavior.floating,
     content: Text(
       msg,
       style: TextStyle(color: Colors.white),

@@ -10,21 +10,22 @@ Widget getCenteredViewMessage(BuildContext context, String message,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              error
+                  ? Container(height: 150, child: Lottie.asset(json))
+                  : Container(),
               Text(
                 message,
                 style: viewErrorTitle,
                 textAlign: TextAlign.center,
               ),
-              error
-                  ? Container(height: 150, child: Lottie.asset(json))
-                  : Container()
             ],
           )));
 }
 
 Widget noDataUi(BuildContext context,
-    {String json = 'assets/lottie/cancel_order.json'}) {
-  return getCenteredViewMessage(context, "No data available yet", json: json);
+    {String json = 'assets/lottie/cancel_order.json',
+    String text = "No data available yet"}) {
+  return getCenteredViewMessage(context, text, json: json, error: true);
 }
 
 Widget errorUi(

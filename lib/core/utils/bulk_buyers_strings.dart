@@ -4,6 +4,7 @@ class BCStrings {
   static const String IS_VERIFIED = "IS_VERIFIED";
   static const String LOGGED_OUT = "LOGGED_OUT";
   static const String CACHE_STATE = "CACHE_STATE";
+  static const String CACHE_EMAIL = "CACHE_EMAIL";
   static const String CACHE_FAILURE_MESSAGE = "Cache Failure";
   static final String NEWS_PLACEHOLDER_IMAGE_ASSET_URL =
       'assets/images/placeholder.png';

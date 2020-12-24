@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bulk_buyers/core/router/routes.gr.dart';
 import 'package:bulk_buyers/core/utils/constants.dart';
 import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
+import 'package:bulk_buyers/src/data/models/cart_model.dart';
 import 'package:bulk_buyers/src/presentation/scoped_models/store/shop_view_model.dart';
 import 'package:bulk_buyers/src/presentation/shared/ui_helpers.dart';
 import 'package:bulk_buyers/src/presentation/widgets/snack_bar.dart';
@@ -132,13 +133,14 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     UIHelper.midButtonGradient(
                         onTap: () async {
                           await model.addToCart(
-                              id: widget.id,
-                              name: widget.name,
-                              price: widget.price,
-                              quantity: widget.quantity,
-                              image: widget.image,
-                              unitprice: widget.price,
-                              discount: widget.discount);
+                              cartModel: CartModel(
+                                  productid: widget.id,
+                                  productname: widget.name,
+                                  totalprice: widget.price,
+                                  quantity: widget.quantity,
+                                  productimg: widget.image,
+                                  unitprice: widget.price,
+                                  discount: widget.discount));
                           model.show
                               ? showCartSnak(
                                   color: model.color,

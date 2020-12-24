@@ -9,6 +9,7 @@ import 'package:bulk_buyers/src/data/models/categories_model.dart';
 import 'package:bulk_buyers/src/data/models/login_model.dart';
 import 'package:bulk_buyers/src/data/models/products_model.dart';
 import 'package:bulk_buyers/src/data/models/registration_model.dart';
+import 'package:bulk_buyers/src/data/models/user_model.dart';
 import 'package:bulk_buyers/src/domain/entities/categories_entities.dart';
 import 'package:bulk_buyers/src/domain/entities/products_entities.dart';
 import 'package:http/http.dart' show Client;
@@ -18,6 +19,7 @@ abstract class RemoteData {
   login(LoginModel loginModel);
   register(RegisterModel registerModel);
   reset(ResetModel resetModel);
+  getUserDetails();
   Future<List<CategoriesEntities>> fetchCategories();
   Future<List<ProductsEntitiy>> fetchProducts();
 }
@@ -147,6 +149,24 @@ class RemoteDataImpl with EndPoints implements RemoteData {
           return reply;
         case HttpStatus.unauthorized:
           throw ServerException("UnAuthorised");
+        default:
+          throw ServerFailure();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  getUserDetails() async {
+    final Map<String, String> head = await authHeader();
+    try {
+      final response = await client.get(users, headers: head);
+      final data = json.decode(response.body);
+
+      switch (response.statusCode) {
+        case HttpStatus.ok:
+          return UserModels.fromJson(data);
         default:
           throw ServerFailure();
       }

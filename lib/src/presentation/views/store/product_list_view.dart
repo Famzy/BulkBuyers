@@ -2,6 +2,7 @@
 import 'package:bulk_buyers/core/utils/constants.dart';
 import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
 import 'package:bulk_buyers/core/utils/theme/ui_reducers.dart';
+import 'package:bulk_buyers/src/data/models/cart_model.dart';
 import 'package:bulk_buyers/src/data/models/products_model.dart';
 import 'package:bulk_buyers/src/presentation/scoped_models/store/shop_view_model.dart';
 import 'package:bulk_buyers/src/presentation/views/base_view.dart';
@@ -159,13 +160,14 @@ class ProductListView extends StatelessWidget {
                         //  addToCart(item['price'], 1, item['productId'], 1, item['price'], item['price']);
 
                         await model.addToCart(
-                            id: result.productid,
-                            name: result.productname,
-                            price: result.price,
-                            quantity: result.quantity,
-                            image: result.productimg,
-                            unitprice: result.price,
-                            discount: result.discount);
+                            cartModel: CartModel(
+                                productid: result.productid,
+                                productname: result.productname,
+                                totalprice: result.price,
+                                quantity: result.quantity,
+                                productimg: result.productimg,
+                                unitprice: result.price,
+                                discount: result.discount));
                         model.show
                             ? showCartSnak(
                                 color: model.color,

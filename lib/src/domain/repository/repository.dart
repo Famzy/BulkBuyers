@@ -21,10 +21,10 @@ abstract class Repository {
   Future<int> cartTotalQuantities();
   clearCart();
   removeFromCart(int id);
-  updateCartItems();
+  updateCartItems({int id, int price, int qty});
   Future<List<CartModel>> getCartList();
   Future<int> getCartCount();
-  Future<List> getCartCheckoutItems();
+  Future<List<CartModel>> getCartCheckoutItems();
   Future<Either<Failure, List<ProductsEntitiy>>> getFilter({int id});
   Future<List> fetchUserOrders();
   getOrderDetails(int id);
@@ -32,6 +32,7 @@ abstract class Repository {
   Future<int> logout();
   Future<int> getProCount();
   fetchWishList();
+  Future<String> getEmail();
   updateWishList({int id, bool state});
   Future<Either<Failure, List<CategoriesEntities>>> getCategories();
 }

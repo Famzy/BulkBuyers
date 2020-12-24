@@ -105,6 +105,7 @@ class RepositoryImpl implements Repository {
       try {
         final response = await remoteData.login(loginModel);
         print(response);
+        await localData.cacheEmail(email: loginModel.email);
         await localData.cacheToken(token: response);
         await localData.cacheState(state: BCStrings.IS_VERIFIED);
         return "Authenticated";
@@ -180,10 +181,7 @@ class RepositoryImpl implements Repository {
       await localData.addToCart(cart: model);
 
   @override
-  Future<int> CartTotal() {
-    // TODO: implement CartTotal
-    throw UnimplementedError();
-  }
+  Future<int> CartTotal() async => localData.cartTotalPrice();
 
   @override
   Future<int> cartTotalQuantities() {
@@ -195,10 +193,8 @@ class RepositoryImpl implements Repository {
   clearCart() async => await localData.clearCartDB();
 
   @override
-  Future<List> getCartCheckoutItems() {
-    // TODO: implement getCartCheckoutItems
-    throw UnimplementedError();
-  }
+  Future<List<CartModel>> getCartCheckoutItems() async =>
+      localData.getCartCheckoutItems();
 
   @override
   Future<int> getCartCount() async => localData.getCartCount();
@@ -207,14 +203,12 @@ class RepositoryImpl implements Repository {
   Future<List<CartModel>> getCartList() async => localData.getCartList();
 
   @override
-  removeFromCart(int id) {
-    // TODO: implement removeFromCart
-    throw UnimplementedError();
-  }
+  removeFromCart(int id) async => localData.deleteCartItems(id: id);
 
   @override
-  updateCartItems() {
-    // TODO: implement updateCartItems
-    throw UnimplementedError();
-  }
+  updateCartItems({int id, int price, int qty}) async =>
+      localData.updateCartPriceAndQty(productid: id, price: price, qty: qty);
+
+  @override
+  Future<String> getEmail() async => localData.getEmail();
 }

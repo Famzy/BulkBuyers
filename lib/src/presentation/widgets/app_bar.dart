@@ -2,11 +2,11 @@ import 'package:bulk_buyers/core/router/routes.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-Widget appBar({@required BuildContext context, dynamic route = Router.you}) {
+Widget appBar({@required BuildContext context,@required var scaffoldKey}) {
   return AppBar(
     backgroundColor: Colors.black,
     leading: GestureDetector(
-      onTap: () => Router.navigator.pushNamed(route),
+      onTap: () => scaffoldKey.currentState.openDrawer(),
       child: Image.asset(
         "assets/images/icon-ios-menu.png",
       ),

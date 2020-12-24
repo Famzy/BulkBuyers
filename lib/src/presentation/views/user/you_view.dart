@@ -22,7 +22,6 @@ class _YouViewState extends State<YouView> {
     return Scaffold(
       appBar: backAppBar(context: context),
       backgroundColor: Color.fromARGB(242, 243, 243, 243),
-      bottomNavigationBar: BottomNav.nav(index: 3),
       body: Container(
         margin: EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
@@ -45,62 +44,68 @@ class _YouViewState extends State<YouView> {
                 ),
               ),
               GestureDetector(
-                onTap: () => Router.navigator.pushNamed(Router.orders),
+                onTap: () =>
+                    Router.navigator.pushReplacementNamed(Router.orders),
                 child: Row(
                   children: <Widget>[
                     IconButton(
                       icon: Image.asset('assets/images/list.png'),
                       onPressed: () =>
-                          Router.navigator.pushNamed(Router.orders),
+                          Router.navigator.pushReplacementNamed(Router.orders),
                     ),
                     Text("My Orders"),
                   ],
                 ),
               ),
               GestureDetector(
-                onTap: () => Router.navigator.pushNamed(Router.wishList),
+                onTap: () => Router.navigator
+                    .pushReplacementNamed(Router.wishListViewTB),
                 child: Row(
                   children: <Widget>[
                     IconButton(
                         icon: Image.asset('assets/images/like.png'),
-                        onPressed: () =>
-                            Router.navigator.pushNamed(Router.wishList)),
+                        onPressed: () => Router.navigator
+                            .pushReplacementNamed(Router.wishList)),
                     Text("My WishList"),
                   ],
                 ),
               ),
               GestureDetector(
-                onTap: () => Router.navigator.pushNamed(Router.profile),
+                onTap: () =>
+                    Router.navigator.pushReplacementNamed(Router.profileViewTB),
                 child: Row(
                   children: <Widget>[
                     IconButton(
                       icon: Image.asset('assets/images/settings.png'),
                       onPressed: () =>
-                          Router.navigator.pushNamed(Router.profile),
+                          Router.navigator.pushReplacementNamed(Router.profile),
                     ),
                     Text("My Account"),
                   ],
                 ),
               ),
               GestureDetector(
-                onTap: () => Router.navigator.pushNamed(Router.about),
+                onTap: () =>
+                    Router.navigator.pushReplacementNamed(Router.about),
                 child: Row(
                   children: <Widget>[
                     IconButton(
                       icon: Image.asset('assets/images/about.png'),
-                      onPressed: () => Router.navigator.pushNamed(Router.about),
+                      onPressed: () =>
+                          Router.navigator.pushReplacementNamed(Router.about),
                     ),
                     Text("About Bulk Buyers Connect"),
                   ],
                 ),
               ),
               GestureDetector(
-                onTap: () => Router.navigator.pushNamed(Router.faQs),
+                onTap: () => Router.navigator.pushReplacementNamed(Router.faQs),
                 child: Row(
                   children: <Widget>[
                     IconButton(
                       icon: Image.asset('assets/images/how_it_works.png'),
-                      onPressed: () => Router.navigator.pushNamed(Router.faQs),
+                      onPressed: () =>
+                          Router.navigator.pushReplacementNamed(Router.faQs),
                     ),
                     Text("FAQs"),
                   ],

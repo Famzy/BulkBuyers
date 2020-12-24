@@ -1,5 +1,6 @@
 import 'package:bulk_buyers/src/data/models/products_model.dart';
 import 'package:bulk_buyers/src/presentation/scoped_models/store/shop_view_model.dart';
+import 'package:bulk_buyers/src/presentation/widgets/app_bar.dart';
 import 'package:bulk_buyers/src/presentation/widgets/card_helpers.dart';
 import 'package:bulk_buyers/src/presentation/widgets/center_message.dart';
 
@@ -10,17 +11,18 @@ import 'package:lottie/lottie.dart';
 import '../base_view.dart';
 import 'cart_view.dart';
 
-class WishListView extends StatefulWidget {
+class WishListViewTB extends StatefulWidget {
   @override
-  _WishListViewState createState() => _WishListViewState();
+  _WishListViewTBState createState() => _WishListViewTBState();
 }
 
-class _WishListViewState extends State<WishListView> {
+class _WishListViewTBState extends State<WishListViewTB> {
   @override
   Widget build(BuildContext context) {
     return BaseView<ShopViewModel>(
       onModelReady: (model) => model.fetchWishList(),
       builder: (context, childe, model) => Scaffold(
+        appBar: backAppBar(context: context),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[

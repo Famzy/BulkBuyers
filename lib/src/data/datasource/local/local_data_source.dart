@@ -54,7 +54,9 @@ abstract class LocalData {
   Future<int> insertUsers({@required UserModels users});
   Future<List> getUsers();
   Future<String> getToken();
+  Future<String> getEmail();
   Future<void> cacheToken({@required String token});
+  Future<void> cacheEmail({@required String email});
   Future<void> cacheState({@required String state});
   updateUserDeatails(
       {@required int UserId,

@@ -2,16 +2,18 @@ import 'package:bulk_buyers/core/utils/theme/app_colors.dart';
 import 'package:bulk_buyers/core/utils/theme/font_styles.dart';
 import 'package:bulk_buyers/src/presentation/scoped_models/user/profile_view_model.dart';
 import 'package:bulk_buyers/src/presentation/shared/ui_helpers.dart';
+import 'package:bulk_buyers/src/presentation/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../base_view.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileViewTB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<ProfileViewModel>(
       onModelReady: (model) => model.loadUserDetails(),
       builder: (context, child, model) => Scaffold(
+        appBar: backAppBar(context: context),
         body: Container(
           width: double.infinity,
           margin: EdgeInsets.only(bottom: 10.0),
